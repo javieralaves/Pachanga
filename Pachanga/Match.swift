@@ -30,10 +30,22 @@ struct Match: Identifiable {
 
         if scoreOne >= 21 && scoreOne > (scoreTwo + 1) {
             winner = teamOne
+            
+            teamOne[0].wins += 1
+            teamOne[1].wins += 1
+            
+            teamTwo[0].losses += 1
+            teamTwo[1].losses += 1
         }
         
         if scoreTwo >= 21 && scoreTwo > (scoreOne + 1) {
             winner = teamTwo
+            
+            teamTwo[0].wins += 1
+            teamTwo[1].wins += 1
+            
+            teamOne[0].losses += 1
+            teamOne[1].losses += 1
         }
         
     }
