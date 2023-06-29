@@ -11,9 +11,9 @@ struct Match: Identifiable {
     
     var id = UUID()
     
-    var teamOne: Array = [Player]()
-    var teamTwo: Array = [Player]()
-    var winner: [Player]
+    var teamOne: (Player, Player)
+    var teamTwo: (Player, Player)
+    var winner: (Player, Player)? = nil
     
     var scoreOne: Int = 0
     var scoreTwo: Int = 0
@@ -26,26 +26,20 @@ struct Match: Identifiable {
     var isBallAvailable: Bool = false
     var areLinesAvailable: Bool = false
     
-    mutating func setWinner() {
+    mutating func setWinner(teamNumber: Int) {
 
-        if scoreOne >= 21 && scoreOne > (scoreTwo + 1) {
+        if teamNumber == 1 {
             winner = teamOne
-            
-            teamOne[0].wins += 1
-            teamOne[1].wins += 1
-            
-            teamTwo[0].losses += 1
-            teamTwo[1].losses += 1
-        }
-        
-        if scoreTwo >= 21 && scoreTwo > (scoreOne + 1) {
+            teamOne.0.wins += 1
+            teamOne.1.wins += 1
+            teamTwo.0.losses += 1
+            teamTwo.1.losses += 1
+        } else {
             winner = teamTwo
-            
-            teamTwo[0].wins += 1
-            teamTwo[1].wins += 1
-            
-            teamOne[0].losses += 1
-            teamOne[1].losses += 1
+            teamOne.0.losses += 1
+            teamOne.1.losses += 1
+            teamTwo.0.wins += 1
+            teamTwo.1.wins += 1
         }
         
     }
