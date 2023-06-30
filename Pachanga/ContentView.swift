@@ -10,15 +10,17 @@ import SwiftUI
 struct ContentView: View {
     
     var body: some View {
-        VStack {
-            Image(systemName: "volleyball")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-                .padding(.bottom, 4)
-            Text("Hello, Muchavista squad!")
+        VStack (alignment: .leading) {
+            Text("Upcoming match")
+                .font(.headline)
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
+                .frame(height: 120)
+                .foregroundColor(.gray.opacity(0.20))
+            Spacer()
         }
         .padding()
     }
+    
 }
 
 struct ContentView_Previews: PreviewProvider {
