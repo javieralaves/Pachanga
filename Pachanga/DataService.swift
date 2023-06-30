@@ -16,4 +16,13 @@ struct DataService {
                 Player(firstName: "Alvaro", lastName: "Perez", profileImage: "alvaro")]
     }
     
+    func getPachangas() -> [Match] {
+        return [Match(teamOne: (getPlayers()[0], getPlayers()[1]),
+                      teamTwo: (getPlayers()[2], getPlayers()[3]),
+                      location: "Club Playa Muchavista",
+                      date: Date(),
+                      timeHour: 8,
+                      timeMinute: 30)]
+    }
+    
 }
