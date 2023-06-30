@@ -9,13 +9,25 @@ import SwiftUI
 
 struct ContentView: View {
     
+    var playerOne = DataService().getPlayers()[0]
+    var playerTwo = DataService().getPlayers()[1]
+    var playerThree = DataService().getPlayers()[2]
+    var playerFour = DataService().getPlayers()[3]
+    
     var body: some View {
         VStack (alignment: .leading) {
-            Text("Upcoming match")
+            Text("Próxima pachanga")
                 .font(.headline)
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .frame(height: 120)
-                .foregroundColor(.gray.opacity(0.20))
+            ZStack {
+                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                    .frame(height: 120)
+                    .foregroundColor(.gray.opacity(0.20))
+                VStack {
+                    Text("\(playerOne.firstName) y \(playerTwo.firstName)")
+                    Text("vs")
+                    Text("\(playerThree.firstName) y \(playerFour.firstName)")
+                }
+            }
             Spacer()
         }
         .padding()
