@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5952532A2A5020A7003CE6B5 /* NewMatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595253292A5020A7003CE6B5 /* NewMatch.swift */; };
 		59B788782A4D7FFE00079978 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B788772A4D7FFE00079978 /* Player.swift */; };
 		59B7887A2A4D814B00079978 /* Match.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B788792A4D814B00079978 /* Match.swift */; };
 		59C854842A4EB51E0069B6F3 /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C854832A4EB51E0069B6F3 /* DataService.swift */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		595253292A5020A7003CE6B5 /* NewMatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMatch.swift; sourceTree = "<group>"; };
 		59B788772A4D7FFE00079978 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		59B788792A4D814B00079978 /* Match.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Match.swift; sourceTree = "<group>"; };
 		59C854832A4EB51E0069B6F3 /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
@@ -60,6 +62,7 @@
 				59E723BF2A4CC4B000236085 /* PachangaApp.swift */,
 				59E723C12A4CC4B000236085 /* ContentView.swift */,
 				59B788772A4D7FFE00079978 /* Player.swift */,
+				595253292A5020A7003CE6B5 /* NewMatch.swift */,
 				59B788792A4D814B00079978 /* Match.swift */,
 				59C854832A4EB51E0069B6F3 /* DataService.swift */,
 				59E723C32A4CC4B100236085 /* Assets.xcassets */,
@@ -146,6 +149,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5952532A2A5020A7003CE6B5 /* NewMatch.swift in Sources */,
 				59E723C22A4CC4B000236085 /* ContentView.swift in Sources */,
 				59B788782A4D7FFE00079978 /* Player.swift in Sources */,
 				59E723C02A4CC4B000236085 /* PachangaApp.swift in Sources */,
