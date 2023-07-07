@@ -11,6 +11,10 @@
 		59B788782A4D7FFE00079978 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B788772A4D7FFE00079978 /* Player.swift */; };
 		59B7887A2A4D814B00079978 /* Match.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B788792A4D814B00079978 /* Match.swift */; };
 		59C854842A4EB51E0069B6F3 /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C854832A4EB51E0069B6F3 /* DataService.swift */; };
+		59D693AD2A5874BF008364A7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D693AC2A5874BF008364A7 /* HomeView.swift */; };
+		59D693AF2A5874D2008364A7 /* RankingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D693AE2A5874D2008364A7 /* RankingView.swift */; };
+		59D693B12A5874DF008364A7 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D693B02A5874DF008364A7 /* ProfileView.swift */; };
+		59D693B32A58770D008364A7 /* AppLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D693B22A58770D008364A7 /* AppLogo.swift */; };
 		59E723C02A4CC4B000236085 /* PachangaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E723BF2A4CC4B000236085 /* PachangaApp.swift */; };
 		59E723C22A4CC4B000236085 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E723C12A4CC4B000236085 /* ContentView.swift */; };
 		59E723C42A4CC4B100236085 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 59E723C32A4CC4B100236085 /* Assets.xcassets */; };
@@ -22,6 +26,10 @@
 		59B788772A4D7FFE00079978 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		59B788792A4D814B00079978 /* Match.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Match.swift; sourceTree = "<group>"; };
 		59C854832A4EB51E0069B6F3 /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
+		59D693AC2A5874BF008364A7 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		59D693AE2A5874D2008364A7 /* RankingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingView.swift; sourceTree = "<group>"; };
+		59D693B02A5874DF008364A7 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		59D693B22A58770D008364A7 /* AppLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLogo.swift; sourceTree = "<group>"; };
 		59E723BC2A4CC4B000236085 /* Pachanga.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pachanga.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		59E723BF2A4CC4B000236085 /* PachangaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PachangaApp.swift; sourceTree = "<group>"; };
 		59E723C12A4CC4B000236085 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -61,6 +69,10 @@
 			children = (
 				59E723BF2A4CC4B000236085 /* PachangaApp.swift */,
 				59E723C12A4CC4B000236085 /* ContentView.swift */,
+				59D693AC2A5874BF008364A7 /* HomeView.swift */,
+				59D693AE2A5874D2008364A7 /* RankingView.swift */,
+				59D693B02A5874DF008364A7 /* ProfileView.swift */,
+				59D693B22A58770D008364A7 /* AppLogo.swift */,
 				59B788772A4D7FFE00079978 /* Player.swift */,
 				595253292A5020A7003CE6B5 /* NewMatch.swift */,
 				59B788792A4D814B00079978 /* Match.swift */,
@@ -150,6 +162,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				5952532A2A5020A7003CE6B5 /* NewMatch.swift in Sources */,
+				59D693B12A5874DF008364A7 /* ProfileView.swift in Sources */,
+				59D693AF2A5874D2008364A7 /* RankingView.swift in Sources */,
+				59D693AD2A5874BF008364A7 /* HomeView.swift in Sources */,
+				59D693B32A58770D008364A7 /* AppLogo.swift in Sources */,
 				59E723C22A4CC4B000236085 /* ContentView.swift in Sources */,
 				59B788782A4D7FFE00079978 /* Player.swift in Sources */,
 				59E723C02A4CC4B000236085 /* PachangaApp.swift in Sources */,

@@ -10,20 +10,23 @@ import SwiftUI
 struct ContentView: View {
     
     var body: some View {
-        NavigationView {
-            Form {
-                Section {
-                    NavigationLink {
-                        NewMatch()
-                    } label: {
-                        Text("Nueva pachanga")
-                    }
+        
+        // Navigation tabs
+        TabView {
+            HomeView()
+                .tabItem {
+                    Image(systemName: "house")
                 }
-                Section {
-                    Text("No hay pachangas")
+            RankingView()
+                .tabItem {
+                    Image(systemName: "trophy")
                 }
-            }
+            ProfileView()
+                .tabItem {
+                    Image(systemName: "person.crop.circle")
+                }
         }
+        
     }
 }
 
