@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5952532A2A5020A7003CE6B5 /* NewMatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595253292A5020A7003CE6B5 /* NewMatch.swift */; };
+		59967B0C2A5C1BA6000B2874 /* SessionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59967B0B2A5C1BA6000B2874 /* SessionCard.swift */; };
 		59B788782A4D7FFE00079978 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B788772A4D7FFE00079978 /* Player.swift */; };
 		59B7887A2A4D814B00079978 /* Match.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B788792A4D814B00079978 /* Match.swift */; };
 		59C854842A4EB51E0069B6F3 /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C854832A4EB51E0069B6F3 /* DataService.swift */; };
@@ -23,6 +24,7 @@
 
 /* Begin PBXFileReference section */
 		595253292A5020A7003CE6B5 /* NewMatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMatch.swift; sourceTree = "<group>"; };
+		59967B0B2A5C1BA6000B2874 /* SessionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCard.swift; sourceTree = "<group>"; };
 		59B788772A4D7FFE00079978 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		59B788792A4D814B00079978 /* Match.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Match.swift; sourceTree = "<group>"; };
 		59C854832A4EB51E0069B6F3 /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
@@ -70,6 +72,7 @@
 				59E723BF2A4CC4B000236085 /* PachangaApp.swift */,
 				59E723C12A4CC4B000236085 /* ContentView.swift */,
 				59D693AC2A5874BF008364A7 /* HomeView.swift */,
+				59967B0B2A5C1BA6000B2874 /* SessionCard.swift */,
 				59D693AE2A5874D2008364A7 /* RankingView.swift */,
 				59D693B02A5874DF008364A7 /* ProfileView.swift */,
 				59D693B22A58770D008364A7 /* AppLogo.swift */,
@@ -170,6 +173,7 @@
 				59B788782A4D7FFE00079978 /* Player.swift in Sources */,
 				59E723C02A4CC4B000236085 /* PachangaApp.swift in Sources */,
 				59B7887A2A4D814B00079978 /* Match.swift in Sources */,
+				59967B0C2A5C1BA6000B2874 /* SessionCard.swift in Sources */,
 				59C854842A4EB51E0069B6F3 /* DataService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
