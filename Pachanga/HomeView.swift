@@ -21,7 +21,7 @@ struct HomeView: View {
                     .font(.title2)
                     .padding(.bottom, 24)
                 
-                ScrollView {
+                ScrollView (showsIndicators: false) {
                     
                     // Sections
                     VStack (spacing: 40) {
