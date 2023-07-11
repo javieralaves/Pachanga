@@ -9,7 +9,9 @@ import SwiftUI
 
 struct SessionCard: View {
     
-    @State var players = [String]() // to be replaced with [Player]()
+    @State var players: [Player] = [Player(firstName: "Javi", lastName: "Alaves", profileImage: "javi"),
+                                    Player(firstName: "Danielle", lastName: "Humphreys", profileImage: "danielle"),
+                                    Player(firstName: "Jorge", lastName: "Yoldi", profileImage: "jorge")]
     
     @State var playersTitle: String
     @State var startTime: String
@@ -18,18 +20,15 @@ struct SessionCard: View {
     
     var body: some View {
         
-        // Avatars will be obtained from players array imageProfile property with a ForEach
         VStack (alignment: .leading, spacing: 12) {
             HStack (spacing: -8){
-                Image("javi")
-                    .frame(width: 32, height: 32)
-                Image("danielle")
-                    .frame(width: 32, height: 32)
-                Image("jorge")
-                    .frame(width: 32, height: 32)
+                ForEach(0..<3) { player in
+                    Image(players[player].profileImage)
+                        .frame(width: 32, height: 32)
+                }
             }
             
-            Text(playersTitle) // to be defined by function based on # of players
+            Text(setCardTitle()) // to be defined by function based on # of players
                 .fontWeight(.semibold)
             
             HStack {
@@ -50,6 +49,20 @@ struct SessionCard: View {
         .background(.white)
         .cornerRadius(10)
         .shadow(color: .black.opacity(0.05), radius: 6, x: 0, y: 4)
+    }
+    
+    func setCardTitle() -> String {
+        
+        // If array of players >= 3, do as "X, Y, Z & array.count - 3 more
+        // else, just "X, Y, Z"
+        
+        if players.count >= 4 {
+            return "\(players[0].firstName), \(players[1].firstName), \(players[2].firstName) & \(players.count - 3) más"
+        } else {
+            // Need to set this dynamically based on number of players, concatenating with a ForEach
+            return "..."
+        }
+        
     }
 }
 
