@@ -9,12 +9,14 @@ import Foundation
 
 struct Player: Identifiable, Codable {
     
-    var id = UUID()
+    var id: UUID
     var firstName: String
     var lastName: String
-    var profileImage: String
+    var emailAddress: String
+    var sessions: [Session]
     
-    var wins: Int = 0
-    var losses: Int = 0
+    // var profileImage: String
+    // var wins: Int = 0
+    // var losses: Int = 0
     
 }
