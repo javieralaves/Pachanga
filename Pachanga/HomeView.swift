@@ -8,52 +8,74 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var showingAddSession = false
+    @State private var mySessions = Sessions()
     
     var body: some View {
         
-        ZStack {
-            // Background
-            Color.black.ignoresSafeArea().opacity(0.05)
-            
-            VStack () {
-                Image(systemName: "volleyball.fill")
-                    .foregroundStyle(.black)
-                    .font(.title2)
-                    .padding(.bottom, 24)
+        NavigationView {
+            ZStack {
+                // Background
+                Color.black.ignoresSafeArea().opacity(0.05)
                 
-                ScrollView (showsIndicators: false) {
+                VStack () {
+                    Image(systemName: "volleyball.fill")
+                        .foregroundStyle(.black)
+                        .font(.title2)
+                        .padding(.bottom, 24)
                     
-                    // Sections
-                    VStack (spacing: 40) {
+                    ScrollView (showsIndicators: false) {
                         
-                        // Section
-                        VStack (alignment: .leading, spacing: 24) {
-                            Text("Tus pachangas")
-                                .font(.title.bold())
+                        // Sections
+                        VStack (spacing: 40) {
                             
-                            // Session
-                            SessionCard(playersTitle: "Javi, Danielle, Jorge & 2 más", startTime: "8:00", endTime: "9:30", location: "Club Vóley Playa Muchavista")
+                            // Section
+                            VStack (alignment: .leading, spacing: 24) {
+                                Text("Tus pachangas")
+                                    .font(.title.bold())
+                                
+                                // Session
+                                SessionCard(playersTitle: "Javi, Danielle, Jorge & 2 más", startTime: "8:00", endTime: "9:30", location: "Club Vóley Playa Muchavista")
+                                
+                            }
                             
+                            // Section
+                            VStack (alignment: .leading, spacing: 24) {
+                                Text("Cerca de ti")
+                                    .font(.title.bold())
+                                
+                                SessionCard(playersTitle: "Marta, Diego, Paco & 3 más", startTime: "9:00", endTime: "10:30", location: "Restaurante Xaloc")
+                                
+                                SessionCard(playersTitle: "Jon, Manu & 1 más", startTime: "7:30", endTime: "9:30", location: "Restaurante Niza")
+                            }
                         }
-                        
-                        // Section
-                        VStack (alignment: .leading, spacing: 24) {
-                            Text("Cerca de ti")
-                                .font(.title.bold())
-                                                        
-                            SessionCard(playersTitle: "Marta, Diego, Paco & 3 más", startTime: "9:00", endTime: "10:30", location: "Restaurante Xaloc")
-
-                            SessionCard(playersTitle: "Jon, Manu & 1 más", startTime: "7:30", endTime: "9:30", location: "Restaurante Niza")
-                            
-                        }
-                        
                     }
-                    
                 }
-
+                .padding(24)
+                
+                HStack {
+                    Spacer()
+                    VStack {
+                        Spacer()
+                        Button {
+                            showingAddSession = true
+                            
+                        } label: {
+                            Image(systemName: "plus")
+                                .font(Font.title.weight(.medium))
+                                .tint(Color.white)
+                        }
+                        .frame(width: 64, height: 64)
+                        .background(Color.black)
+                        .clipShape(Circle())
+                        .padding(16)
+                        .padding(.bottom, 24)
+                    }
+                }
             }
-            .padding(24)
-            
+            .sheet(isPresented: $showingAddSession) {
+                NewSession(sessions: mySessions)
+            }
         }
         
     }
