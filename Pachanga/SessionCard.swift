@@ -19,12 +19,12 @@ struct SessionCard: View {
     var body: some View {
         
         VStack (alignment: .leading, spacing: 12) {
-            HStack (spacing: -8){
-                ForEach(0..<3) { player in
-                    Image(players[player].profileImage)
-                        .frame(width: 32, height: 32)
-                }
-            }
+//            HStack (spacing: -8){
+//                ForEach(0..<3) { player in
+//                    Image(players[player].profileImage)
+//                        .frame(width: 32, height: 32)
+//                }
+//            }
             
             Text(setCardTitle()) // to be defined by function based on # of players
                 .fontWeight(.semibold)
