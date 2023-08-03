@@ -23,6 +23,7 @@
 		59E723C22A4CC4B000236085 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E723C12A4CC4B000236085 /* ContentView.swift */; };
 		59E723C42A4CC4B100236085 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 59E723C32A4CC4B100236085 /* Assets.xcassets */; };
 		59E723C72A4CC4B100236085 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 59E723C62A4CC4B100236085 /* Preview Assets.xcassets */; };
+		663F38B62A7C133C00FE6272 /* SessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663F38B52A7C133C00FE6272 /* SessionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 		59E723C12A4CC4B000236085 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		59E723C32A4CC4B100236085 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		59E723C62A4CC4B100236085 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		663F38B52A7C133C00FE6272 /* SessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +92,7 @@
 				59B788792A4D814B00079978 /* Match.swift */,
 				59C854832A4EB51E0069B6F3 /* DataService.swift */,
 				59E723C32A4CC4B100236085 /* Assets.xcassets */,
+				663F38B52A7C133C00FE6272 /* SessionView.swift */,
 				59E723C52A4CC4B100236085 /* Preview Content */,
 			);
 			path = Pachanga;
@@ -174,6 +177,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5952532A2A5020A7003CE6B5 /* NewMatch.swift in Sources */,
+				663F38B62A7C133C00FE6272 /* SessionView.swift in Sources */,
 				59BB5A5F2A6AA1600089711F /* NewSession.swift in Sources */,
 				59D693B12A5874DF008364A7 /* ProfileView.swift in Sources */,
 				59D693AF2A5874D2008364A7 /* RankingView.swift in Sources */,

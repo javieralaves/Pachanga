@@ -35,7 +35,12 @@ struct HomeView: View {
                                     .font(.title.bold())
                                 
                                 // Session
-                                SessionCard(playersTitle: "Javi, Danielle, Jorge & 2 más", startTime: "8:00", endTime: "9:30", location: "Club Vóley Playa Muchavista")
+                                NavigationLink {
+                                    SessionView()
+                                } label: {
+                                    SessionCard(playersTitle: "Javi, Danielle, Jorge & 2 más", startTime: "8:00", endTime: "9:30", location: "Club Vóley Playa Muchavista")
+                                }
+                                .foregroundColor(.black)
                                 
                             }
                             
@@ -44,9 +49,20 @@ struct HomeView: View {
                                 Text("Cerca de ti")
                                     .font(.title.bold())
                                 
-                                SessionCard(playersTitle: "Marta, Diego, Paco & 3 más", startTime: "9:00", endTime: "10:30", location: "Restaurante Xaloc")
+                                // Session
+                                NavigationLink {
+                                    SessionView()
+                                } label: {
+                                    SessionCard(playersTitle: "Marta, Diego, Paco & 3 más", startTime: "9:00", endTime: "10:30", location: "Restaurante Xaloc")
+                                }
+                                .foregroundColor(.black)
                                 
-                                SessionCard(playersTitle: "Jon, Manu & 1 más", startTime: "7:30", endTime: "9:30", location: "Restaurante Niza")
+                                NavigationLink {
+                                    SessionView()
+                                } label: {
+                                    SessionCard(playersTitle: "Jon, Manu & 1 más", startTime: "7:30", endTime: "9:30", location: "Restaurante Niza")
+                                }
+                                .foregroundColor(.black)
                             }
                         }
                     }
