@@ -33,7 +33,8 @@ struct NewSession: View {
             .navigationTitle("Nueva pachanga")
             .toolbar {
                 Button("Crear") {
-                    let session = Session(players: [], date: date, location: location, ballAvailable: ballAvailable)
+                    let session = Session(participants: [Player](), date: date, location: location)
+                    // need to append user who creates session to this new participants array
                     sessions.sessions.append(session)
                     dismiss()
                 }

@@ -9,9 +9,7 @@ import SwiftUI
 
 struct SessionCard: View {
     
-    @State var players: [Player] = [Player(firstName: "Javi", lastName: "Alaves", profileImage: "javi"),
-                                    Player(firstName: "Danielle", lastName: "Humphreys", profileImage: "danielle"),
-                                    Player(firstName: "Jorge", lastName: "Yoldi", profileImage: "jorge")]
+    @State var players: [Player] = Player.samplePlayers
     
     @State var playersTitle: String
     @State var startTime: String
