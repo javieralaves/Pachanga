@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct SessionView: View {
-    @State private var enoughMembers = false
-    @State private var enoughMaterials = false
+//    @State private var enoughMembers = false
+//    @State private var enoughMaterials = false
     
     var participants: [Player]
     var date: Date
@@ -64,34 +64,34 @@ struct SessionView: View {
                     }
                 }
                 
-                Section {
-                    HStack {
-                        Spacer()
-                        VStack{
-                            Button("Finish Session"){
-                                
-                            }
-                            .buttonStyle(.borderedProminent)
-                            .padding(4)
-                            
-                            if(!enoughMembers) {
-                                Text("Not enough players to begin!")
-                                    .foregroundColor(.red)
-                                    .bold()
-                                    .padding(4)
-                            }
-                            
-                            if(!enoughMaterials) {
-                                Text("Nobody is bringing a Volleyball!")
-                                    .foregroundColor(.red)
-                                    .bold()
-                                    .padding(2)
-                            }
-                        }
-                        Spacer()
-                    }
-                    .listRowBackground(Color(.systemGroupedBackground))
-                }
+//                Section {
+//                    HStack {
+//                        Spacer()
+//                        VStack{
+//                            Button("Finish Session"){
+//
+//                            }
+//                            .buttonStyle(.borderedProminent)
+//                            .padding(4)
+//
+//                            if(!enoughMembers) {
+//                                Text("Not enough players to begin!")
+//                                    .foregroundColor(.red)
+//                                    .bold()
+//                                    .padding(4)
+//                            }
+//
+//                            if(!enoughMaterials) {
+//                                Text("Nobody is bringing a Volleyball!")
+//                                    .foregroundColor(.red)
+//                                    .bold()
+//                                    .padding(2)
+//                            }
+//                        }
+//                        Spacer()
+//                    }
+//                    .listRowBackground(Color(.systemGroupedBackground))
+//                }
             }
             .navigationTitle("Session info")
             .navigationBarTitleDisplayMode(.inline)
