@@ -93,12 +93,12 @@ struct SessionView: View {
                     .listRowBackground(Color(.systemGroupedBackground))
                 }
             }
-            .navigationTitle("My Session")
+            .navigationTitle("Session info")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 Button {
                 } label: {
-                    Image(systemName: "pencil.line")
-                        .padding()
+                    Text("Edit")
                 }
             }
         }
