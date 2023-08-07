@@ -11,6 +11,10 @@ struct SessionView: View {
     @State private var enoughMembers = false
     @State private var enoughMaterials = false
     
+    var participants: [Player]
+    var date: Date
+    var location: String
+    
     var mySession = Session(participants: Player.samplePlayers, date: Date.now, location: "El Campello")
     
     var body: some View {
@@ -20,23 +24,24 @@ struct SessionView: View {
                     HStack {
                         Text("Date")
                         Spacer()
-                        Text(mySession.date, format: .dateTime.day().month())
+                        Text(date, format: .dateTime.day().month())
                             .foregroundColor(.secondary)
                     }
                     HStack {
                         Text("Time")
                         Spacer()
-                        Text(mySession.date, format: .dateTime.hour().minute())
+                        Text(date, format: .dateTime.hour().minute())
                             .foregroundColor(.secondary)
                     }
                     HStack {
                         Text("Location")
                         Spacer()
-                        Text(mySession.location)
+                        Text(location)
                             .foregroundColor(.secondary)
                     }
                 }
                 
+                // need to replace these with participants data
                 Section("Players") {
                     HStack {
                         Text("Javier Alaves")
@@ -101,6 +106,6 @@ struct SessionView: View {
 
 struct SessionView_Previews: PreviewProvider {
     static var previews: some View {
-        SessionView()
+        SessionView(participants: Player.samplePlayers, date: Date.now, location: "El Campello")
     }
 }

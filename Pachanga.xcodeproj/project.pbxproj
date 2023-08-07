@@ -82,6 +82,7 @@
 				59D693AC2A5874BF008364A7 /* HomeView.swift */,
 				59967B0B2A5C1BA6000B2874 /* SessionCard.swift */,
 				59BB5A5A2A6A9B8C0089711F /* Session.swift */,
+				663F38B52A7C133C00FE6272 /* SessionView.swift */,
 				59BB5A5C2A6A9E500089711F /* Sessions.swift */,
 				59BB5A5E2A6AA1600089711F /* NewSession.swift */,
 				59D693AE2A5874D2008364A7 /* RankingView.swift */,
@@ -92,7 +93,6 @@
 				59B788792A4D814B00079978 /* Match.swift */,
 				59C854832A4EB51E0069B6F3 /* DataService.swift */,
 				59E723C32A4CC4B100236085 /* Assets.xcassets */,
-				663F38B52A7C133C00FE6272 /* SessionView.swift */,
 				59E723C52A4CC4B100236085 /* Preview Content */,
 			);
 			path = Pachanga;

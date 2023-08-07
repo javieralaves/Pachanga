@@ -26,7 +26,7 @@ struct HomeView: View {
                     
                     ScrollView (showsIndicators: false) {
                         
-                        // Sections
+                        // Sections, need to be replaced with dynamic session data and props
                         VStack (spacing: 40) {
                             
                             // Section
@@ -36,7 +36,7 @@ struct HomeView: View {
                                 
                                 // Session
                                 NavigationLink {
-                                    SessionView()
+                                    SessionView(participants: Player.samplePlayers, date: Date.now, location: "El Campello")
                                 } label: {
                                     SessionCard(playersTitle: "Javi, Danielle, Jorge & 2 más", startTime: "8:00", endTime: "9:30", location: "Club Vóley Playa Muchavista")
                                 }
@@ -51,14 +51,14 @@ struct HomeView: View {
                                 
                                 // Session
                                 NavigationLink {
-                                    SessionView()
+                                    SessionView(participants: Player.samplePlayers, date: Date.now, location: "Restaurante Xaloc")
                                 } label: {
                                     SessionCard(playersTitle: "Marta, Diego, Paco & 3 más", startTime: "9:00", endTime: "10:30", location: "Restaurante Xaloc")
                                 }
                                 .foregroundColor(.black)
                                 
                                 NavigationLink {
-                                    SessionView()
+                                    SessionView(participants: Player.samplePlayers, date: Date.now, location: "Niza")
                                 } label: {
                                     SessionCard(playersTitle: "Jon, Manu & 1 más", startTime: "7:30", endTime: "9:30", location: "Restaurante Niza")
                                 }
