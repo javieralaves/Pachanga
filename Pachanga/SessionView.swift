@@ -47,13 +47,14 @@ struct SessionView: View {
                         Text("Javier Alaves")
                         Spacer()
                         Image(systemName: "volleyball.fill")
+                            .foregroundColor(.secondary)
+                            .padding(.trailing, 4)
                     }
                     HStack {
                         Text("Nacho Alaves")
                         Spacer()
-                        Image("net")
-                            .resizable()
-                            .frame(width: 25, height: 25)
+                        Image(systemName: "sportscourt.fill")
+                            .foregroundColor(.secondary)
                     }
                     HStack {
                         Text("Antonio Marcos")
