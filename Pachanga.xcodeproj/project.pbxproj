@@ -82,6 +82,7 @@
 		59C046E62A8262DD00E5D071 /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
+				59E723C12A4CC4B000236085 /* ContentView.swift */,
 				59C046E72A82630800E5D071 /* AuthenticationView.swift */,
 				59C046E92A82646C00E5D071 /* SignInEmailView.swift */,
 				59C046EB2A82677900E5D071 /* AuthenticationManager.swift */,
@@ -111,7 +112,6 @@
 			children = (
 				59E723BF2A4CC4B000236085 /* PachangaApp.swift */,
 				59C046E62A8262DD00E5D071 /* Authentication */,
-				59E723C12A4CC4B000236085 /* ContentView.swift */,
 				59D693AC2A5874BF008364A7 /* HomeView.swift */,
 				59967B0B2A5C1BA6000B2874 /* SessionCard.swift */,
 				59BB5A5A2A6A9B8C0089711F /* Session.swift */,
