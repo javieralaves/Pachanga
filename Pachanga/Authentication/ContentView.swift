@@ -13,6 +13,7 @@ struct ContentView: View {
     
     var body: some View {
         
+        // need to replace this with the actual home view and recontextualize the code below
         ZStack {
             NavigationStack {
                 SettingsView(showSignedInView: $showSignedInView)
