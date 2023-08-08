@@ -9,23 +9,25 @@ import SwiftUI
 
 struct ContentView: View {
     
+    @State private var showSignedInView: Bool = false
+    
     var body: some View {
         
-        // Navigation tabs
-        TabView {
-            HomeView()
-                .tabItem {
-                    Image(systemName: "house")
-                }
-            RankingView()
-                .tabItem {
-                    Image(systemName: "trophy")
-                }
-            ProfileView()
-                .tabItem {
-                    Image(systemName: "person.crop.circle")
-                }
+        ZStack {
+            NavigationStack {
+                Text("You're signed in")
+            }
         }
+        .onAppear {
+            let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
+            self.showSignedInView = authUser == nil
+        }
+        .fullScreenCover(isPresented: $showSignedInView) {
+            NavigationStack {
+                AuthenticationView()
+            }
+        }
+        
         
     }
 }

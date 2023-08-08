@@ -17,9 +17,7 @@ struct PachangaApp: App {
     
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
-                AuthenticationView()
-            }
+            ContentView()
         }
     }
 }
