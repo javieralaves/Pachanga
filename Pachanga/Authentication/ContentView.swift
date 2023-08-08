@@ -15,7 +15,7 @@ struct ContentView: View {
         
         ZStack {
             NavigationStack {
-                Text("You're signed in")
+                SettingsView(showSignedInView: $showSignedInView)
             }
         }
         .onAppear {
