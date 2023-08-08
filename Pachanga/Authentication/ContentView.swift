@@ -9,23 +9,23 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var showSignedInView: Bool = false
+    @State private var showSignInView: Bool = false
     
     var body: some View {
         
         // need to replace this with the actual home view and recontextualize the code below
         ZStack {
             NavigationStack {
-                SettingsView(showSignedInView: $showSignedInView)
+                SettingsView(showSignInView: $showSignInView)
             }
         }
         .onAppear {
             let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
-            self.showSignedInView = authUser == nil
+            self.showSignInView = authUser == nil
         }
-        .fullScreenCover(isPresented: $showSignedInView) {
+        .fullScreenCover(isPresented: $showSignInView) {
             NavigationStack {
-                AuthenticationView()
+                AuthenticationView(showSignInView: $showSignInView)
             }
         }
         
@@ -35,6 +35,8 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        NavigationStack {
+            ContentView()            
+        }
     }
 }

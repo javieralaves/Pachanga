@@ -13,7 +13,7 @@ final class SignInEmailViewModel: ObservableObject {
     @Published var email = ""
     @Published var password = ""
     
-    func signIn() {
+    func signIn() async throws {
         
         // Do proper validation down the line
         guard !email.isEmpty, !password.isEmpty else {
@@ -21,15 +21,7 @@ final class SignInEmailViewModel: ObservableObject {
             return
         }
         
-        Task {
-            do {
-                let returnedUserData = try await AuthenticationManager.shared.createUser(email: email, password: password)
-                print("Success")
-                print(returnedUserData)
-            } catch {
-                print("Error: \(error)")
-            }
-        }
+        try await AuthenticationManager.shared.createUser(email: email, password: password)
     }
     
 }
@@ -37,6 +29,7 @@ final class SignInEmailViewModel: ObservableObject {
 struct SignInEmailView: View {
     
     @StateObject private var viewModel = SignInEmailViewModel()
+    @Binding var showSignInView: Bool
     
     var body: some View {
         VStack {
@@ -51,7 +44,14 @@ struct SignInEmailView: View {
                 .cornerRadius(10)
             
             Button {
-                viewModel.signIn()
+                Task {
+                    do {
+                        try await viewModel.signIn()
+                        showSignInView = false
+                    } catch {
+                        print(error)
+                    }
+                }
             } label: {
                 Text("Iniciar sesión")
                     .font(.headline)
@@ -73,7 +73,7 @@ struct SignInEmailView: View {
 struct SignInEmailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            SignInEmailView()
+            SignInEmailView(showSignInView: .constant(false))
         }
     }
 }

@@ -19,7 +19,7 @@ final class SettingsViewModel: ObservableObject {
 struct SettingsView: View {
     
     @StateObject private var viewModel = SettingsViewModel()
-    @Binding var showSignedInView: Bool
+    @Binding var showSignInView: Bool
     
     var body: some View {
         List {
@@ -27,7 +27,7 @@ struct SettingsView: View {
                 Task {
                     do {
                         try viewModel.signOut()
-                        showSignedInView = true
+                        showSignInView = true
                     } catch {
                         // need better error handling here
                         print(error)
@@ -41,6 +41,6 @@ struct SettingsView: View {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView(showSignedInView: .constant(false))
+        SettingsView(showSignInView: .constant(false))
     }
 }
