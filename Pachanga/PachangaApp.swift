@@ -13,7 +13,6 @@ struct PachangaApp: App {
     
     init() {
         FirebaseApp.configure()
-        print("Configured Firebase!")
     }
     
     var body: some Scene {
