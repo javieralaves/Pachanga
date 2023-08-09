@@ -15,11 +15,13 @@ struct ContentView: View {
         
         // need to replace this with the actual home view and recontextualize the code below
         ZStack {
-            NavigationStack {
-                // need to bring back tab view instead of HomeView() later
-                // HomeView()
-                // code for settings tab:
-                SettingsView(showSignInView: $showSignInView)
+            if !showSignInView {
+                NavigationStack {
+                    // need to bring back tab view instead of HomeView() later
+                    // HomeView()
+                    // code for settings tab:
+                    SettingsView(showSignInView: $showSignInView)
+                }
             }
         }
         .onAppear {
@@ -39,7 +41,7 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            ContentView()            
+            ContentView()
         }
     }
 }
