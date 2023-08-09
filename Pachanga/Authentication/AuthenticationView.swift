@@ -9,8 +9,22 @@ import GoogleSignIn
 import GoogleSignInSwift
 import SwiftUI
 
+@MainActor
+final class AuthenticationViewModel: ObservableObject {
+    
+    func signInGoogle() async throws {
+        guard let topVC = Utilities.shared.topViewController() else {
+            throw URLError(.cannotFindHost)
+        }
+        
+        let gidSignInResult = try await GIDSignIn.sharedInstance.signIn(withPresenting: topVC)
+    }
+    
+}
+
 struct AuthenticationView: View {
     
+    @StateObject private var viewModel = AuthenticationViewModel()
     @Binding var showSignInView: Bool
     
     var body: some View {

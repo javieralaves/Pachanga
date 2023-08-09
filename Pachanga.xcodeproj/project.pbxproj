@@ -11,6 +11,7 @@
 		59967B0C2A5C1BA6000B2874 /* SessionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59967B0B2A5C1BA6000B2874 /* SessionCard.swift */; };
 		59AA47912A84078100927483 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 59AA47902A84078100927483 /* GoogleSignIn */; };
 		59AA47932A84078100927483 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 59AA47922A84078100927483 /* GoogleSignInSwift */; };
+		59AA47972A840B1100927483 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59AA47962A840B1100927483 /* Utilities.swift */; };
 		59B788782A4D7FFE00079978 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B788772A4D7FFE00079978 /* Player.swift */; };
 		59B7887A2A4D814B00079978 /* Match.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B788792A4D814B00079978 /* Match.swift */; };
 		59BB5A5B2A6A9B8D0089711F /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59BB5A5A2A6A9B8C0089711F /* Session.swift */; };
@@ -40,6 +41,7 @@
 		595253292A5020A7003CE6B5 /* NewMatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMatch.swift; sourceTree = "<group>"; };
 		59967B0B2A5C1BA6000B2874 /* SessionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCard.swift; sourceTree = "<group>"; };
 		59AA47942A8407CB00927483 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		59AA47962A840B1100927483 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		59B788772A4D7FFE00079978 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		59B788792A4D814B00079978 /* Match.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Match.swift; sourceTree = "<group>"; };
 		59BB5A5A2A6A9B8C0089711F /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
@@ -79,6 +81,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		59AA47952A840B0000927483 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				59AA47962A840B1100927483 /* Utilities.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
 		59C046E32A82627E00E5D071 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -120,6 +130,7 @@
 			children = (
 				59AA47942A8407CB00927483 /* Info.plist */,
 				59E723BF2A4CC4B000236085 /* PachangaApp.swift */,
+				59AA47952A840B0000927483 /* Utilities */,
 				59C046E62A8262DD00E5D071 /* Authentication */,
 				59D693AC2A5874BF008364A7 /* HomeView.swift */,
 				59967B0B2A5C1BA6000B2874 /* SessionCard.swift */,
@@ -249,6 +260,7 @@
 				59967B0C2A5C1BA6000B2874 /* SessionCard.swift in Sources */,
 				59C046E82A82630800E5D071 /* AuthenticationView.swift in Sources */,
 				59C854842A4EB51E0069B6F3 /* DataService.swift in Sources */,
+				59AA47972A840B1100927483 /* Utilities.swift in Sources */,
 				59C046EE2A8277F700E5D071 /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
