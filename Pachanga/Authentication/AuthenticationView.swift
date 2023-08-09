@@ -5,6 +5,8 @@
 //  Created by Javier Alaves on 8/8/23.
 //
 
+import GoogleSignIn
+import GoogleSignInSwift
 import SwiftUI
 
 struct AuthenticationView: View {
@@ -23,6 +25,10 @@ struct AuthenticationView: View {
                     .frame(maxWidth: .infinity)
                     .background(.blue)
                     .cornerRadius(10)
+            }
+            
+            GoogleSignInButton(viewModel: GoogleSignInButtonViewModel(scheme: .dark, style: .wide, state: .normal)) {
+                
             }
         }
         .padding()
