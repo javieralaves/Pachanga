@@ -17,9 +17,9 @@ struct ContentView: View {
         ZStack {
             NavigationStack {
                 // need to bring back tab view instead of HomeView() later
-                HomeView()
+                // HomeView()
                 // code for settings tab:
-                // SettingsView(showSignInView: $showSignInView)
+                SettingsView(showSignInView: $showSignInView)
             }
         }
         .onAppear {
