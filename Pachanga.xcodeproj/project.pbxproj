@@ -12,6 +12,7 @@
 		59AA47912A84078100927483 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 59AA47902A84078100927483 /* GoogleSignIn */; };
 		59AA47932A84078100927483 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 59AA47922A84078100927483 /* GoogleSignInSwift */; };
 		59AA47972A840B1100927483 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59AA47962A840B1100927483 /* Utilities.swift */; };
+		59AA47992A8413BE00927483 /* SignInGoogleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59AA47982A8413BE00927483 /* SignInGoogleHelper.swift */; };
 		59B788782A4D7FFE00079978 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B788772A4D7FFE00079978 /* Player.swift */; };
 		59B7887A2A4D814B00079978 /* Match.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B788792A4D814B00079978 /* Match.swift */; };
 		59BB5A5B2A6A9B8D0089711F /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59BB5A5A2A6A9B8C0089711F /* Session.swift */; };
@@ -42,6 +43,7 @@
 		59967B0B2A5C1BA6000B2874 /* SessionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCard.swift; sourceTree = "<group>"; };
 		59AA47942A8407CB00927483 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		59AA47962A840B1100927483 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		59AA47982A8413BE00927483 /* SignInGoogleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInGoogleHelper.swift; sourceTree = "<group>"; };
 		59B788772A4D7FFE00079978 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		59B788792A4D814B00079978 /* Match.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Match.swift; sourceTree = "<group>"; };
 		59BB5A5A2A6A9B8C0089711F /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 				59C046E92A82646C00E5D071 /* SignInEmailView.swift */,
 				59C046EB2A82677900E5D071 /* AuthenticationManager.swift */,
 				59C046ED2A8277F700E5D071 /* SettingsView.swift */,
+				59AA47982A8413BE00927483 /* SignInGoogleHelper.swift */,
 			);
 			path = Authentication;
 			sourceTree = "<group>";
@@ -243,6 +246,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5952532A2A5020A7003CE6B5 /* NewMatch.swift in Sources */,
+				59AA47992A8413BE00927483 /* SignInGoogleHelper.swift in Sources */,
 				663F38B62A7C133C00FE6272 /* SessionView.swift in Sources */,
 				59BB5A5F2A6AA1600089711F /* NewSession.swift in Sources */,
 				59C046EC2A82677900E5D071 /* AuthenticationManager.swift in Sources */,
