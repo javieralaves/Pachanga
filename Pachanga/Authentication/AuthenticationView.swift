@@ -5,9 +5,15 @@
 //  Created by Javier Alaves on 8/8/23.
 //
 
+import FirebaseAuth
 import GoogleSignIn
 import GoogleSignInSwift
 import SwiftUI
+
+struct GoogleSignInResultModel {
+    let idToken: String
+    let accessToken: String
+}
 
 @MainActor
 final class AuthenticationViewModel: ObservableObject {
@@ -18,6 +24,12 @@ final class AuthenticationViewModel: ObservableObject {
         }
         
         let gidSignInResult = try await GIDSignIn.sharedInstance.signIn(withPresenting: topVC)
+        
+        guard let idToken = gidSignInResult.user.idToken?.tokenString else { throw URLError(.badServerResponse)}
+        let accessToken = gidSignInResult.user.accessToken.tokenString
+        
+        let tokens = GoogleSignInResultModel(idToken: idToken, accessToken: accessToken)
+        try await AuthenticationManager.shared.signInWithGoogle(tokens: tokens)
     }
     
 }
@@ -42,7 +54,14 @@ struct AuthenticationView: View {
             }
             
             GoogleSignInButton(viewModel: GoogleSignInButtonViewModel(scheme: .dark, style: .wide, state: .normal)) {
-                
+                Task {
+                    do {
+                        try await viewModel.signInGoogle()
+                        showSignInView = false
+                    } catch {
+                        print(error)
+                    }
+                }
             }
         }
         .padding()
