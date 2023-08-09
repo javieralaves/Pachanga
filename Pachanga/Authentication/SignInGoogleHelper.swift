@@ -12,6 +12,8 @@ import GoogleSignInSwift
 struct GoogleSignInResultModel {
     let idToken: String
     let accessToken: String
+    let name: String?
+    let email: String?
 }
 
 final class SignInGoogleHelper {
@@ -25,9 +27,12 @@ final class SignInGoogleHelper {
         let gidSignInResult = try await GIDSignIn.sharedInstance.signIn(withPresenting: topVC)
         
         guard let idToken = gidSignInResult.user.idToken?.tokenString else { throw URLError(.badServerResponse)}
-        let accessToken = gidSignInResult.user.accessToken.tokenString
         
-        let tokens = GoogleSignInResultModel(idToken: idToken, accessToken: accessToken)
+        let accessToken = gidSignInResult.user.accessToken.tokenString
+        let name = gidSignInResult.user.profile?.name
+        let email = gidSignInResult.user.profile?.email
+        
+        let tokens = GoogleSignInResultModel(idToken: idToken, accessToken: accessToken, name: name, email: email)
         return tokens
     }
     
