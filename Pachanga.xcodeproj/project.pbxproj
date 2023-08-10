@@ -40,6 +40,7 @@
 
 /* Begin PBXFileReference section */
 		595253292A5020A7003CE6B5 /* NewMatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMatch.swift; sourceTree = "<group>"; };
+		5971B8462A84F4EF00145866 /* Pachanga.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Pachanga.entitlements; sourceTree = "<group>"; };
 		59967B0B2A5C1BA6000B2874 /* SessionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCard.swift; sourceTree = "<group>"; };
 		59AA47942A8407CB00927483 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		59AA47962A840B1100927483 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
@@ -131,6 +132,7 @@
 		59E723BE2A4CC4B000236085 /* Pachanga */ = {
 			isa = PBXGroup;
 			children = (
+				5971B8462A84F4EF00145866 /* Pachanga.entitlements */,
 				59AA47942A8407CB00927483 /* Info.plist */,
 				59E723BF2A4CC4B000236085 /* PachangaApp.swift */,
 				59AA47952A840B0000927483 /* Utilities */,
@@ -391,6 +393,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Pachanga/Pachanga.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Pachanga/Preview Content\"";
@@ -421,6 +424,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Pachanga/Pachanga.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Pachanga/Preview Content\"";
