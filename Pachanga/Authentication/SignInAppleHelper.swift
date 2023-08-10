@@ -69,6 +69,21 @@ final class SignInAppleHelper: NSObject {
         return hashString
     }
     
+    func startSignInWithAppleFlow() async throws -> SignInWithAppleResult {
+        try await withCheckedThrowingContinuation { continuation in
+            self.startSignInWithAppleFlow { result in
+                switch result {
+                case .success(let signInAppleResult):
+                    continuation.resume(returning: signInAppleResult)
+                    return
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                    return
+                }
+            }
+        }
+    }
+    
     func startSignInWithAppleFlow(completion: @escaping (Result<SignInWithAppleResult, Error>) -> Void) {
         guard let topVC = Utilities.shared.topViewController() else {
             completion(.failure(URLError(.badURL)))

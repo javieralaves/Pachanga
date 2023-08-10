@@ -14,7 +14,6 @@ import SwiftUI
 @MainActor
 final class AuthenticationViewModel: ObservableObject {
     
-    @Published var didSignInWithApple: Bool = false
     let signInAppleHelper = SignInAppleHelper()
     
     func signInGoogle() async throws {
@@ -24,23 +23,9 @@ final class AuthenticationViewModel: ObservableObject {
     }
     
     func signInApple() async throws {
-        signInAppleHelper.startSignInWithAppleFlow { result in
-            switch result {
-            case .success(let signInAppleResult):
-                
-                Task {
-                    do {
-                        try await AuthenticationManager.shared.signInWithApple(tokens: signInAppleResult)
-                        self.didSignInWithApple = true
-                    } catch {
-                        
-                    }
-                }
-                
-            case .failure(let error):
-                print(error)
-            }
-        }
+        let helper = SignInAppleHelper()
+        let tokens = try await helper.startSignInWithAppleFlow()
+        try await AuthenticationManager.shared.signInWithApple(tokens: tokens)
     }
 }
 
@@ -78,7 +63,7 @@ struct AuthenticationView: View {
                 Task {
                     do {
                         try await viewModel.signInApple()
-                        //                        showSignInView = false
+                        showSignInView = false
                     } catch {
                         print(error)
                     }
@@ -88,11 +73,6 @@ struct AuthenticationView: View {
                     .allowsHitTesting(false)
             }
             .frame(height: 55)
-            .onChange(of: viewModel.didSignInWithApple) { newValue in
-                if newValue {
-                    showSignInView = false
-                }
-            }
             
         }
         .padding()
