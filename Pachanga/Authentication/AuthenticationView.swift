@@ -41,10 +41,7 @@ final class AuthenticationViewModel: ObservableObject {
                 print(error)
             }
         }
-        
-        
     }
-    
 }
 
 struct AuthenticationView: View {
