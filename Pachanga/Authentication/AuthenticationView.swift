@@ -9,8 +9,12 @@ import GoogleSignIn
 import GoogleSignInSwift
 import SwiftUI
 
+
+
 @MainActor
 final class AuthenticationViewModel: ObservableObject {
+    
+    let signInAppleHelper = SignInAppleHelper()
     
     func signInGoogle() async throws {
         let helper = SignInGoogleHelper()
@@ -18,6 +22,11 @@ final class AuthenticationViewModel: ObservableObject {
         try await AuthenticationManager.shared.signInWithGoogle(tokens: tokens)
     }
     
+    func signInApple() async throws {
+        let helper = SignInAppleHelper()
+        let tokens = try await helper.startSignInWithAppleFlow()
+        try await AuthenticationManager.shared.signInWithApple(tokens: tokens)
+    }
 }
 
 struct AuthenticationView: View {
@@ -49,6 +58,22 @@ struct AuthenticationView: View {
                     }
                 }
             }
+            
+            Button {
+                Task {
+                    do {
+                        try await viewModel.signInApple()
+                        showSignInView = false
+                    } catch {
+                        print(error)
+                    }
+                }
+            } label: {
+                SignInWithAppleViewRepresentable(type: .default, style: .black)
+                    .allowsHitTesting(false)
+            }
+            .frame(height: 55)
+            
         }
         .padding()
         .navigationTitle("Inicia sesión")

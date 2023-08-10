@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5952532A2A5020A7003CE6B5 /* NewMatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595253292A5020A7003CE6B5 /* NewMatch.swift */; };
+		5971B8482A85013900145866 /* SignInAppleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5971B8472A85013900145866 /* SignInAppleHelper.swift */; };
 		59967B0C2A5C1BA6000B2874 /* SessionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59967B0B2A5C1BA6000B2874 /* SessionCard.swift */; };
 		59AA47912A84078100927483 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 59AA47902A84078100927483 /* GoogleSignIn */; };
 		59AA47932A84078100927483 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 59AA47922A84078100927483 /* GoogleSignInSwift */; };
@@ -40,6 +41,8 @@
 
 /* Begin PBXFileReference section */
 		595253292A5020A7003CE6B5 /* NewMatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMatch.swift; sourceTree = "<group>"; };
+		5971B8462A84F4EF00145866 /* Pachanga.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Pachanga.entitlements; sourceTree = "<group>"; };
+		5971B8472A85013900145866 /* SignInAppleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInAppleHelper.swift; sourceTree = "<group>"; };
 		59967B0B2A5C1BA6000B2874 /* SessionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCard.swift; sourceTree = "<group>"; };
 		59AA47942A8407CB00927483 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		59AA47962A840B1100927483 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
@@ -107,6 +110,7 @@
 				59C046EB2A82677900E5D071 /* AuthenticationManager.swift */,
 				59C046ED2A8277F700E5D071 /* SettingsView.swift */,
 				59AA47982A8413BE00927483 /* SignInGoogleHelper.swift */,
+				5971B8472A85013900145866 /* SignInAppleHelper.swift */,
 			);
 			path = Authentication;
 			sourceTree = "<group>";
@@ -131,6 +135,7 @@
 		59E723BE2A4CC4B000236085 /* Pachanga */ = {
 			isa = PBXGroup;
 			children = (
+				5971B8462A84F4EF00145866 /* Pachanga.entitlements */,
 				59AA47942A8407CB00927483 /* Info.plist */,
 				59E723BF2A4CC4B000236085 /* PachangaApp.swift */,
 				59AA47952A840B0000927483 /* Utilities */,
@@ -265,6 +270,7 @@
 				59C046E82A82630800E5D071 /* AuthenticationView.swift in Sources */,
 				59C854842A4EB51E0069B6F3 /* DataService.swift in Sources */,
 				59AA47972A840B1100927483 /* Utilities.swift in Sources */,
+				5971B8482A85013900145866 /* SignInAppleHelper.swift in Sources */,
 				59C046EE2A8277F700E5D071 /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -391,6 +397,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Pachanga/Pachanga.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Pachanga/Preview Content\"";
@@ -421,6 +428,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Pachanga/Pachanga.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Pachanga/Preview Content\"";
