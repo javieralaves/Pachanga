@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct MainView: View {
     
     @State private var showSignInView: Bool = false
     
@@ -17,10 +17,7 @@ struct ContentView: View {
         ZStack {
             if !showSignInView {
                 NavigationStack {
-                    // need to bring back tab view instead of HomeView() later
-                    // HomeView()
-                    // code for settings tab:
-                    SettingsView(showSignInView: $showSignInView)
+                    ProfileView(showSignInView: $showSignInView)
                 }
             }
         }
@@ -38,10 +35,10 @@ struct ContentView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct MainView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            ContentView()
+            MainView()
         }
     }
 }
