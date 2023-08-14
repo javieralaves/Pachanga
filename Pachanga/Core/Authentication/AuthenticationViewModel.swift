@@ -23,6 +23,9 @@ final class AuthenticationViewModel: ObservableObject {
         let helper = SignInAppleHelper()
         let tokens = try await helper.startSignInWithAppleFlow()
         let authDataResult = try await AuthenticationManager.shared.signInWithApple(tokens: tokens)
-        try await UserManager.shared.createNewUser(auth: authDataResult)
+        let user = DBUser(userId: authDataResult.uid, email: authDataResult.email, photoUrl: authDataResult.photoURL, dateCreated: Date())
+        
+        try await UserManager.shared.createNewUser(user: user)
+//        try await UserManager.shared.createNewUser(auth: authDataResult)
     }
 }

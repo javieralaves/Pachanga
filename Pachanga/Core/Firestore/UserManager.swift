@@ -9,7 +9,7 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import Foundation
 
-struct DBUser {
+struct DBUser: Codable {
     let userId: String
     let email: String?
     let photoUrl: String?
@@ -25,6 +25,18 @@ final class UserManager {
     
     private func userDocument(userId: String) -> DocumentReference {
         userCollection.document(userId)
+    }
+    
+    // to encode DBUser property keys to match db properties
+    private let encoder: Firestore.Encoder = {
+        let encoder = Firestore.Encoder()
+        encoder.keyEncodingStrategy = .convertToSnakeCase
+        return encoder
+    }()
+    
+    // instead of creating a dictionary, pushing the user itself as a DBUser
+    func createNewUser(user: DBUser) async throws {
+        try userDocument(userId: user.userId).setData(from: user, merge: false, encoder: encoder)
     }
     
     func createNewUser(auth: AuthDataResultModel) async throws {
