@@ -32,7 +32,10 @@ struct ProfileView: View {
                 if let email = user.email {
                     Text("Email: \(email)")
                 }
+                
+                Text("Tu plan: \(user.isPremium ?? false ? "Pro" : "Básico")")
             }
+
             
         }
         .task {
