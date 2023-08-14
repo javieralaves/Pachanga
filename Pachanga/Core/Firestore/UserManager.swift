@@ -21,6 +21,12 @@ final class UserManager {
     static let shared = UserManager()
     private init() { }
     
+    private let userCollection = Firestore.firestore().collection("users")
+    
+    private func userDocument(userId: String) -> DocumentReference {
+        userCollection.document(userId)
+    }
+    
     func createNewUser(auth: AuthDataResultModel) async throws {
         
         var userData: [String : Any] = [
@@ -37,11 +43,11 @@ final class UserManager {
             userData["photo_url"] = photoUrl
         }
         
-        try await Firestore.firestore().collection("users").document(auth.uid).setData(userData, merge: false)
+        try await userDocument(userId: auth.uid).setData(userData, merge: false)
     }
     
     func getUser(userId: String) async throws -> DBUser {
-        let snapshot = try await Firestore.firestore().collection("users").document(userId).getDocument()
+        let snapshot = try await userDocument(userId: userId).getDocument()
         
         guard let data = snapshot.data(), let userId = data["user_id"] as? String else {
             throw URLError(.badServerResponse)
