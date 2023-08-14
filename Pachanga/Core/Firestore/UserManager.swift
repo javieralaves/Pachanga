@@ -22,7 +22,7 @@ struct DBUser: Codable {
         self.userId = auth.uid
         self.email = auth.email
         self.photoUrl = auth.photoURL
-        self.dateCreated = Date()
+        self.dateCreated = Date() // will need to update this flow eventually because it overrides the stored value with a new date every time user logs in
         self.isPremium = false
     }
     
