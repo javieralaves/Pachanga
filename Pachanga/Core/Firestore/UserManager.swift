@@ -14,7 +14,7 @@ struct DBUser: Codable {
     let email: String?
     let photoUrl: String?
     let dateCreated: Date?
-    var isPremium: Bool?
+    let isPremium: Bool?
     
     
     // initializer passing an AuthDataResultModel for authentication flow
@@ -42,10 +42,10 @@ struct DBUser: Codable {
     }
     
     // a function that toggles plan for user, for whenever we need it, by calling user.togglePlan() and then updating the db with that user
-    mutating func togglePlan() {
-        let currentPlan = isPremium ?? false
-        isPremium = !currentPlan
-    }
+    //    mutating func togglePlan() {
+    //        let currentPlan = isPremium ?? false
+    //        isPremium = !currentPlan
+    //    }
     
 }
 
