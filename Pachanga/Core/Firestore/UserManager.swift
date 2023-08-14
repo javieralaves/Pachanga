@@ -14,6 +14,13 @@ struct DBUser: Codable {
     let email: String?
     let photoUrl: String?
     let dateCreated: Date?
+    
+    init(auth: AuthDataResultModel) {
+        self.userId = auth.uid
+        self.email = auth.email
+        self.photoUrl = auth.photoURL
+        self.dateCreated = Date()
+    }
 }
 
 final class UserManager {
