@@ -38,7 +38,7 @@ struct MainView: View {
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            MainView()
+            AuthenticationView(showSignInView: .constant(false))
         }
     }
 }
