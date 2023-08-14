@@ -163,8 +163,8 @@
 		59C1BBE72A87A00100D3558C /* Firestore */ = {
 			isa = PBXGroup;
 			children = (
-				59C1BBE82A87A01800D3558C /* UserManager.swift */,
 				593E11712A8AAF730012B15F /* SessionManager.swift */,
+				59C1BBE82A87A01800D3558C /* UserManager.swift */,
 			);
 			path = Firestore;
 			sourceTree = "<group>";
