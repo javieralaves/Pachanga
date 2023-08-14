@@ -47,6 +47,33 @@ struct DBUser: Codable {
     //        isPremium = !currentPlan
     //    }
     
+    // custom coding strategy
+    enum CodingKeys: String, CodingKey {
+        case userId = "user_id"
+        case email = "email"
+        case photoUrl = "photo_url"
+        case dateCreated = "date_created"
+        case isPremium = "is_premium"
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.userId = try container.decode(String.self, forKey: .userId)
+        self.email = try container.decodeIfPresent(String.self, forKey: .email)
+        self.photoUrl = try container.decodeIfPresent(String.self, forKey: .photoUrl)
+        self.dateCreated = try container.decodeIfPresent(Date.self, forKey: .dateCreated)
+        self.isPremium = try container.decodeIfPresent(Bool.self, forKey: .isPremium)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self.userId, forKey: .userId)
+        try container.encodeIfPresent(self.email, forKey: .email)
+        try container.encodeIfPresent(self.photoUrl, forKey: .photoUrl)
+        try container.encodeIfPresent(self.dateCreated, forKey: .dateCreated)
+        try container.encodeIfPresent(self.isPremium, forKey: .isPremium)
+    }
+    
 }
 
 final class UserManager {
@@ -60,23 +87,23 @@ final class UserManager {
         userCollection.document(userId)
     }
     
-    // to encode DBUser property keys to match db properties
-    private let encoder: Firestore.Encoder = {
-        let encoder = Firestore.Encoder()
-        encoder.keyEncodingStrategy = .convertToSnakeCase
-        return encoder
-    }()
-    
-    // to get user with custom decoder
-    private let decoder: Firestore.Decoder = {
-        let decoder = Firestore.Decoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        return decoder
-    }()
+    //    // to encode DBUser property keys to match db properties
+    //    private let encoder: Firestore.Encoder = {
+    //        let encoder = Firestore.Encoder()
+    //        encoder.keyEncodingStrategy = .convertToSnakeCase
+    //        return encoder
+    //    }()
+    //
+    //    // to get user with custom decoder
+    //    private let decoder: Firestore.Decoder = {
+    //        let decoder = Firestore.Decoder()
+    //        decoder.keyDecodingStrategy = .convertFromSnakeCase
+    //        return decoder
+    //    }()
     
     // instead of creating a dictionary, pushing the user itself as a DBUser
     func createNewUser(user: DBUser) async throws {
-        try userDocument(userId: user.userId).setData(from: user, merge: false, encoder: encoder)
+        try userDocument(userId: user.userId).setData(from: user, merge: false)
     }
     
     //    func createNewUser(auth: AuthDataResultModel) async throws {
@@ -99,18 +126,18 @@ final class UserManager {
     //    }
     
     func getUser(userId: String) async throws -> DBUser {
-        try await userDocument(userId: userId).getDocument(as: DBUser.self, decoder: decoder)
+        try await userDocument(userId: userId).getDocument(as: DBUser.self)
     }
     
     // take a user and push it back to database
     // this one is dangerous because it overrides the whole user
-    func updateUserPlan(user: DBUser) async throws {
-        try userDocument(userId: user.userId).setData(from: user, merge: true, encoder: encoder)
-    }
+    //    func updateUserPlan(user: DBUser) async throws {
+    //        try userDocument(userId: user.userId).setData(from: user, merge: true)
+    //    }
     
     func updateUserPlan(userId: String, isPremium: Bool) async throws {
         let data: [String: Any] = [
-            "is_premium" : isPremium
+            DBUser.CodingKeys.isPremium.rawValue : isPremium
         ]
         
         try await userDocument(userId: userId).updateData(data)
