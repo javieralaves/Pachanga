@@ -17,6 +17,15 @@ final class ProfileViewModel: ObservableObject {
         self.user = try await UserManager.shared.getUser(userId: authDataResult.uid)
     }
     
+    func togglePlan() {
+        guard let user else { return }
+        let currentValue = user.isPremium ?? false
+        Task {
+            try await UserManager.shared.updateUserPlan(userId: user.userId, isPremium: !currentValue)
+            self.user = try await UserManager.shared.getUser(userId: user.userId) // get user from db once user plan was updated to be safe
+        }
+    }
+    
 }
 
 struct ProfileView: View {

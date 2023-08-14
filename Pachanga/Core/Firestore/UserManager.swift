@@ -14,8 +14,10 @@ struct DBUser: Codable {
     let email: String?
     let photoUrl: String?
     let dateCreated: Date?
-    let isPremium: Bool?
+    var isPremium: Bool?
     
+    
+    // initializer passing an AuthDataResultModel for authentication flow
     init(auth: AuthDataResultModel) {
         self.userId = auth.uid
         self.email = auth.email
@@ -23,6 +25,28 @@ struct DBUser: Codable {
         self.dateCreated = Date()
         self.isPremium = false
     }
+    
+    // initializer to adjust properties
+    init(
+        userId: String,
+        email: String? = nil,
+        photoUrl: String? = nil,
+        dateCreated: Date? = nil,
+        isPremium: Bool? = nil
+    ) {
+        self.userId = userId
+        self.email = email
+        self.photoUrl = photoUrl
+        self.dateCreated = dateCreated
+        self.isPremium = isPremium
+    }
+    
+    // a function that toggles plan for user, for whenever we need it, by calling user.togglePlan() and then updating the db with that user
+    mutating func togglePlan() {
+        let currentPlan = isPremium ?? false
+        isPremium = !currentPlan
+    }
+    
 }
 
 final class UserManager {
@@ -55,41 +79,55 @@ final class UserManager {
         try userDocument(userId: user.userId).setData(from: user, merge: false, encoder: encoder)
     }
     
-//    func createNewUser(auth: AuthDataResultModel) async throws {
-//
-//        var userData: [String : Any] = [
-//            "user_id" : auth.uid,
-//            "date_created" : Timestamp(),
-//
-//        ]
-//
-//        if let email = auth.email {
-//            userData["email"] = email
-//        }
-//
-//        if let photoUrl = auth.photoURL {
-//            userData["photo_url"] = photoUrl
-//        }
-//
-//        try await userDocument(userId: auth.uid).setData(userData, merge: false)
-//    }
+    //    func createNewUser(auth: AuthDataResultModel) async throws {
+    //
+    //        var userData: [String : Any] = [
+    //            "user_id" : auth.uid,
+    //            "date_created" : Timestamp(),
+    //
+    //        ]
+    //
+    //        if let email = auth.email {
+    //            userData["email"] = email
+    //        }
+    //
+    //        if let photoUrl = auth.photoURL {
+    //            userData["photo_url"] = photoUrl
+    //        }
+    //
+    //        try await userDocument(userId: auth.uid).setData(userData, merge: false)
+    //    }
     
     func getUser(userId: String) async throws -> DBUser {
         try await userDocument(userId: userId).getDocument(as: DBUser.self, decoder: decoder)
     }
     
-//    func getUser(userId: String) async throws -> DBUser {
-//        let snapshot = try await userDocument(userId: userId).getDocument()
-//
-//        guard let data = snapshot.data(), let userId = data["user_id"] as? String else {
-//            throw URLError(.badServerResponse)
-//        }
-//
-//        let email = data["email"] as? String
-//        let photoUrl = data["photo_url"] as? String
-//        let dateCreated = data["date_created"] as? Date
-//
-//        return DBUser(userId: userId, email: email, photoUrl: photoUrl, dateCreated: dateCreated)
-//    }
+    // take a user and push it back to database
+    // this one is dangerous because it overrides the whole user
+    func updateUserPlan(user: DBUser) async throws {
+        try userDocument(userId: user.userId).setData(from: user, merge: true, encoder: encoder)
+    }
+    
+    func updateUserPlan(userId: String, isPremium: Bool) async throws {
+        let data: [String: Any] = [
+            "is_premium" : isPremium
+        ]
+        
+        try await userDocument(userId: userId).updateData(data)
+    }
+    
+    //    func getUser(userId: String) async throws -> DBUser {
+    //        let snapshot = try await userDocument(userId: userId).getDocument()
+    //
+    //        guard let data = snapshot.data(), let userId = data["user_id"] as? String else {
+    //            throw URLError(.badServerResponse)
+    //        }
+    //
+    //        let email = data["email"] as? String
+    //        let photoUrl = data["photo_url"] as? String
+    //        let dateCreated = data["date_created"] as? Date
+    //
+    //        return DBUser(userId: userId, email: email, photoUrl: photoUrl, dateCreated: dateCreated)
+    //    }
     
 }
