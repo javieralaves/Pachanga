@@ -75,3 +75,27 @@ struct Session: Codable {
     }
     
 }
+
+final class SessionManager {
+    
+    static let shared = SessionManager()
+    private init() { }
+    
+    // reference to the sessions collection in the db
+    private let sessionCollection = Firestore.firestore().collection("sessions")
+    
+    // reference to a specific session in the sessions db by session id
+    private func sessionDocument(sessionId: String) -> DocumentReference {
+        sessionCollection.document(sessionId)
+    }
+    
+    // push new session to db
+    func createNewSession(session: Session) async throws {
+        try sessionDocument(sessionId: session.sessionId).setData(from: session, merge: false)
+    }
+    
+    // get session by id
+    func getSession(sessionId: String) async throws -> Session {
+        try await sessionDocument(sessionId: sessionId).getDocument(as: Session.self)
+    }
+}
