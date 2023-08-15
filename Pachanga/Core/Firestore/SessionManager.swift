@@ -98,4 +98,21 @@ final class SessionManager {
     func getSession(sessionId: String) async throws -> Session {
         try await sessionDocument(sessionId: sessionId).getDocument(as: Session.self)
     }
+    
+    // get all sessions from db
+    func getAllSessions() async throws -> [Session] {
+        try await sessionCollection.getDocuments(as: Session.self)
+    }
+}
+
+extension Query {
+    
+    func getDocuments<T>(as type: T.Type) async throws -> [T] where T : Decodable {
+        let snapshot = try await self.getDocuments()
+        
+        return try snapshot.documents.map({ document in
+            try document.data(as: T.self)
+        })
+    }
+    
 }
