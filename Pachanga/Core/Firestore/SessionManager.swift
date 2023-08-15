@@ -98,4 +98,17 @@ final class SessionManager {
     func getSession(sessionId: String) async throws -> Session {
         try await sessionDocument(sessionId: sessionId).getDocument(as: Session.self)
     }
+    
+    // get all sessions from db
+    func getAllSessions() async throws -> [Session] {
+        let snapshot = try await sessionCollection.getDocuments()
+        
+        var sessions: [Session] = []
+        for document in snapshot.documents {
+            let session = try document.data(as: Session.self)
+            sessions.append(session)
+        }
+        
+        return sessions
+    }
 }
