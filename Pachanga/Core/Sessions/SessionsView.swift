@@ -25,10 +25,7 @@ struct SessionsView: View {
     var body: some View {
         List {
             ForEach(viewModel.sessions, id: \.sessionId) { session in
-                VStack (alignment: .leading) {
-                    Text("Cuándo: \(session.sessionDate.formatted(date: .abbreviated, time: .shortened))")
-                    Text("Dónde: \(session.location)")
-                }
+                SessionCell(session: session)
             }
         }
         .navigationTitle("Sesiones")
