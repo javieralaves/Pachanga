@@ -18,6 +18,9 @@ struct PachangaApp: App {
     var body: some Scene {
         WindowGroup {
             MainView()
+            //            NavigationStack {
+            //                NewSession()
+            //            }
         }
     }
 }
