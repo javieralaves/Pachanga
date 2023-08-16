@@ -39,7 +39,6 @@ struct NewSession: View {
 
                 DatePicker("Fecha", selection: $sessionDate)
                     .onChange(of: sessionDate) { newValue in
-                        print("Date changed to \(newValue.formatted(date: .abbreviated, time: .shortened))" )
                     }
             }
             Section ("Equipamiento") {

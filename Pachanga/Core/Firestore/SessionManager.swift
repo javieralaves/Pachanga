@@ -33,7 +33,7 @@ struct Session: Codable {
         self.sessionId = sessionId
         self.dateCreated = dateCreated
         self.location = location
-        self.sessionDate = dateCreated
+        self.sessionDate = sessionDate
         self.players = players
         self.isBallAvailable = isBallAvailable
         self.areLinesAvailable = areLinesAvailable
