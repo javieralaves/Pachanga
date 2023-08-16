@@ -11,9 +11,14 @@ import SwiftUI
 final class SessionsViewModel: ObservableObject {
     
     @Published private(set) var sessions: [Session] = []
+    @Published private(set) var upcomingSessions: [Session] = []
     
     func getAllSessions() async throws {
         self.sessions = try await SessionManager.shared.getAllSessionsSortedByDate()
+    }
+    
+    func getUpcomingSessions() async throws {
+        self.upcomingSessions = try await SessionManager.shared.getAllUpcomingSessions()
     }
     
 }
@@ -23,14 +28,35 @@ struct SessionsView: View {
     @StateObject private var viewModel = SessionsViewModel()
     
     var body: some View {
-        List {
-            ForEach(viewModel.sessions, id: \.sessionId) { session in
-                SessionCell(session: session)
+        
+        VStack {
+            HStack {
+                Text("Sesiones")
+                    .font(.system(size: 36,  weight: .semibold))
+                    .padding()
+                Spacer()
+            }
+            List {
+                ForEach(viewModel.sessions, id: \.sessionId) { session in
+                    SessionCell(session: session)
+                }
+            }
+            
+            HStack {
+                Text("Próximas sesiones")
+                    .font(.system(size: 36,  weight: .semibold))
+                    .padding()
+                Spacer()
+            }
+            List {
+                ForEach(viewModel.upcomingSessions, id: \.sessionId) { session in
+                    SessionCell(session: session)
+                }
             }
         }
-        .navigationTitle("Sesiones")
         .task {
             try? await viewModel.getAllSessions()
+            try? await viewModel.getUpcomingSessions()
         }
     }
 }

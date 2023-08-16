@@ -108,6 +108,10 @@ final class SessionManager {
     func getAllSessionsSortedByDate() async throws -> [Session] {
         try await sessionCollection.order(by: "session_date", descending: false).getDocuments(as: Session.self)
     }
+    
+    func getAllUpcomingSessions() async throws -> [Session] {
+        try await sessionCollection.whereField("session_date", isGreaterThan: Date.now).getDocuments(as: Session.self)
+    }
 }
 
 extension Query {
