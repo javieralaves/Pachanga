@@ -15,7 +15,7 @@ struct NewSession: View {
     
     // session details
     @State private var location: String = "Club Muchavista"
-    @State private var sessionDate: Date = Date.now
+    @State private var sessionDate: Date = Date()
     
     // equipment
     @State private var isBallAvailable: Bool = false
@@ -33,8 +33,14 @@ struct NewSession: View {
                         Text($0)
                     }
                 }
+                .onChange(of: location) { newValue in
+                    print("Location changed to \(newValue)" )
+                }
 
                 DatePicker("Fecha", selection: $sessionDate)
+                    .onChange(of: sessionDate) { newValue in
+                        print("Date changed to \(newValue.formatted(date: .abbreviated, time: .shortened))" )
+                    }
             }
             Section ("Equipamiento") {
                 Toggle("Bola disponible", isOn: $isBallAvailable)
@@ -51,6 +57,8 @@ struct NewSession: View {
                                          players: [DBUser](),
                                          isBallAvailable: isBallAvailable,
                                          areLinesAvailable: areLinesAvailable)
+                
+                print("The session date that's getting passed is \(sessionDate)")
                 
                 Task {
                     do {
