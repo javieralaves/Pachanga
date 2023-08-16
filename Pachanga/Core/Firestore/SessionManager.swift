@@ -103,6 +103,11 @@ final class SessionManager {
     func getAllSessions() async throws -> [Session] {
         try await sessionCollection.getDocuments(as: Session.self)
     }
+    
+    // returns array of sessions sorted by the session date
+    func getAllSessionsSortedByDate() async throws -> [Session] {
+        try await sessionCollection.order(by: "session_date", descending: false).getDocuments(as: Session.self)
+    }
 }
 
 extension Query {

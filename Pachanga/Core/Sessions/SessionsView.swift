@@ -13,7 +13,7 @@ final class SessionsViewModel: ObservableObject {
     @Published private(set) var sessions: [Session] = []
     
     func getAllSessions() async throws {
-        self.sessions = try await SessionManager.shared.getAllSessions()
+        self.sessions = try await SessionManager.shared.getAllSessionsSortedByDate()
     }
     
 }
