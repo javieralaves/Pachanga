@@ -30,17 +30,17 @@ struct SessionsView: View {
     var body: some View {
         
         VStack {
-            HStack {
-                Text("Sesiones")
-                    .font(.system(size: 36,  weight: .semibold))
-                    .padding()
-                Spacer()
-            }
-            List {
-                ForEach(viewModel.sessions, id: \.sessionId) { session in
-                    SessionCell(session: session)
-                }
-            }
+//            HStack {
+//                Text("Sesiones")
+//                    .font(.system(size: 36,  weight: .semibold))
+//                    .padding()
+//                Spacer()
+//            }
+//            List {
+//                ForEach(viewModel.sessions, id: \.sessionId) { session in
+//                    SessionCell(session: session)
+//                }
+//            }
             
             HStack {
                 Text("Próximas sesiones")
