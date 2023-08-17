@@ -11,6 +11,7 @@ struct SettingsView: View {
     
     @StateObject private var viewModel = SettingsViewModel()
     @Binding var showSignInView: Bool
+    @State private var showAlert = false
     
     var body: some View {
         List {
@@ -27,16 +28,7 @@ struct SettingsView: View {
             }
             
             Button(role: .destructive) {
-                Task {
-                    do {
-                        try await viewModel.deleteAccount()
-                        showSignInView = true
-                    } catch {
-                        // need better error handling here
-                        print(error)
-                    }
-                }
-                
+                showAlert = true
             } label: {
                 Text("Borrar cuenta")
             }
@@ -45,6 +37,20 @@ struct SettingsView: View {
             viewModel.loadAuthProviders()
         }
         .navigationTitle("Ajustes")
+        .alert("¿Estás seguro de que quieres borrar tu cuenta?", isPresented: $showAlert) {
+            Button(role: .destructive) {
+                Task {
+                    do {
+                        try await viewModel.deleteAccount()
+                        showSignInView = true
+                    } catch {
+                        print(error)
+                    }
+                }
+            } label: {
+                Text("Sí")
+            }
+        }
     }
 }
 
