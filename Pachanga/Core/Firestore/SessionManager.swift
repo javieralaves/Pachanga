@@ -33,7 +33,7 @@ struct Session: Codable {
         self.sessionId = sessionId
         self.dateCreated = dateCreated
         self.location = location
-        self.sessionDate = dateCreated
+        self.sessionDate = sessionDate
         self.players = players
         self.isBallAvailable = isBallAvailable
         self.areLinesAvailable = areLinesAvailable
@@ -102,6 +102,15 @@ final class SessionManager {
     // get all sessions from db
     func getAllSessions() async throws -> [Session] {
         try await sessionCollection.getDocuments(as: Session.self)
+    }
+    
+    // returns array of sessions sorted by the session date
+    func getAllSessionsSortedByDate() async throws -> [Session] {
+        try await sessionCollection.order(by: "session_date", descending: false).getDocuments(as: Session.self)
+    }
+    
+    func getAllUpcomingSessions() async throws -> [Session] {
+        try await sessionCollection.whereField("session_date", isGreaterThan: Date.now).getDocuments(as: Session.self)
     }
 }
 
