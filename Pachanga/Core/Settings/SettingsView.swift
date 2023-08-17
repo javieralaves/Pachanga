@@ -25,6 +25,21 @@ struct SettingsView: View {
                     }
                 }
             }
+            
+            Button(role: .destructive) {
+                Task {
+                    do {
+                        try await viewModel.deleteAccount()
+                        showSignInView = true
+                    } catch {
+                        // need better error handling here
+                        print(error)
+                    }
+                }
+                
+            } label: {
+                Text("Borrar cuenta")
+            }
         }
         .onAppear {
             viewModel.loadAuthProviders()
