@@ -10,6 +10,7 @@
 		593E11722A8AAF730012B15F /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593E11712A8AAF730012B15F /* SessionManager.swift */; };
 		595C61B82A8B6FF5003A0E04 /* NewSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595C61B72A8B6FF5003A0E04 /* NewSession.swift */; };
 		5971B8482A85013900145866 /* SignInAppleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5971B8472A85013900145866 /* SignInAppleHelper.swift */; };
+		598247182A8E742100184327 /* EditSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598247172A8E742100184327 /* EditSessionView.swift */; };
 		59A8AEBD2A8BC03A00A85460 /* SessionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A8AEBC2A8BC03A00A85460 /* SessionsView.swift */; };
 		59A8AEBF2A8BD15B00A85460 /* SessionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A8AEBE2A8BD15B00A85460 /* SessionCell.swift */; };
 		59AA47912A84078100927483 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 59AA47902A84078100927483 /* GoogleSignIn */; };
@@ -43,6 +44,7 @@
 		595C61B72A8B6FF5003A0E04 /* NewSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSession.swift; sourceTree = "<group>"; };
 		5971B8462A84F4EF00145866 /* Pachanga.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Pachanga.entitlements; sourceTree = "<group>"; };
 		5971B8472A85013900145866 /* SignInAppleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInAppleHelper.swift; sourceTree = "<group>"; };
+		598247172A8E742100184327 /* EditSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSessionView.swift; sourceTree = "<group>"; };
 		59A8AEBC2A8BC03A00A85460 /* SessionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionsView.swift; sourceTree = "<group>"; };
 		59A8AEBE2A8BD15B00A85460 /* SessionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCell.swift; sourceTree = "<group>"; };
 		59AA47942A8407CB00927483 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -89,6 +91,7 @@
 			children = (
 				595C61B72A8B6FF5003A0E04 /* NewSession.swift */,
 				59A8AEBC2A8BC03A00A85460 /* SessionsView.swift */,
+				598247172A8E742100184327 /* EditSessionView.swift */,
 			);
 			path = Sessions;
 			sourceTree = "<group>";
@@ -320,6 +323,7 @@
 				593E11722A8AAF730012B15F /* SessionManager.swift in Sources */,
 				59C1BBE22A8799E500D3558C /* AuthenticationViewModel.swift in Sources */,
 				59E723C02A4CC4B000236085 /* PachangaApp.swift in Sources */,
+				598247182A8E742100184327 /* EditSessionView.swift in Sources */,
 				59C1BBE92A87A01800D3558C /* UserManager.swift in Sources */,
 				595C61B82A8B6FF5003A0E04 /* NewSession.swift in Sources */,
 				59C046EA2A82646C00E5D071 /* SignInEmailView.swift in Sources */,
