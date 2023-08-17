@@ -48,7 +48,7 @@ struct SettingsView: View {
                     }
                 }
             } label: {
-                Text("Confirmar")
+                Text("Sí")
             }
         }
     }
