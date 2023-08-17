@@ -36,19 +36,15 @@ struct SessionsView: View {
 //                    SessionCell(session: session)
 //                }
 //            }
-            
-            HStack {
-                Text("Próximas sesiones")
-                    .font(.system(size: 36,  weight: .semibold))
-                    .padding()
-                Spacer()
-            }
+        
             List {
                 ForEach(viewModel.upcomingSessions, id: \.sessionId) { session in
                     SessionCell(session: session)
                 }
             }
+            
         }
+        .navigationTitle("Próximas sesiones")
         .task {
             try? await viewModel.getUpcomingSessions()
         }
