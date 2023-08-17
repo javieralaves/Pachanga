@@ -10,12 +10,7 @@ import SwiftUI
 @MainActor
 final class SessionsViewModel: ObservableObject {
     
-    @Published private(set) var sessions: [Session] = []
     @Published private(set) var upcomingSessions: [Session] = []
-    
-    func getAllSessions() async throws {
-        self.sessions = try await SessionManager.shared.getAllSessionsSortedByDate()
-    }
     
     func getUpcomingSessions() async throws {
         self.upcomingSessions = try await SessionManager.shared.getAllUpcomingSessions()
@@ -55,7 +50,6 @@ struct SessionsView: View {
             }
         }
         .task {
-            try? await viewModel.getAllSessions()
             try? await viewModel.getUpcomingSessions()
         }
     }
