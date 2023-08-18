@@ -21,9 +21,12 @@ struct SessionView: View {
                         Text(session.sessionDate.formatted(date: .abbreviated, time: .shortened))
                     }
                     
-                    Section ("Jugadores") {
-                        ForEach(session.players, id: \.userId) { player in
-                            Text(player.userId)
+                    
+                    if !session.players.isEmpty {
+                        Section ("Jugadores") {
+                            ForEach(session.players, id: \.userId) { player in
+                                Text(player.userId)
+                            }
                         }
                     }
                     
@@ -38,6 +41,7 @@ struct SessionView: View {
                             Text("Faltan líneas")
                         }
                     }
+                    
                     
                     Button("Unirme") {
                         // get userid with auth, pass to get dbuser, and add db user to session [players]
