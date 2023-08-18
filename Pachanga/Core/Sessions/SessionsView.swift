@@ -45,6 +45,14 @@ struct SessionsView: View {
             
         }
         .navigationTitle("Próximas sesiones")
+        .toolbar {
+            NavigationLink {
+                NewSession()
+            } label: {
+                Image(systemName: "plus")
+                    .font(.headline)
+            }
+        }
         .task {
             try? await viewModel.getUpcomingSessions()
         }
