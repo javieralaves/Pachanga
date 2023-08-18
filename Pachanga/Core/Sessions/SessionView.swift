@@ -44,8 +44,7 @@ struct SessionView: View {
                     
                     
                     Button("Unirme") {
-                        // get userid with auth, pass to get dbuser, and add db user to session [players]
-                        // if i'm already in, this would be an option to leave
+                        // need to update the players value in db with a new array with added player
                     }
                 }
                 
