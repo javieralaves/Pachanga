@@ -18,7 +18,7 @@ struct PachangaApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationStack {
-                NewSession()
+                SessionsView() // do proper routing later
             }
         }
     }
