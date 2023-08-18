@@ -18,6 +18,8 @@ struct SessionView: View {
                 Text(session.location)
                 Text(session.sessionDate.formatted(date: .abbreviated, time: .shortened))
                 
+                // would be nice to show list of players who joined the session
+                
                 if !session.isBallAvailable {
                     Text("Falta bola")
                 }
