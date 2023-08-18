@@ -56,7 +56,7 @@ struct EditSession: View {
                         Session.CodingKeys.location.rawValue : location,
                         Session.CodingKeys.sessionDate.rawValue : sessionDate,
                         Session.CodingKeys.isBallAvailable.rawValue : isBallAvailable,
-                        Session.CodingKeys.isBallAvailable.rawValue : areLinesAvailable
+                        Session.CodingKeys.areLinesAvailable.rawValue : areLinesAvailable
                     ]
                     
                     Task {
