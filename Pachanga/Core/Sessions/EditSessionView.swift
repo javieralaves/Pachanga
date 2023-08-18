@@ -46,7 +46,7 @@ struct EditSession: View {
                 Toggle("Líneas disponibles", isOn: $areLinesAvailable)
             }
         }
-        .navigationTitle("Detalles de sesión")
+        .navigationTitle("Detalles")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
