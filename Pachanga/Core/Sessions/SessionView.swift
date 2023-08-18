@@ -15,23 +15,29 @@ struct SessionView: View {
         
         NavigationStack {
             VStack {
-                Text(session.location)
-                Text(session.sessionDate.formatted(date: .abbreviated, time: .shortened))
-                
+                List {
+                    Section ("Detalles") {
+                        Text(session.location)
+                        Text(session.sessionDate.formatted(date: .abbreviated, time: .shortened))
+                    }
+                    
+                    Section ("Atención") {
+                        if !session.isBallAvailable {
+                            Text("Falta bola")
+                        }
+                        if !session.areLinesAvailable {
+                            Text("Faltan líneas")
+                        }
+                    }
+                    
+                    Button("Unirme") {
+                        // get userid with auth, pass to get dbuser, and add db user to session [players]
+                        // if i'm already in, this would be an option to leave
+                    }
+                }
+
                 // would be nice to show list of players who joined the session
                 
-                if !session.isBallAvailable {
-                    Text("Falta bola")
-                }
-                
-                if !session.areLinesAvailable {
-                    Text("Faltan líneas")
-                }
-                
-                Button("Unirme") {
-                    // get userid with auth, pass to get dbuser, and add db user to session [players]
-                    // if i'm already in, this would be an option to leave
-                }
             }
             .navigationTitle("Sesión")
             .navigationBarTitleDisplayMode(.inline)
