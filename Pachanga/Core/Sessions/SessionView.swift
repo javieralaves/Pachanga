@@ -17,6 +17,19 @@ struct SessionView: View {
             VStack {
                 Text(session.location)
                 Text(session.sessionDate.formatted(date: .abbreviated, time: .shortened))
+                
+                if !session.isBallAvailable {
+                    Text("Falta bola")
+                }
+                
+                if !session.areLinesAvailable {
+                    Text("Faltan líneas")
+                }
+                
+                Button("Unirme") {
+                    // get userid with auth, pass to get dbuser, and add db user to session [players]
+                    // if i'm already in, this would be an option to leave
+                }
             }
             .navigationTitle("Sesión")
             .navigationBarTitleDisplayMode(.inline)
@@ -40,7 +53,7 @@ struct SessionView_Previews: PreviewProvider {
                                          location: "Restaurante Niza",
                                          sessionDate: Date.now.advanced(by: 86400),
                                          players: [],
-                                         isBallAvailable: true,
+                                         isBallAvailable: false,
                                          areLinesAvailable: false))
         }
     }
