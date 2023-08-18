@@ -34,7 +34,6 @@ struct EditSession: View {
                     }
                 }
                 .onChange(of: location) { newValue in
-                    print("Location changed to \(newValue)" )
                 }
 
                 DatePicker("Fecha", selection: $sessionDate)
