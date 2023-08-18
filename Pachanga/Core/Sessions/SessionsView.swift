@@ -39,7 +39,12 @@ struct SessionsView: View {
         
             List {
                 ForEach(viewModel.upcomingSessions, id: \.sessionId) { session in
-                    SessionCell(session: session)
+                    NavigationLink {
+                        SessionView(session: session)
+                    } label: {
+                        SessionCell(session: session)
+                    }
+
                 }
             }
             
