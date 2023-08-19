@@ -21,27 +21,29 @@ struct SessionView: View {
                         Text(session.sessionDate.formatted(date: .abbreviated, time: .shortened))
                     }
                     
-                    
-                    if !session.players.isEmpty {
-                        Section ("Jugadores") {
-                            ForEach(session.players, id: \.self) { player in
-                                Text(player)
-                            }
+                    Section {
+                        ForEach(session.players, id: \.self) { player in
+                            Text(player)
                         }
-                    }
-                    
-                    Section ("Atención") {
+                        
+                    } header: {
+                        Text("Jugadores")
+                    } footer: {
                         if session.players.count < 4 {
                             Text("Faltan \(4 - session.players.count) jugadores más")
                         }
-                        if !session.isBallAvailable {
-                            Text("Falta bola")
-                        }
-                        if !session.areLinesAvailable {
-                            Text("Faltan líneas")
+                    }
+
+                    if(!session.isBallAvailable || !session.areLinesAvailable) {
+                        Section ("Atención") {
+                            if !session.isBallAvailable {
+                                Text("Falta bola")
+                            }
+                            if !session.areLinesAvailable {
+                                Text("Faltan líneas")
+                            }
                         }
                     }
-                    
                     
                     Button("Unirme") {
                         addPlayer()
