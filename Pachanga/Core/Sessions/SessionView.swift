@@ -45,8 +45,16 @@ struct SessionView: View {
                         }
                     }
                     
-                    Button("Unirme") {
-                        addPlayer()
+                    if(!session.players.contains(verifiedPlayerId())) {
+                        Button("Unirme") {
+                            addPlayer()
+                        }
+                    } else {
+                        Button(role: .destructive) {
+                            removePlayer()
+                        } label: {
+                            Text("Salirme")
+                        }
                     }
                 }
                                 
@@ -63,6 +71,17 @@ struct SessionView: View {
         }
     }
     
+    func verifiedPlayerId() -> String {
+        // User is always going to be verified so throw will never happen
+        // But we still have to handle it anyway ¯\_(ツ)_/¯
+        do {
+            return try AuthenticationManager.shared.getAuthenticatedUser().uid
+        } catch {
+            print(error)
+        }
+        return ""
+    }
+
     func addPlayer() {
         Task {
             try await SessionManager.shared.addPlayer(session: session)
@@ -71,6 +90,13 @@ struct SessionView: View {
         }
     }
     
+    func removePlayer() {
+        Task {
+            try await SessionManager.shared.removePlayer(session: session)
+            self.session = try await SessionManager.shared.getSession(sessionId: session.sessionId)
+        }
+        
+    }
 }
 
 struct SessionView_Previews: PreviewProvider {
