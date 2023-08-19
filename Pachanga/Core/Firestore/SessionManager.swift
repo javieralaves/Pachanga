@@ -62,7 +62,7 @@ struct Session: Codable {
         self.isBallAvailable = try container.decode(Bool.self, forKey: .isBallAvailable)
         self.areLinesAvailable = try container.decode(Bool.self, forKey: .areLinesAvailable)
     }
-
+    
     // to encode session instance into db with encoder
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
@@ -131,6 +131,22 @@ final class SessionManager {
         try await sessionDocument(sessionId: session.sessionId).updateData(data)
         print("And now, there are \(session.players.count) players")
     }
+    
+    // remove authenticated user from session players
+    func removePlayer(session: Session) async throws {
+        // get authenticated user from auth model
+        let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
+        
+        // set data I want to change in db
+        let data: [String : Any] = [
+            Session.CodingKeys.players.rawValue : FieldValue.arrayRemove([authDataResult.uid])
+        ]
+        
+        // update data in session
+        try await sessionDocument(sessionId: session.sessionId).updateData(data)
+    }
+    
+    
 }
 
 extension Query {
