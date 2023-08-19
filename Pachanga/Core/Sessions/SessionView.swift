@@ -7,32 +7,9 @@
 
 import SwiftUI
 
-@MainActor
-final class SessionViewModel: ObservableObject {
-    
-    @Published private var session: Session? = nil
-    
-    // fetch session given a session id and makes it the session in this view, for loading this screen
-    func loadSession(session: Session) async throws {
-        self.session = try await SessionManager.shared.getSession(sessionId: session.sessionId)
-    }
-    
-    // adds player to session in db and reloads that player as the session in this view
-    func addPlayer() {
-        guard let session else { return }
-        
-        Task {
-            try await SessionManager.shared.addPlayer(session: session)
-            self.session = try await SessionManager.shared.getSession(sessionId: session.sessionId)
-        }
-    }
-    
-}
-
 struct SessionView: View {
     
-    @StateObject private var viewModel = SessionViewModel()
-    var session: Session
+    @State var session: Session
     
     var body: some View {
         
@@ -47,8 +24,8 @@ struct SessionView: View {
                     
                     if !session.players.isEmpty {
                         Section ("Jugadores") {
-                            ForEach(session.players, id: \.userId) { player in
-                                Text(player.userId)
+                            ForEach(session.players, id: \.self) { player in
+                                Text(player)
                             }
                         }
                     }
@@ -67,12 +44,10 @@ struct SessionView: View {
                     
                     
                     Button("Unirme") {
-                        // need to update the players value in db with a new array with added player
+                        addPlayer()
                     }
                 }
-                
-                // would be nice to show list of players who joined the session
-                
+                                
             }
             .navigationTitle("Sesión")
             .navigationBarTitleDisplayMode(.inline)
@@ -85,6 +60,15 @@ struct SessionView: View {
             }
         }
     }
+    
+    func addPlayer() {
+        Task {
+            try await SessionManager.shared.addPlayer(session: session)
+            self.session = try await SessionManager.shared.getSession(sessionId: session.sessionId)
+            print("Completed!")
+        }
+    }
+    
 }
 
 struct SessionView_Previews: PreviewProvider {
