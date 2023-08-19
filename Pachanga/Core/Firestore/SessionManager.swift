@@ -16,7 +16,7 @@ struct Session: Codable {
     let dateCreated: Date
     var location: String
     var sessionDate: Date
-    var players: [DBUser]?
+    var players: [DBUser]
     var isBallAvailable: Bool = false
     var areLinesAvailable: Bool = false
     
@@ -26,7 +26,7 @@ struct Session: Codable {
         dateCreated: Date,
         location: String,
         sessionDate: Date,
-        players: [DBUser]?,
+        players: [DBUser],
         isBallAvailable: Bool,
         areLinesAvailable: Bool
     ) {

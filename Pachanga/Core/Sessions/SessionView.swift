@@ -7,9 +7,32 @@
 
 import SwiftUI
 
+@MainActor
+final class SessionViewModel: ObservableObject {
+    
+    @Published private var session: Session? = nil
+    
+    // fetch session given a session id and makes it the session in this view, for loading this screen
+    func loadSession(session: Session) async throws {
+        self.session = try await SessionManager.shared.getSession(sessionId: session.sessionId)
+    }
+    
+    // adds player to session in db and reloads that player as the session in this view
+    func addPlayer() {
+        guard let session else { return }
+        
+        Task {
+            try await SessionManager.shared.addPlayer(session: session)
+            self.session = try await SessionManager.shared.getSession(sessionId: session.sessionId)
+        }
+    }
+    
+}
+
 struct SessionView: View {
     
-    let session: Session
+    @StateObject private var viewModel = SessionViewModel()
+    var session: Session
     
     var body: some View {
         
