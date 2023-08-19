@@ -39,12 +39,25 @@ struct SessionsView: View {
         
             List {
                 ForEach(viewModel.upcomingSessions, id: \.sessionId) { session in
-                    SessionCell(session: session)
+                    NavigationLink {
+                        SessionView(session: session)
+                    } label: {
+                        SessionCell(session: session)
+                    }
+
                 }
             }
             
         }
         .navigationTitle("Próximas sesiones")
+        .toolbar {
+            NavigationLink {
+                NewSession()
+            } label: {
+                Image(systemName: "plus")
+                    .font(.headline)
+            }
+        }
         .task {
             try? await viewModel.getUpcomingSessions()
         }

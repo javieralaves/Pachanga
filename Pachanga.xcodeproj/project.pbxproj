@@ -10,6 +10,7 @@
 		593E11722A8AAF730012B15F /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593E11712A8AAF730012B15F /* SessionManager.swift */; };
 		595C61B82A8B6FF5003A0E04 /* NewSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595C61B72A8B6FF5003A0E04 /* NewSession.swift */; };
 		5971B8482A85013900145866 /* SignInAppleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5971B8472A85013900145866 /* SignInAppleHelper.swift */; };
+		598247182A8E742100184327 /* EditSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598247172A8E742100184327 /* EditSessionView.swift */; };
 		59A8AEBD2A8BC03A00A85460 /* SessionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A8AEBC2A8BC03A00A85460 /* SessionsView.swift */; };
 		59A8AEBF2A8BD15B00A85460 /* SessionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A8AEBE2A8BD15B00A85460 /* SessionCell.swift */; };
 		59AA47912A84078100927483 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 59AA47902A84078100927483 /* GoogleSignIn */; };
@@ -32,6 +33,7 @@
 		59C1BBE92A87A01800D3558C /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C1BBE82A87A01800D3558C /* UserManager.swift */; };
 		59D693B12A5874DF008364A7 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D693B02A5874DF008364A7 /* ProfileView.swift */; };
 		59D693B32A58770D008364A7 /* AppLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D693B22A58770D008364A7 /* AppLogo.swift */; };
+		59D7879A2A8F696600C659AA /* SessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D787992A8F696600C659AA /* SessionView.swift */; };
 		59E723C02A4CC4B000236085 /* PachangaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E723BF2A4CC4B000236085 /* PachangaApp.swift */; };
 		59E723C22A4CC4B000236085 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E723C12A4CC4B000236085 /* MainView.swift */; };
 		59E723C42A4CC4B100236085 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 59E723C32A4CC4B100236085 /* Assets.xcassets */; };
@@ -43,6 +45,7 @@
 		595C61B72A8B6FF5003A0E04 /* NewSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSession.swift; sourceTree = "<group>"; };
 		5971B8462A84F4EF00145866 /* Pachanga.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Pachanga.entitlements; sourceTree = "<group>"; };
 		5971B8472A85013900145866 /* SignInAppleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInAppleHelper.swift; sourceTree = "<group>"; };
+		598247172A8E742100184327 /* EditSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSessionView.swift; sourceTree = "<group>"; };
 		59A8AEBC2A8BC03A00A85460 /* SessionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionsView.swift; sourceTree = "<group>"; };
 		59A8AEBE2A8BD15B00A85460 /* SessionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCell.swift; sourceTree = "<group>"; };
 		59AA47942A8407CB00927483 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -59,6 +62,7 @@
 		59C1BBE82A87A01800D3558C /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		59D693B02A5874DF008364A7 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		59D693B22A58770D008364A7 /* AppLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLogo.swift; sourceTree = "<group>"; };
+		59D787992A8F696600C659AA /* SessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionView.swift; sourceTree = "<group>"; };
 		59E723BC2A4CC4B000236085 /* Pachanga.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pachanga.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		59E723BF2A4CC4B000236085 /* PachangaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PachangaApp.swift; sourceTree = "<group>"; };
 		59E723C12A4CC4B000236085 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -89,6 +93,8 @@
 			children = (
 				595C61B72A8B6FF5003A0E04 /* NewSession.swift */,
 				59A8AEBC2A8BC03A00A85460 /* SessionsView.swift */,
+				59D787992A8F696600C659AA /* SessionView.swift */,
+				598247172A8E742100184327 /* EditSessionView.swift */,
 			);
 			path = Sessions;
 			sourceTree = "<group>";
@@ -318,8 +324,10 @@
 				59D693B32A58770D008364A7 /* AppLogo.swift in Sources */,
 				59E723C22A4CC4B000236085 /* MainView.swift in Sources */,
 				593E11722A8AAF730012B15F /* SessionManager.swift in Sources */,
+				59D7879A2A8F696600C659AA /* SessionView.swift in Sources */,
 				59C1BBE22A8799E500D3558C /* AuthenticationViewModel.swift in Sources */,
 				59E723C02A4CC4B000236085 /* PachangaApp.swift in Sources */,
+				598247182A8E742100184327 /* EditSessionView.swift in Sources */,
 				59C1BBE92A87A01800D3558C /* UserManager.swift in Sources */,
 				595C61B82A8B6FF5003A0E04 /* NewSession.swift in Sources */,
 				59C046EA2A82646C00E5D071 /* SignInEmailView.swift in Sources */,

@@ -8,6 +8,7 @@
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 import Foundation
+import SwiftUI
 
 struct Session: Codable {
     
@@ -16,7 +17,7 @@ struct Session: Codable {
     let dateCreated: Date
     var location: String
     var sessionDate: Date
-    var players: [DBUser] = []
+    var players: [String]
     var isBallAvailable: Bool = false
     var areLinesAvailable: Bool = false
     
@@ -26,7 +27,7 @@ struct Session: Codable {
         dateCreated: Date,
         location: String,
         sessionDate: Date,
-        players: [DBUser],
+        players: [String],
         isBallAvailable: Bool,
         areLinesAvailable: Bool
     ) {
@@ -57,7 +58,7 @@ struct Session: Codable {
         self.dateCreated = try container.decode(Date.self, forKey: .dateCreated)
         self.location = try container.decode(String.self, forKey: .location)
         self.sessionDate = try container.decode(Date.self, forKey: .sessionDate)
-        self.players = try container.decode([DBUser].self, forKey: .players)
+        self.players = try container.decode([String].self, forKey: .players)
         self.isBallAvailable = try container.decode(Bool.self, forKey: .isBallAvailable)
         self.areLinesAvailable = try container.decode(Bool.self, forKey: .areLinesAvailable)
     }
@@ -109,8 +110,26 @@ final class SessionManager {
         try await sessionCollection.order(by: "session_date", descending: false).getDocuments(as: Session.self)
     }
     
+    // get all sessions in the future
     func getAllUpcomingSessions() async throws -> [Session] {
         try await sessionCollection.whereField("session_date", isGreaterThan: Date.now).getDocuments(as: Session.self)
+    }
+    
+    // add authenticated user to session players
+    func addPlayer(session: Session) async throws {
+        // get authenticated user from auth model
+        let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
+        print("Received id: \(authDataResult.uid)")
+        
+        // set data I want to change in db
+        let data: [String : Any] = [
+            Session.CodingKeys.players.rawValue : FieldValue.arrayUnion([authDataResult.uid])
+        ]
+        
+        // update data in session
+        print("Updating data in session: \(session.sessionId)... there are currently \(session.players.count) players")
+        try await sessionDocument(sessionId: session.sessionId).updateData(data)
+        print("And now, there are \(session.players.count) players")
     }
 }
 
