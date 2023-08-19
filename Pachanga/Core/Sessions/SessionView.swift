@@ -23,7 +23,11 @@ struct SessionView: View {
                     
                     Section {
                         ForEach(session.players, id: \.self) { player in
-                            Text(player)
+                            if(player == "NwIseDznbPNs5KmZlsHBTsxcsFl2") {
+                                Text("Javier Alavés")
+                            } else {
+                                Text("Ignacio Alavés")
+                            }
                         }
                         
                     } header: {
