@@ -16,7 +16,7 @@ struct Session: Codable {
     let dateCreated: Date
     var location: String
     var sessionDate: Date
-    var players: [DBUser] = []
+    var players: [DBUser]?
     var isBallAvailable: Bool = false
     var areLinesAvailable: Bool = false
     
@@ -26,7 +26,7 @@ struct Session: Codable {
         dateCreated: Date,
         location: String,
         sessionDate: Date,
-        players: [DBUser],
+        players: [DBUser]?,
         isBallAvailable: Bool,
         areLinesAvailable: Bool
     ) {
@@ -109,8 +109,24 @@ final class SessionManager {
         try await sessionCollection.order(by: "session_date", descending: false).getDocuments(as: Session.self)
     }
     
+    // get all sessions in the future
     func getAllUpcomingSessions() async throws -> [Session] {
         try await sessionCollection.whereField("session_date", isGreaterThan: Date.now).getDocuments(as: Session.self)
+    }
+    
+    // add authenticated user to session players
+    func addPlayer(session: Session) async throws {
+        // get authenticated user from auth model
+        let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
+        let player = DBUser(auth: authDataResult)
+        
+        // set data I want to change in db
+        let data: [AnyHashable : Any] = [
+            Session.CodingKeys.players.rawValue : FieldValue.arrayUnion([player])
+        ]
+        
+        // update data in session
+        try await sessionDocument(sessionId: session.sessionId).updateData(data)
     }
 }
 
