@@ -9,7 +9,7 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import Foundation
 
-struct DBUser: Codable {
+struct DBUser: Codable, Hashable {
     let userId: String
     let email: String?
     let photoUrl: String?

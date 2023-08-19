@@ -53,7 +53,7 @@ struct NewSession: View {
                                          dateCreated: Date.now,
                                          location: location,
                                          sessionDate: sessionDate,
-                                         players: [DBUser](),
+                                         players: [String](),
                                          isBallAvailable: isBallAvailable,
                                          areLinesAvailable: areLinesAvailable)
                 
