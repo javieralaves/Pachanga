@@ -113,3 +113,28 @@ struct Match: Codable {
     }
     
 }
+
+final class MatchManager {
+    
+    static let shared = MatchManager()
+    private init() { }
+    
+    // reference to matches collection in the db
+    private let matchesCollection = Firestore.firestore().collection("matches")
+    
+    // reference to specific match in matches db by match id
+    private func matchDocument(matchId: String) -> DocumentReference {
+        matchesCollection.document(matchId)
+    }
+    
+    // push new match to db
+    func createNewMatch(match: Match) async throws {
+        try matchDocument(matchId: match.matchId).setData(from: match, merge: false)
+    }
+    
+    // get match by id
+    func getMatch(matchId: String) async throws -> Match {
+        try await matchDocument(matchId: matchId).getDocument(as: Match.self)
+    }
+    
+}
