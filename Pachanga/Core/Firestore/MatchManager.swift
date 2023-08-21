@@ -137,4 +137,8 @@ final class MatchManager {
         try await matchDocument(matchId: matchId).getDocument(as: Match.self)
     }
     
+    func getWinner(match: Match) async throws -> [String] {
+        match.teamOneScore > match.teamTwoScore ? match.teamOne : match.teamTwo
+    }
+    
 }
