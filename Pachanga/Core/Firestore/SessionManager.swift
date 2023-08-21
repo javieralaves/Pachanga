@@ -18,6 +18,7 @@ struct Session: Codable {
     var location: String
     var sessionDate: Date
     var players: [String]
+    var matches: [String]
     var isBallAvailable: Bool = false
     var areLinesAvailable: Bool = false
     
@@ -28,6 +29,7 @@ struct Session: Codable {
         location: String,
         sessionDate: Date,
         players: [String],
+        matches: [String],
         isBallAvailable: Bool,
         areLinesAvailable: Bool
     ) {
@@ -36,6 +38,7 @@ struct Session: Codable {
         self.location = location
         self.sessionDate = sessionDate
         self.players = players
+        self.matches = matches
         self.isBallAvailable = isBallAvailable
         self.areLinesAvailable = areLinesAvailable
     }
@@ -47,6 +50,7 @@ struct Session: Codable {
         case location = "location"
         case sessionDate = "session_date"
         case players = "players"
+        case matches = "matches"
         case isBallAvailable = "is_ball_available"
         case areLinesAvailable = "are_lines_available"
     }
@@ -59,6 +63,7 @@ struct Session: Codable {
         self.location = try container.decode(String.self, forKey: .location)
         self.sessionDate = try container.decode(Date.self, forKey: .sessionDate)
         self.players = try container.decode([String].self, forKey: .players)
+        self.matches = try container.decode([String].self, forKey: .matches)
         self.isBallAvailable = try container.decode(Bool.self, forKey: .isBallAvailable)
         self.areLinesAvailable = try container.decode(Bool.self, forKey: .areLinesAvailable)
     }
@@ -71,6 +76,7 @@ struct Session: Codable {
         try container.encode(self.location, forKey: .location)
         try container.encode(self.sessionDate, forKey: .sessionDate)
         try container.encode(self.players, forKey: .players)
+        try container.encode(self.matches, forKey: .matches)
         try container.encode(self.isBallAvailable, forKey: .isBallAvailable)
         try container.encode(self.areLinesAvailable, forKey: .areLinesAvailable)
     }
