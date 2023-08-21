@@ -137,6 +137,7 @@ final class MatchManager {
         try await matchDocument(matchId: matchId).getDocument(as: Match.self)
     }
     
+    // get match winner by checking who has largest score
     func getWinner(match: Match) async throws -> [String] {
         match.teamOneScore > match.teamTwoScore ? match.teamOne : match.teamTwo
     }
