@@ -66,9 +66,7 @@ struct NewSession: View {
                         print(error)
                     }
                 }
-                
-                // dismiss()
-                
+                dismiss()
             }
         }
         
