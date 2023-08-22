@@ -11,9 +11,6 @@ import SwiftUI
 
 struct EditSession: View {
     
-    // to dismiss view on save
-    @Environment(\.dismiss) var dismiss
-    
     let session: Session
     
     // session details
@@ -65,7 +62,6 @@ struct EditSession: View {
                         let sessionCollection = Firestore.firestore().collection("sessions")
                         try await sessionCollection.document(session.sessionId).updateData(data)
                     }
-                    dismiss()
                 }
             }
         }
