@@ -54,6 +54,7 @@ struct NewSession: View {
                                          location: location,
                                          sessionDate: sessionDate,
                                          players: [String](),
+                                         matches: [String](),
                                          isBallAvailable: isBallAvailable,
                                          areLinesAvailable: areLinesAvailable)
                 
