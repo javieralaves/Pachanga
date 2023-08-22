@@ -112,7 +112,8 @@ struct SessionView_Previews: PreviewProvider {
                                          dateCreated: Date.now,
                                          location: "Restaurante Niza",
                                          sessionDate: Date.now.advanced(by: 86400),
-                                         players: [], // app is crashing when filling this up
+                                         players: [],
+                                         matches: [],
                                          isBallAvailable: false,
                                          areLinesAvailable: false))
         }

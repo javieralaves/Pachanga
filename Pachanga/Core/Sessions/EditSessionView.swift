@@ -86,6 +86,7 @@ struct EditSession_Previews: PreviewProvider {
                                          location: "Restaurante Niza",
                                          sessionDate: Date.now.advanced(by: 86400),
                                          players: [],
+                                         matches: [],
                                          isBallAvailable: true,
                                          areLinesAvailable: false))
         }
