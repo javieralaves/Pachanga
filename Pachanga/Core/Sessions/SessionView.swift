@@ -72,11 +72,6 @@ struct SessionView: View {
                     Text("Editar")
                 }
             }
-            .onAppear {
-                Task {
-                    try await updateSession()
-                }
-            }
         }
     }
     
@@ -89,19 +84,6 @@ struct SessionView: View {
             print(error)
         }
         return ""
-    }
-    
-    func updateSession() async throws {
-        do {
-            let updatedSession = try await SessionManager.shared.getSession(sessionId: session.sessionId)
-            session.location = updatedSession.location
-            session.sessionDate = updatedSession.sessionDate
-            session.players = updatedSession.players
-            session.isBallAvailable = updatedSession.isBallAvailable
-            session.areLinesAvailable = updatedSession.areLinesAvailable
-        } catch {
-            print(error)
-        }
     }
 
     func addPlayer() {
