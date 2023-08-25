@@ -13,11 +13,11 @@ struct MainView: View {
     
     var body: some View {
         
-        // need to replace this with the actual home view and recontextualize the code below
         ZStack {
+            // if user has authenticated
             if !showSignInView {
                 NavigationStack {
-                    ProfileView(showSignInView: $showSignInView)
+                    SessionsView()
                 }
             }
         }
