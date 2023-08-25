@@ -32,6 +32,7 @@
 		59C1BBE22A8799E500D3558C /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C1BBE12A8799E500D3558C /* AuthenticationViewModel.swift */; };
 		59C1BBE52A879A3E00D3558C /* SignInEmailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C1BBE42A879A3E00D3558C /* SignInEmailViewModel.swift */; };
 		59C1BBE92A87A01800D3558C /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C1BBE82A87A01800D3558C /* UserManager.swift */; };
+		59D309672A98A328008C70D5 /* Ranking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D309662A98A328008C70D5 /* Ranking.swift */; };
 		59D693B12A5874DF008364A7 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D693B02A5874DF008364A7 /* ProfileView.swift */; };
 		59D693B32A58770D008364A7 /* AppLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D693B22A58770D008364A7 /* AppLogo.swift */; };
 		59D7879A2A8F696600C659AA /* SessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D787992A8F696600C659AA /* SessionView.swift */; };
@@ -62,6 +63,7 @@
 		59C1BBE12A8799E500D3558C /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
 		59C1BBE42A879A3E00D3558C /* SignInEmailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInEmailViewModel.swift; sourceTree = "<group>"; };
 		59C1BBE82A87A01800D3558C /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
+		59D309662A98A328008C70D5 /* Ranking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ranking.swift; sourceTree = "<group>"; };
 		59D693B02A5874DF008364A7 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		59D693B22A58770D008364A7 /* AppLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLogo.swift; sourceTree = "<group>"; };
 		59D787992A8F696600C659AA /* SessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionView.swift; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 				59C1BBE62A879A9300D3558C /* Profile */,
 				595C61B62A8B6FC1003A0E04 /* Sessions */,
 				59AAC6BA2A93ACFF0081349F /* Matches */,
+				59D309662A98A328008C70D5 /* Ranking.swift */,
 				59C1BBDD2A87995400D3558C /* Settings */,
 				59C1BBDC2A8798F700D3558C /* Components */,
 			);
@@ -342,6 +345,7 @@
 				598247182A8E742100184327 /* EditSessionView.swift in Sources */,
 				59C1BBE92A87A01800D3558C /* UserManager.swift in Sources */,
 				595C61B82A8B6FF5003A0E04 /* NewSession.swift in Sources */,
+				59D309672A98A328008C70D5 /* Ranking.swift in Sources */,
 				59C046EA2A82646C00E5D071 /* SignInEmailView.swift in Sources */,
 				59C046E82A82630800E5D071 /* AuthenticationView.swift in Sources */,
 				59A8AEBD2A8BC03A00A85460 /* SessionsView.swift in Sources */,
