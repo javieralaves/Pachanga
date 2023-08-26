@@ -5,6 +5,9 @@
 //  Created by Javier Alaves on 18/8/23.
 //
 
+import Firebase
+import FirebaseFirestore
+import FirebaseFirestoreSwift
 import SwiftUI
 
 struct SessionView: View {
@@ -15,29 +18,58 @@ struct SessionView: View {
         
         NavigationStack {
             VStack {
+                
+                // Details section
                 List {
                     Section ("Detalles") {
                         Text(session.location)
                         Text(session.sessionDate.formatted(date: .abbreviated, time: .shortened))
                     }
                     
-                    Section {
-                        ForEach(session.players, id: \.self) { player in
-                            if(player == "NwIseDznbPNs5KmZlsHBTsxcsFl2") {
-                                Text("Javier Alavés")
-                            } else {
-                                Text("Ignacio Alavés")
+                    // Players section
+                    if !session.players.isEmpty {
+                        Section {
+                            ForEach(session.players, id: \.self) { player in
+                                if(player == "NwIseDznbPNs5KmZlsHBTsxcsFl2") {
+                                    Text("Javier Alavés")
+                                } else {
+                                    Text("Ignacio Alavés")
+                                }
+                            }
+                        } header: {
+                            Text("Jugadores")
+                        } footer: {
+                            if session.players.count < 4 {
+                                Text("Faltan \(4 - session.players.count) jugadores más")
                             }
                         }
-                        
-                    } header: {
-                        Text("Jugadores")
-                    } footer: {
-                        if session.players.count < 4 {
-                            Text("Faltan \(4 - session.players.count) jugadores más")
-                        }
                     }
-
+                    
+                    // Matches section
+                    Section ("Partidos") {
+                        ForEach(session.matches, id: \.self) { match in
+                            VStack (spacing: 8) {
+                                HStack {
+                                    Text("\(match.teamOne[0]) y \(match.teamOne[1])")
+                                    Spacer()
+                                    Text("\(match.teamOneScore)")
+                                }
+                                HStack {
+                                    Text("\(match.teamTwo[0]) y \(match.teamTwo[1])")
+                                    Spacer()
+                                    Text("\(match.teamTwoScore)")
+                                }
+                            }
+                        }
+                        NavigationLink {
+                            // nuevo partido
+                        } label: {
+                            Text("Nuevo partido")
+                        }
+                        
+                    }
+                    
+                    // Equipment section
                     if(!session.isBallAvailable || !session.areLinesAvailable) {
                         Section ("Atención") {
                             if !session.isBallAvailable {
@@ -49,6 +81,7 @@ struct SessionView: View {
                         }
                     }
                     
+                    // Join/unjoin button
                     if(!session.players.contains(verifiedPlayerId())) {
                         Button("Unirme") {
                             addPlayer()
@@ -61,7 +94,7 @@ struct SessionView: View {
                         }
                     }
                 }
-                                
+                
             }
             .navigationTitle("Sesión")
             .navigationBarTitleDisplayMode(.inline)
@@ -97,13 +130,14 @@ struct SessionView: View {
             session.location = updatedSession.location
             session.sessionDate = updatedSession.sessionDate
             session.players = updatedSession.players
+            session.matches = updatedSession.matches
             session.isBallAvailable = updatedSession.isBallAvailable
             session.areLinesAvailable = updatedSession.areLinesAvailable
         } catch {
             print(error)
         }
     }
-
+    
     func addPlayer() {
         Task {
             try await SessionManager.shared.addPlayer(session: session)
@@ -131,7 +165,14 @@ struct SessionView_Previews: PreviewProvider {
                                          location: "Restaurante Niza",
                                          sessionDate: Date.now.advanced(by: 86400),
                                          players: [],
-                                         matches: [],
+                                         matches: [Match(location: "El Campello",
+                                                         matchDate: Date.now,
+                                                         players: ["Javi", "Alvaro", "Diego", "Nacho"],
+                                                         teamOne: ["Javi", "Alvaro"],
+                                                         teamTwo: ["Diego", "Nacho"],
+                                                         teamOneScore: 21,
+                                                         teamTwoScore: 19,
+                                                         isRanked: true)],
                                          isBallAvailable: false,
                                          areLinesAvailable: false))
         }

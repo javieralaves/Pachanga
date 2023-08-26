@@ -10,7 +10,7 @@ import FirebaseFirestoreSwift
 import Foundation
 import SwiftUI
 
-struct Match: Codable {
+struct Match: Codable, Hashable {
     
     // props
     let matchId: String

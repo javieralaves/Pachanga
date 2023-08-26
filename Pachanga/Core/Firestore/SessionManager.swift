@@ -18,7 +18,7 @@ struct Session: Codable {
     var location: String
     var sessionDate: Date
     var players: [String]
-    var matches: [String]
+    var matches: [Match]
     var isBallAvailable: Bool = false
     var areLinesAvailable: Bool = false
     
@@ -29,7 +29,7 @@ struct Session: Codable {
         location: String,
         sessionDate: Date,
         players: [String],
-        matches: [String],
+        matches: [Match],
         isBallAvailable: Bool,
         areLinesAvailable: Bool
     ) {
@@ -63,7 +63,7 @@ struct Session: Codable {
         self.location = try container.decode(String.self, forKey: .location)
         self.sessionDate = try container.decode(Date.self, forKey: .sessionDate)
         self.players = try container.decode([String].self, forKey: .players)
-        self.matches = try container.decode([String].self, forKey: .matches)
+        self.matches = try container.decode([Match].self, forKey: .matches)
         self.isBallAvailable = try container.decode(Bool.self, forKey: .isBallAvailable)
         self.areLinesAvailable = try container.decode(Bool.self, forKey: .areLinesAvailable)
     }
