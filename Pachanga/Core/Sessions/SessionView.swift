@@ -11,6 +11,9 @@ struct SessionView: View {
     
     @State var session: Session
     
+    // bool to display sheet that appears after tapping on join button
+    @State private var joinSheet: Bool = false
+    
     var body: some View {
         
         NavigationStack {
@@ -59,7 +62,11 @@ struct SessionView: View {
                     // join/unjoin button
                     if(!session.players.contains(currentUser())) {
                         Button("Unirme") {
-                            addPlayer()
+                            // addPlayer() - no longer the case, we show JoinSheet() view instead
+                            joinSheet.toggle()
+                        }
+                        .sheet(isPresented: $joinSheet) {
+                            Text("Placeholder")
                         }
                     } else {
                         Button(role: .destructive) {
