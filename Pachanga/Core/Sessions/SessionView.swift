@@ -56,12 +56,12 @@ struct SessionView: View {
                     }
                     
                     // match alerts
-                    if(!session.bringsBall.isEmpty || !session.bringsLines.isEmpty) {
+                    if(session.bringsBall.isEmpty || session.bringsLines.isEmpty) {
                         Section ("Atención") {
-                            if !session.bringsBall.isEmpty {
+                            if session.bringsBall.isEmpty {
                                 Text("Falta bola")
                             }
-                            if !session.bringsLines.isEmpty {
+                            if session.bringsLines.isEmpty {
                                 Text("Faltan líneas")
                             }
                         }
