@@ -31,7 +31,7 @@ struct SessionView: View {
                             ForEach(session.players, id: \.self) { player in
                                 HStack {
                                     // for testing purposes
-                                    if currentUser() == "DTkv4Nz55mgST1eOmDn37TaCow63" {
+                                    if currentUser() == "NwIseDznbPNs5KmZlsHBTsxcsFl2" {
                                         Text("Javier Alaves")
                                     } else {
                                         Text(player)
