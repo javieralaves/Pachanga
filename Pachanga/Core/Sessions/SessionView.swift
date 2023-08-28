@@ -16,20 +16,26 @@ struct SessionView: View {
         NavigationStack {
             VStack {
                 List {
+                    // details section
                     Section ("Detalles") {
                         Text(session.location)
                         Text(session.sessionDate.formatted(date: .abbreviated, time: .shortened))
                     }
                     
+                    // list of registered players
                     Section {
                         ForEach(session.players, id: \.self) { player in
-                            if(player == "NwIseDznbPNs5KmZlsHBTsxcsFl2") {
-                                Text("Javier Alavés")
-                            } else {
-                                Text("Ignacio Alavés")
+                            HStack {
+                                Text(player)
+                                Spacer()
+                                if session.bringsBall.contains(player) {
+                                    Image(systemName: "volleyball.fill")
+                                }
+                                if session.bringsLines.contains(player) {
+                                    Image(systemName: "sportscourt.fill")
+                                }
                             }
                         }
-                        
                     } header: {
                         Text("Jugadores")
                     } footer: {
@@ -37,7 +43,8 @@ struct SessionView: View {
                             Text("Faltan \(4 - session.players.count) jugadores más")
                         }
                     }
-
+                    
+                    // match alerts
                     if(!session.bringsBall.isEmpty || !session.bringsLines.isEmpty) {
                         Section ("Atención") {
                             if !session.bringsBall.isEmpty {
@@ -49,7 +56,8 @@ struct SessionView: View {
                         }
                     }
                     
-                    if(!session.players.contains(verifiedPlayerId())) {
+                    // join/unjoin button
+                    if(!session.players.contains(currentUser())) {
                         Button("Unirme") {
                             addPlayer()
                         }
@@ -61,7 +69,7 @@ struct SessionView: View {
                         }
                     }
                 }
-                                
+                
             }
             .navigationTitle("Sesión")
             .navigationBarTitleDisplayMode(.inline)
@@ -80,9 +88,10 @@ struct SessionView: View {
         }
     }
     
-    func verifiedPlayerId() -> String {
-        // User is always going to be verified so throw will never happen
-        // But we still have to handle it anyway ¯\_(ツ)_/¯
+    // function that returns userId for authenticated user, for join button state
+    func currentUser() -> String {
+        // bser is always going to be verified so throw will never happen
+        // but we still have to handle it anyway ¯\_(ツ)_/¯
         do {
             return try AuthenticationManager.shared.getAuthenticatedUser().uid
         } catch {
@@ -91,27 +100,29 @@ struct SessionView: View {
         return ""
     }
     
+    // function to refresh session data every time the view appears
     func updateSession() async throws {
         do {
             let updatedSession = try await SessionManager.shared.getSession(sessionId: session.sessionId)
             session.location = updatedSession.location
             session.sessionDate = updatedSession.sessionDate
             session.players = updatedSession.players
-            session.isBallAvailable = updatedSession.isBallAvailable
-            session.areLinesAvailable = updatedSession.areLinesAvailable
+            session.bringsBall = updatedSession.bringsBall
+            session.bringsLines = updatedSession.bringsLines
         } catch {
             print(error)
         }
     }
-
+    
+    // function to add myself to session
     func addPlayer() {
         Task {
             try await SessionManager.shared.addPlayer(session: session)
             self.session = try await SessionManager.shared.getSession(sessionId: session.sessionId)
-            print("Completed!")
         }
     }
     
+    // function to remove myself from session
     func removePlayer() {
         Task {
             try await SessionManager.shared.removePlayer(session: session)
@@ -124,7 +135,6 @@ struct SessionView: View {
 struct SessionView_Previews: PreviewProvider {
     
     static var previews: some View {
-        
         NavigationStack {
             SessionView(session: Session(sessionId: "001",
                                          dateCreated: Date.now,
