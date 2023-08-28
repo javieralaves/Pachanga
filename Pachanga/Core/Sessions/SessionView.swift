@@ -132,8 +132,8 @@ struct SessionView_Previews: PreviewProvider {
                                          sessionDate: Date.now.advanced(by: 86400),
                                          players: [],
                                          matches: [],
-                                         isBallAvailable: false,
-                                         areLinesAvailable: false))
+                                         bringsBall: [],
+                                         bringsLines: []))
         }
     }
 }
