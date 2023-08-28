@@ -100,6 +100,11 @@ struct SessionView: View {
                     try await updateSession()
                 }
             }
+            .onChange(of: joinSheet) { _ in
+                Task {
+                    try await updateSession()
+                }
+            }
         }
     }
     

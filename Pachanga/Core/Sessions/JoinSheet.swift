@@ -39,7 +39,6 @@ struct JoinSheet: View {
                     } label: {
                         Text("Unirme")
                     }
-
                 }
             }
         }
