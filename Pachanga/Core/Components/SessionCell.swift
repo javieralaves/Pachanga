@@ -28,8 +28,8 @@ struct SessionCell_Previews: PreviewProvider {
                                          sessionDate: Date.now,
                                          players: ["javi"],
                                          matches: [],
-                                         isBallAvailable: true,
-                                         areLinesAvailable: false))
+                                         bringsBall: [],
+                                         bringsLines: []))
         }
     }
 }
