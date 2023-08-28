@@ -12,9 +12,20 @@ struct SessionCell: View {
     let session: Session
     
     var body: some View {
-        VStack (alignment: .leading) {
-            Text("Cuándo: \(session.sessionDate.formatted(date: .abbreviated, time: .shortened))")
-            Text("Dónde: \(session.location)")
+        HStack {
+            VStack (alignment: .leading) {
+                Text("\(session.location)")
+                    .fontWeight(.medium)
+                Text("\(session.sessionDate.formatted(date: .abbreviated, time: .shortened))")
+                    .foregroundColor(.secondary)
+            }
+            Spacer()
+            HStack {
+                Text("\(session.players.count)")
+                Image(systemName: "person.crop.circle")
+            }
+            .fontWeight(.medium)
+            .foregroundColor(.secondary)
         }
     }
 }
@@ -28,8 +39,9 @@ struct SessionCell_Previews: PreviewProvider {
                                          sessionDate: Date.now,
                                          players: ["javi"],
                                          matches: [],
-                                         isBallAvailable: true,
-                                         areLinesAvailable: false))
+                                         bringsBall: [],
+                                         bringsLines: []))
+            .padding()
         }
     }
 }

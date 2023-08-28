@@ -34,18 +34,18 @@ struct ProfileView: View {
     @Binding var showSignInView: Bool
     
     var body: some View {
-        List {
-            if let user = viewModel.user {
-                Text("ID: \(user.userId)")
-                
-                if let email = user.email {
-                    Text("Email: \(email)")
+        VStack {
+            List {
+                if let user = viewModel.user {
+                    Text("ID: \(user.userId)")
+                    
+                    if let email = user.email {
+                        Text("Email: \(email)")
+                    }
+                    
+                    Text("Tu plan: \(user.isPremium ?? false ? "Pro" : "Básico")")
                 }
-                
-                Text("Tu plan: \(user.isPremium ?? false ? "Pro" : "Básico")")
             }
-
-            
         }
         .task {
             try? await viewModel.loadCurrentUser()

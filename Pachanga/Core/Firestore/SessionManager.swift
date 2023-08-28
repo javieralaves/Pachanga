@@ -19,8 +19,8 @@ struct Session: Codable {
     var sessionDate: Date
     var players: [String]
     var matches: [String]
-    var isBallAvailable: Bool = false
-    var areLinesAvailable: Bool = false
+    var bringsBall: [String]
+    var bringsLines: [String]
     
     // custom init
     init(
@@ -30,8 +30,8 @@ struct Session: Codable {
         sessionDate: Date,
         players: [String],
         matches: [String],
-        isBallAvailable: Bool,
-        areLinesAvailable: Bool
+        bringsBall: [String],
+        bringsLines: [String]
     ) {
         self.sessionId = sessionId
         self.dateCreated = dateCreated
@@ -39,8 +39,8 @@ struct Session: Codable {
         self.sessionDate = sessionDate
         self.players = players
         self.matches = matches
-        self.isBallAvailable = isBallAvailable
-        self.areLinesAvailable = areLinesAvailable
+        self.bringsBall = bringsBall
+        self.bringsLines = bringsLines
     }
     
     // custom coding strategy
@@ -51,8 +51,8 @@ struct Session: Codable {
         case sessionDate = "session_date"
         case players = "players"
         case matches = "matches"
-        case isBallAvailable = "is_ball_available"
-        case areLinesAvailable = "are_lines_available"
+        case bringsBall = "bringsBall"
+        case bringsLines = "bringsLines"
     }
     
     // to load a session from db with decoder
@@ -64,8 +64,8 @@ struct Session: Codable {
         self.sessionDate = try container.decode(Date.self, forKey: .sessionDate)
         self.players = try container.decode([String].self, forKey: .players)
         self.matches = try container.decode([String].self, forKey: .matches)
-        self.isBallAvailable = try container.decode(Bool.self, forKey: .isBallAvailable)
-        self.areLinesAvailable = try container.decode(Bool.self, forKey: .areLinesAvailable)
+        self.bringsBall = try container.decode([String].self, forKey: .bringsBall)
+        self.bringsLines = try container.decode([String].self, forKey: .bringsLines)
     }
     
     // to encode session instance into db with encoder
@@ -77,8 +77,8 @@ struct Session: Codable {
         try container.encode(self.sessionDate, forKey: .sessionDate)
         try container.encode(self.players, forKey: .players)
         try container.encode(self.matches, forKey: .matches)
-        try container.encode(self.isBallAvailable, forKey: .isBallAvailable)
-        try container.encode(self.areLinesAvailable, forKey: .areLinesAvailable)
+        try container.encode(self.bringsBall, forKey: .bringsBall)
+        try container.encode(self.bringsLines, forKey: .bringsLines)
     }
     
 }

@@ -13,11 +13,32 @@ struct MainView: View {
     
     var body: some View {
         
-        // need to replace this with the actual home view and recontextualize the code below
         ZStack {
+            // if user has authenticated
             if !showSignInView {
-                NavigationStack {
-                    ProfileView(showSignInView: $showSignInView)
+                TabView {
+                    // Sessions tab
+                    NavigationView {
+                        SessionsView()
+                            .navigationTitle("Próximas sesiones")
+                    }
+                    .tabItem {
+                        Label("Sesiones", systemImage: "volleyball.fill")
+                    }
+                    
+                    // Ranking tab
+                    Ranking()
+                        .tabItem {
+                            Label("Ránking", systemImage: "trophy.fill")
+                        }
+                    
+                    // Profile tab
+                    NavigationView {
+                        ProfileView(showSignInView: $showSignInView)
+                    }
+                    .tabItem {
+                        Label("Perfil", systemImage: "person.crop.circle")
+                    }
                 }
             }
         }
