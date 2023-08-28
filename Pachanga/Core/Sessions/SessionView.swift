@@ -74,6 +74,7 @@ struct SessionView: View {
                         }
                         .sheet(isPresented: $joinSheet) {
                             JoinSheet(session: session)
+                                .presentationDetents([.medium])
                         }
                     } else {
                         Button(role: .destructive) {
