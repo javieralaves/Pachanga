@@ -38,12 +38,12 @@ struct SessionView: View {
                         }
                     }
 
-                    if(!session.isBallAvailable || !session.areLinesAvailable) {
+                    if(!session.bringsBall.isEmpty || !session.bringsLines.isEmpty) {
                         Section ("Atención") {
-                            if !session.isBallAvailable {
+                            if !session.bringsBall.isEmpty {
                                 Text("Falta bola")
                             }
-                            if !session.areLinesAvailable {
+                            if !session.bringsLines.isEmpty {
                                 Text("Faltan líneas")
                             }
                         }
