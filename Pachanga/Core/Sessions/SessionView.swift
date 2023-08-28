@@ -26,24 +26,32 @@ struct SessionView: View {
                     }
                     
                     // list of registered players
-                    Section {
-                        ForEach(session.players, id: \.self) { player in
-                            HStack {
-                                Text(player)
-                                Spacer()
-                                if session.bringsBall.contains(player) {
-                                    Image(systemName: "volleyball.fill")
-                                }
-                                if session.bringsLines.contains(player) {
-                                    Image(systemName: "sportscourt.fill")
+                    if !session.players.isEmpty {
+                        Section {
+                            ForEach(session.players, id: \.self) { player in
+                                HStack {
+                                    // for testing purposes
+                                    if currentUser() == "DTkv4Nz55mgST1eOmDn37TaCow63" {
+                                        Text("Javier Alaves")
+                                    } else {
+                                        Text(player)
+                                    }
+                                    
+                                    Spacer()
+                                    if session.bringsBall.contains(player) {
+                                        Image(systemName: "volleyball.fill")
+                                    }
+                                    if session.bringsLines.contains(player) {
+                                        Image(systemName: "sportscourt.fill")
+                                    }
                                 }
                             }
-                        }
-                    } header: {
-                        Text("Jugadores")
-                    } footer: {
-                        if session.players.count < 4 {
-                            Text("Faltan \(4 - session.players.count) jugadores más")
+                        } header: {
+                            Text("Jugadores")
+                        } footer: {
+                            if session.players.count < 4 {
+                                Text("Faltan \(4 - session.players.count) jugadores más")
+                            }
                         }
                     }
                     
