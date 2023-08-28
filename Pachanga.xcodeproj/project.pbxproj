@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		592170082A9D46710043ED9A /* JoinSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 592170072A9D46710043ED9A /* JoinSheet.swift */; };
+		5921700A2A9D5E270043ED9A /* Ranking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 592170092A9D5E270043ED9A /* Ranking.swift */; };
 		593E11722A8AAF730012B15F /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593E11712A8AAF730012B15F /* SessionManager.swift */; };
 		595C61B82A8B6FF5003A0E04 /* NewSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595C61B72A8B6FF5003A0E04 /* NewSession.swift */; };
 		5971B8482A85013900145866 /* SignInAppleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5971B8472A85013900145866 /* SignInAppleHelper.swift */; };
@@ -44,6 +45,7 @@
 
 /* Begin PBXFileReference section */
 		592170072A9D46710043ED9A /* JoinSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinSheet.swift; sourceTree = "<group>"; };
+		592170092A9D5E270043ED9A /* Ranking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ranking.swift; sourceTree = "<group>"; };
 		593E11712A8AAF730012B15F /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
 		595C61B72A8B6FF5003A0E04 /* NewSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSession.swift; sourceTree = "<group>"; };
 		5971B8462A84F4EF00145866 /* Pachanga.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Pachanga.entitlements; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 				59C1BBE72A87A00100D3558C /* Firestore */,
 				59C1BBE62A879A9300D3558C /* Profile */,
 				595C61B62A8B6FC1003A0E04 /* Sessions */,
+				592170092A9D5E270043ED9A /* Ranking.swift */,
 				59AAC6BA2A93ACFF0081349F /* Matches */,
 				59C1BBDD2A87995400D3558C /* Settings */,
 				59C1BBDC2A8798F700D3558C /* Components */,
@@ -341,6 +344,7 @@
 				59E723C22A4CC4B000236085 /* MainView.swift in Sources */,
 				593E11722A8AAF730012B15F /* SessionManager.swift in Sources */,
 				59D7879A2A8F696600C659AA /* SessionView.swift in Sources */,
+				5921700A2A9D5E270043ED9A /* Ranking.swift in Sources */,
 				59C1BBE22A8799E500D3558C /* AuthenticationViewModel.swift in Sources */,
 				59E723C02A4CC4B000236085 /* PachangaApp.swift in Sources */,
 				598247182A8E742100184327 /* EditSessionView.swift in Sources */,

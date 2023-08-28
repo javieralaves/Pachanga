@@ -16,8 +16,29 @@ struct MainView: View {
         ZStack {
             // if user has authenticated
             if !showSignInView {
-                NavigationStack {
-                    SessionsView()
+                TabView {
+                    // Sessions tab
+                    NavigationView {
+                        SessionsView()
+                            .navigationTitle("Próximas sesiones")
+                    }
+                    .tabItem {
+                        Label("Sesiones", systemImage: "volleyball.fill")
+                    }
+                    
+                    // Ranking tab
+                    Ranking()
+                        .tabItem {
+                            Label("Ránking", systemImage: "trophy.fill")
+                        }
+                    
+                    // Profile tab
+                    NavigationView {
+                        ProfileView(showSignInView: $showSignInView)
+                    }
+                    .tabItem {
+                        Label("Perfil", systemImage: "person.crop.circle")
+                    }
                 }
             }
         }
