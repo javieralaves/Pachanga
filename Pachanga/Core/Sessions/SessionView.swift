@@ -39,10 +39,10 @@ struct SessionView: View {
                                     
                                     Spacer()
                                     if session.bringsBall.contains(player) {
-                                        Image(systemName: "volleyball.fill")
+                                        Text("🏐")
                                     }
                                     if session.bringsLines.contains(player) {
-                                        Image(systemName: "sportscourt.fill")
+                                        Text("🪢")
                                     }
                                 }
                             }
