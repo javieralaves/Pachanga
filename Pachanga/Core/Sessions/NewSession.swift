@@ -41,10 +41,6 @@ struct NewSession: View {
                     .onChange(of: sessionDate) { newValue in
                     }
             }
-            Section ("Equipamiento") {
-                Toggle("Bola disponible", isOn: $isBallAvailable)
-                Toggle("Líneas disponibles", isOn: $areLinesAvailable)
-            }
         }
         .navigationTitle("Nueva sesión")
         .toolbar {
