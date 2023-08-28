@@ -62,11 +62,10 @@ struct SessionView: View {
                     // join/unjoin button
                     if(!session.players.contains(currentUser())) {
                         Button("Unirme") {
-                            // addPlayer() - no longer the case, we show JoinSheet() view instead
                             joinSheet.toggle()
                         }
                         .sheet(isPresented: $joinSheet) {
-                            Text("Placeholder")
+                            JoinSheet(session: session)
                         }
                     } else {
                         Button(role: .destructive) {
@@ -118,14 +117,6 @@ struct SessionView: View {
             session.bringsLines = updatedSession.bringsLines
         } catch {
             print(error)
-        }
-    }
-    
-    // function to add myself to session
-    func addPlayer() {
-        Task {
-            try await SessionManager.shared.addPlayer(session: session)
-            self.session = try await SessionManager.shared.getSession(sessionId: session.sessionId)
         }
     }
     
