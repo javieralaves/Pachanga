@@ -51,11 +51,9 @@ struct NewSession: View {
                                          sessionDate: sessionDate,
                                          players: [String](),
                                          matches: [String](),
-                                         isBallAvailable: isBallAvailable,
-                                         areLinesAvailable: areLinesAvailable)
-                
-                print("The session date that's getting passed is \(sessionDate)")
-                
+                                         bringsBall: [String](),
+                                         bringsLines: [String]())
+                                
                 Task {
                     do {
                         try await SessionManager.shared.createNewSession(session: newSession)
