@@ -20,10 +20,6 @@ struct EditSession: View {
     @State private var location: String = ""
     @State private var sessionDate: Date = Date()
     
-    // equipment
-    @State private var isBallAvailable: Bool = false
-    @State private var areLinesAvailable: Bool = false
-    
     // available fields, stored in form for now
     let fields = ["Club Muchavista", "Restaurante Xaloc", "Restaurante Niza", "Seis Perlas Campello"]
     
