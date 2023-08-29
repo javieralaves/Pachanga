@@ -41,6 +41,7 @@
 		59E723C22A4CC4B000236085 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E723C12A4CC4B000236085 /* MainView.swift */; };
 		59E723C42A4CC4B100236085 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 59E723C32A4CC4B100236085 /* Assets.xcassets */; };
 		59E723C72A4CC4B100236085 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 59E723C62A4CC4B100236085 /* Preview Assets.xcassets */; };
+		59EA01532A9E354C0049642B /* NewMatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59EA01522A9E354C0049642B /* NewMatch.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -74,6 +75,7 @@
 		59E723C12A4CC4B000236085 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		59E723C32A4CC4B100236085 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		59E723C62A4CC4B100236085 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		59EA01522A9E354C0049642B /* NewMatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMatch.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +119,7 @@
 		59AAC6BA2A93ACFF0081349F /* Matches */ = {
 			isa = PBXGroup;
 			children = (
+				59EA01522A9E354C0049642B /* NewMatch.swift */,
 			);
 			path = Matches;
 			sourceTree = "<group>";
@@ -358,6 +361,7 @@
 				59C046EE2A8277F700E5D071 /* SettingsView.swift in Sources */,
 				59A8AEBF2A8BD15B00A85460 /* SessionCell.swift in Sources */,
 				59C1BBE52A879A3E00D3558C /* SignInEmailViewModel.swift in Sources */,
+				59EA01532A9E354C0049642B /* NewMatch.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
