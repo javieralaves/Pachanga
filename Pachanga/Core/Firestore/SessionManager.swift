@@ -156,6 +156,7 @@ final class SessionManager {
         // reference for matches collection
         let matchesCollection = Firestore.firestore().collection("matches")
         
+        // return an array of matches that have been created in session
         return try await matchesCollection.whereField("session_id", isEqualTo: session.sessionId).getDocuments(as: Match.self)
     }
     
