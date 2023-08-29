@@ -23,7 +23,7 @@ struct SessionView: View {
             VStack {
                 List {
                     // details section
-                    Section ("Detalles") {
+                    Section {
                         Text(session.location)
                         Text(session.sessionDate.formatted(date: .abbreviated, time: .shortened))
                     }
