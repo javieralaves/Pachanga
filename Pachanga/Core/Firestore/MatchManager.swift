@@ -114,7 +114,8 @@ struct Match: Codable {
         try container.encode(self.players, forKey: .players)
         try container.encode(self.teamOne, forKey: .teamOne)
         try container.encode(self.teamTwo, forKey: .teamTwo)
-        try container.encode(self.teamOneScore, forKey: .teamTwoScore)
+        try container.encode(self.teamOneScore, forKey: .teamOneScore)
+        try container.encode(self.teamTwoScore, forKey: .teamTwoScore)
         try container.encode(self.isRanked, forKey: .isRanked)
     }
     
