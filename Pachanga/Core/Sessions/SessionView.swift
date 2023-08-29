@@ -56,13 +56,18 @@ struct SessionView: View {
                     }
                     
                     // matches
-                    if(!session.matches.isEmpty) {
-                        Section ("Partidos") {
+                    Section ("Partidos") {
+                        if(!session.matches.isEmpty) {
                             ForEach(session.matches, id: \.self) { match in
                                 Text(match)
                             }
                         }
+                        NavigationLink("Añadir partido") {
+                            NewMatch(session: session)
+                        }
                     }
+                    
+                    
                     
                     // match alerts
                     if(session.bringsBall.isEmpty || session.bringsLines.isEmpty) {
@@ -162,7 +167,7 @@ struct SessionView_Previews: PreviewProvider {
                                          location: "Restaurante Niza",
                                          sessionDate: Date.now.advanced(by: 86400),
                                          players: [],
-                                         matches: ["001", "002", "003"],
+                                         matches: [],
                                          bringsBall: [],
                                          bringsLines: []))
         }
