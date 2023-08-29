@@ -14,13 +14,16 @@ struct SessionView: View {
     // bool to display sheet that appears after tapping on join button
     @State private var joinSheet: Bool = false
     
+    // empty array of matches to be populated
+    @State private var sessionMatches: [Match] = []
+    
     var body: some View {
         
         NavigationStack {
             VStack {
                 List {
                     // details section
-                    Section ("Detalles") {
+                    Section {
                         Text(session.location)
                         Text(session.sessionDate.formatted(date: .abbreviated, time: .shortened))
                     }
@@ -52,6 +55,16 @@ struct SessionView: View {
                             if session.players.count < 4 {
                                 Text("Faltan \(4 - session.players.count) jugadores más")
                             }
+                        }
+                    }
+                    
+                    // matches
+                    Section ("Partidos") {
+                        ForEach(sessionMatches, id: \.self) { match in
+                            Text(match.matchId)
+                        }
+                        NavigationLink("Añadir partido") {
+                            NewMatch(session: session)
                         }
                     }
                     
@@ -97,6 +110,7 @@ struct SessionView: View {
             }
             .onAppear {
                 Task {
+                    // update session data
                     try await updateSession()
                 }
             }
@@ -129,6 +143,8 @@ struct SessionView: View {
             session.players = updatedSession.players
             session.bringsBall = updatedSession.bringsBall
             session.bringsLines = updatedSession.bringsLines
+            
+            sessionMatches = try await SessionManager.shared.getMatches(session: session)
         } catch {
             print(error)
         }
@@ -140,8 +156,8 @@ struct SessionView: View {
             try await SessionManager.shared.removePlayer(session: session)
             self.session = try await SessionManager.shared.getSession(sessionId: session.sessionId)
         }
-        
     }
+    
 }
 
 struct SessionView_Previews: PreviewProvider {
