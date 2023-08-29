@@ -111,15 +111,11 @@ struct NewMatch: View {
                                          teamTwoScore: score2,
                                          isRanked: false)
                     
-                    
                     Task {
                         do {
                             // create match in database
                             try await MatchManager.shared.createNewMatch(match: newMatch)
-                            
-                            // add match id to session
-                            
-                            
+                            dismiss()
                         } catch {
                             print(error)
                         }
