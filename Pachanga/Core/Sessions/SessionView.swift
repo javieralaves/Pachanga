@@ -10,6 +10,8 @@ import SwiftUI
 struct SessionView: View {
     
     @State var session: Session
+    @State var showCancelSessionAlert: Bool = false
+    @State var isSessionCancelled: Bool = false
     
     // bool to display sheet that appears after tapping on join button
     @State private var joinSheet: Bool = false
@@ -61,10 +63,13 @@ struct SessionView: View {
                     // matches
                     Section ("Partidos") {
                         ForEach(sessionMatches, id: \.self) { match in
-                            Text(match.matchId)
+                            MatchCell(match: match)
+                            //Text(match.matchId)
                         }
-                        NavigationLink("Añadir partido") {
-                            NewMatch(session: session)
+                        if(!isSessionCancelled) {
+                            NavigationLink("Añadir partido") {
+                                NewMatch(session: session)
+                            }
                         }
                     }
                     
@@ -89,11 +94,16 @@ struct SessionView: View {
                             JoinSheet(session: session)
                                 .presentationDetents([.medium])
                         }
-                    } else {
+                    } else if (!isSessionCancelled){
                         Button(role: .destructive) {
                             removePlayer()
                         } label: {
                             Text("Salirme")
+                        }
+                        Button(role: .destructive) {
+                            showCancelSessionAlert = true
+                        } label: {
+                            Text("Anular sesión")
                         }
                     }
                 }
@@ -102,10 +112,12 @@ struct SessionView: View {
             .navigationTitle("Sesión")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                NavigationLink {
-                    EditSession(session: session)
-                } label: {
-                    Text("Editar")
+                if(!isSessionCancelled) {
+                    NavigationLink {
+                        EditSession(session: session)
+                    } label: {
+                        Text("Editar")
+                    }
                 }
             }
             .onAppear {
@@ -117,6 +129,13 @@ struct SessionView: View {
             .onChange(of: joinSheet) { _ in
                 Task {
                     try await updateSession()
+                }
+            }
+            .alert("¿Estás seguro de que quieres anular la sesión?", isPresented: $showCancelSessionAlert) {
+                Button(role: .destructive) {
+                    isSessionCancelled = true
+                } label: {
+                    Text("Confirmar")
                 }
             }
         }
