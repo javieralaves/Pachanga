@@ -5,6 +5,8 @@
 //  Created by Javier Alaves on 18/8/23.
 //
 
+import FirebaseFirestore
+import FirebaseFirestoreSwift
 import SwiftUI
 
 struct SessionView: View {
@@ -153,7 +155,34 @@ struct SessionView: View {
     // function to remove myself from session
     func removePlayer() {
         Task {
+            
+            // get authenticated user
+            let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
+            
+            // check if user was bringing ball to remove reference
+            if session.bringsBall.contains(authDataResult.uid) {
+                let data: [String : Any] = [
+                    Session.CodingKeys.bringsBall.rawValue : FieldValue.arrayRemove([authDataResult.uid])
+                ]
+                
+                let sessionCollection = Firestore.firestore().collection("sessions")
+                try await sessionCollection.document(session.sessionId).updateData(data)
+            }
+            
+            // check if user was bringing lines to remove reference
+            if session.bringsLines.contains(authDataResult.uid) {
+                let data: [String : Any] = [
+                    Session.CodingKeys.bringsLines.rawValue : FieldValue.arrayRemove([authDataResult.uid])
+                ]
+                
+                let sessionCollection = Firestore.firestore().collection("sessions")
+                try await sessionCollection.document(session.sessionId).updateData(data)
+            }
+            
+            // remove player from session players array
             try await SessionManager.shared.removePlayer(session: session)
+            
+            // reload session by its id
             self.session = try await SessionManager.shared.getSession(sessionId: session.sessionId)
         }
     }
