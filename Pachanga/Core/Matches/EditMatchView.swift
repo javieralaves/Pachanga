@@ -72,6 +72,20 @@ struct EditMatchView: View {
                                 .keyboardType(.decimalPad)
                         }
                     }
+                    
+                    // actions
+                    Section ("Acciones") {
+                        Button(role: .destructive) {
+                            Task {
+                                let matchCollection = Firestore.firestore().collection("matches")
+                                try await matchCollection.document(match.matchId).delete()
+                            }
+                            dismiss()
+                        } label: {
+                            Text("Eliminar partido")
+                        }
+
+                    }
                 }
             }
         }
