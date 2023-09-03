@@ -15,6 +15,7 @@ struct Session: Codable {
     // props
     let sessionId: String
     let dateCreated: Date
+    var status: String
     var location: String
     var sessionDate: Date
     var players: [String]
@@ -26,6 +27,7 @@ struct Session: Codable {
     init(
         sessionId: String,
         dateCreated: Date,
+        status: String,
         location: String,
         sessionDate: Date,
         players: [String],
@@ -35,6 +37,7 @@ struct Session: Codable {
     ) {
         self.sessionId = sessionId
         self.dateCreated = dateCreated
+        self.status = status
         self.location = location
         self.sessionDate = sessionDate
         self.players = players
@@ -47,6 +50,7 @@ struct Session: Codable {
     enum CodingKeys: String, CodingKey {
         case sessionId = "session_id"
         case dateCreated = "date_created"
+        case status = "status"
         case location = "location"
         case sessionDate = "session_date"
         case players = "players"
@@ -60,6 +64,7 @@ struct Session: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.sessionId = try container.decode(String.self, forKey: .sessionId)
         self.dateCreated = try container.decode(Date.self, forKey: .dateCreated)
+        self.status = try container.decode(String.self, forKey: .status)
         self.location = try container.decode(String.self, forKey: .location)
         self.sessionDate = try container.decode(Date.self, forKey: .sessionDate)
         self.players = try container.decode([String].self, forKey: .players)
@@ -73,6 +78,7 @@ struct Session: Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(self.sessionId, forKey: .sessionId)
         try container.encode(self.dateCreated, forKey: .dateCreated)
+        try container.encode(self.status, forKey: .status)
         try container.encode(self.location, forKey: .location)
         try container.encode(self.sessionDate, forKey: .sessionDate)
         try container.encode(self.players, forKey: .players)
@@ -118,7 +124,10 @@ final class SessionManager {
     
     // get all sessions in the future
     func getAllUpcomingSessions() async throws -> [Session] {
-        try await sessionCollection.whereField("session_date", isGreaterThan: Date.now).getDocuments(as: Session.self)
+        try await sessionCollection
+            .whereField("session_date", isGreaterThan: Date.now)
+            .whereField("status", isEqualTo: "active")
+            .getDocuments(as: Session.self)
     }
     
     // add authenticated user to session players

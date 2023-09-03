@@ -19,7 +19,7 @@ struct JoinSheet: View {
     
     // to dismiss view on joining
     @Environment(\.dismiss) var dismiss
-        
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -92,13 +92,14 @@ struct JoinSheet_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             JoinSheet(session: Session(sessionId: "001",
-                                         dateCreated: Date.now,
-                                         location: "Restaurante Niza",
-                                         sessionDate: Date.now.advanced(by: 86400),
-                                         players: [],
-                                         matches: [],
-                                         bringsBall: [],
-                                         bringsLines: []))
+                                       dateCreated: Date.now,
+                                       status: "active",
+                                       location: "Restaurante Niza",
+                                       sessionDate: Date.now.advanced(by: 86400),
+                                       players: [],
+                                       matches: [],
+                                       bringsBall: [],
+                                       bringsLines: []))
         }
     }
 }
