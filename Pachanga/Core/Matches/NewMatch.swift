@@ -133,6 +133,7 @@ struct NewMatch_Previews: PreviewProvider {
         NavigationStack {
             NewMatch(session: Session(sessionId: "001",
                                       dateCreated: Date.now,
+                                      status: "active",
                                       location: "Restaurante Niza",
                                       sessionDate: Date.now.advanced(by: 86400),
                                       players: ["Javier Alaves",

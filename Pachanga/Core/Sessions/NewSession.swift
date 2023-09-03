@@ -47,6 +47,7 @@ struct NewSession: View {
             Button("Crear") {
                 let newSession = Session(sessionId: UUID().uuidString,
                                          dateCreated: Date.now,
+                                         status: "active",
                                          location: location,
                                          sessionDate: sessionDate,
                                          players: [String](),
