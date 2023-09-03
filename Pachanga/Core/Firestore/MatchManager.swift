@@ -10,19 +10,20 @@ import FirebaseFirestoreSwift
 import Foundation
 import SwiftUI
 
-struct Match: Codable {
+struct Match: Codable, Hashable {
     
     // props
     let matchId: String
+    let sessionId: String
     let dateCreated: Date
     var location: String
     var matchDate: Date
-    var players: [String] // combo of teamOne and teamTwo
-    var teamOne: [String] // tuple instead?
+    var players: [String]
+    var teamOne: [String]
     var teamTwo: [String]
     var teamOneScore: Int
     var teamTwoScore: Int
-    var isRanked: Bool // whether match should contribute to rankings or not
+    var isRanked: Bool
     
     // base init
     init(
@@ -36,6 +37,7 @@ struct Match: Codable {
         isRanked: Bool
     ) {
         self.matchId = UUID().uuidString
+        self.sessionId = UUID().uuidString
         self.dateCreated = Date.now
         self.location = location
         self.matchDate = matchDate
@@ -58,6 +60,7 @@ struct Match: Codable {
         isRanked: Bool
     ) {
         self.matchId = UUID().uuidString
+        self.sessionId = session.sessionId
         self.dateCreated = session.dateCreated
         self.location = session.location
         self.matchDate = session.sessionDate
@@ -72,6 +75,7 @@ struct Match: Codable {
     // custom coding strategy
     enum CodingKeys: String, CodingKey {
         case matchId = "match_id"
+        case sessionId = "session_id"
         case dateCreated = "date_created"
         case location = "location"
         case matchDate = "match_date"
@@ -87,6 +91,7 @@ struct Match: Codable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.matchId = try container.decode(String.self, forKey: .matchId)
+        self.sessionId = try container.decode(String.self, forKey: .sessionId)
         self.dateCreated = try container.decode(Date.self, forKey: .dateCreated)
         self.location = try container.decode(String.self, forKey: .location)
         self.matchDate = try container.decode(Date.self, forKey: .matchDate)
@@ -102,13 +107,15 @@ struct Match: Codable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(self.matchId, forKey: .matchId)
+        try container.encode(self.sessionId, forKey: .sessionId)
         try container.encode(self.dateCreated, forKey: .dateCreated)
         try container.encode(self.location, forKey: .location)
         try container.encode(self.matchDate, forKey: .matchDate)
         try container.encode(self.players, forKey: .players)
         try container.encode(self.teamOne, forKey: .teamOne)
         try container.encode(self.teamTwo, forKey: .teamTwo)
-        try container.encode(self.teamOneScore, forKey: .teamTwoScore)
+        try container.encode(self.teamOneScore, forKey: .teamOneScore)
+        try container.encode(self.teamTwoScore, forKey: .teamTwoScore)
         try container.encode(self.isRanked, forKey: .isRanked)
     }
     

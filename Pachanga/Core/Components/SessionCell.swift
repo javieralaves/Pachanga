@@ -35,6 +35,7 @@ struct SessionCell_Previews: PreviewProvider {
         NavigationStack {
             SessionCell(session: Session(sessionId: "test",
                                          dateCreated: Date.now,
+                                         status: "active",
                                          location: "Club Muchavista",
                                          sessionDate: Date.now,
                                          players: ["javi"],

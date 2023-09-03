@@ -23,6 +23,9 @@ struct EditSession: View {
     // available fields, stored in form for now
     let fields = ["Club Muchavista", "Restaurante Xaloc", "Restaurante Niza", "Seis Perlas Campello"]
     
+    // cancel session alert
+    @State var cancelSessionAlert: Bool = false
+    
     var body: some View {
         
         Form {
@@ -34,6 +37,16 @@ struct EditSession: View {
                     }
                 }
                 DatePicker("Fecha", selection: $sessionDate)
+            }
+            
+            if session.status == "active" {
+                Section ("Acciones") {
+                    Button (role: .destructive) {
+                        cancelSessionAlert = true
+                    } label: {
+                        Text("Anular sesión")
+                    }
+                }
             }
         }
         .navigationTitle("Detalles")
@@ -57,6 +70,24 @@ struct EditSession: View {
         .onAppear {
             updateSession()
         }
+        .alert("¿Estás seguro de que deseas anular la sesión?", isPresented: $cancelSessionAlert) {
+            Button(role: .destructive) {
+                let data: [AnyHashable : Any] = [
+                    // set status to cancelled
+                    Session.CodingKeys.status.rawValue : "cancelled",
+                    // remove players
+                    Session.CodingKeys.players.rawValue : [String]()
+                ]
+                
+                Task {
+                    let sessionCollection = Firestore.firestore().collection("sessions")
+                    try await sessionCollection.document(session.sessionId).updateData(data)
+                    dismiss()
+                }
+            } label: {
+                Text("Confirmar")
+            }
+        }
     }
     
     // update session data every time the view appears
@@ -71,6 +102,7 @@ struct EditSession_Previews: PreviewProvider {
         NavigationStack {
             EditSession(session: Session(sessionId: "001",
                                          dateCreated: Date.now,
+                                         status: "active",
                                          location: "Restaurante Niza",
                                          sessionDate: Date.now.advanced(by: 86400),
                                          players: [],
