@@ -28,3 +28,19 @@ struct MatchCell: View {
         }
     }
 }
+
+struct MatchCell_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationStack {
+            MatchCell(match: Match(location: "El Campello",
+                                   matchDate: Date.now,
+                                   players: ["Javier Alaves", "Diego Cortes", "Alvaro Perez", "Nacho Alaves"],
+                                   teamOne: ["Javier Alaves", "Nacho Alaves"],
+                                   teamTwo: ["Diego Cortes", "Alvaro Perez"],
+                                   teamOneScore: 21,
+                                   teamTwoScore: 19,
+                                   isRanked: false))
+            .padding()
+        }
+    }
+}

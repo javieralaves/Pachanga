@@ -65,7 +65,11 @@ struct SessionView: View {
                         // matches
                         Section ("Partidos") {
                             ForEach(sessionMatches, id: \.self) { match in
-                                MatchCell(match: match)
+                                NavigationLink {
+                                    EditMatchView(match: match)
+                                } label: {
+                                    MatchCell(match: match)
+                                }
                             }
                             NavigationLink("Añadir partido") {
                                 NewMatch(session: session)
