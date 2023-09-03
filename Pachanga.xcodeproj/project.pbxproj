@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		592050102AA4E8C100E8161A /* MatchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5920500F2AA4E8C100E8161A /* MatchCell.swift */; };
 		592170082A9D46710043ED9A /* JoinSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 592170072A9D46710043ED9A /* JoinSheet.swift */; };
 		5921700A2A9D5E270043ED9A /* Ranking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 592170092A9D5E270043ED9A /* Ranking.swift */; };
 		593E11722A8AAF730012B15F /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593E11712A8AAF730012B15F /* SessionManager.swift */; };
@@ -45,6 +46,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5920500F2AA4E8C100E8161A /* MatchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchCell.swift; sourceTree = "<group>"; };
 		592170072A9D46710043ED9A /* JoinSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinSheet.swift; sourceTree = "<group>"; };
 		592170092A9D5E270043ED9A /* Ranking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ranking.swift; sourceTree = "<group>"; };
 		593E11712A8AAF730012B15F /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 			children = (
 				59D693B22A58770D008364A7 /* AppLogo.swift */,
 				59A8AEBE2A8BD15B00A85460 /* SessionCell.swift */,
+				5920500F2AA4E8C100E8161A /* MatchCell.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -342,6 +345,7 @@
 				59C046EC2A82677900E5D071 /* AuthenticationManager.swift in Sources */,
 				59AAC6BC2A93AD270081349F /* MatchManager.swift in Sources */,
 				592170082A9D46710043ED9A /* JoinSheet.swift in Sources */,
+				592050102AA4E8C100E8161A /* MatchCell.swift in Sources */,
 				59D693B12A5874DF008364A7 /* ProfileView.swift in Sources */,
 				59D693B32A58770D008364A7 /* AppLogo.swift in Sources */,
 				59E723C22A4CC4B000236085 /* MainView.swift in Sources */,
