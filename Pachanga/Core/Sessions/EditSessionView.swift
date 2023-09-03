@@ -23,6 +23,9 @@ struct EditSession: View {
     // available fields, stored in form for now
     let fields = ["Club Muchavista", "Restaurante Xaloc", "Restaurante Niza", "Seis Perlas Campello"]
     
+    // cancel session alert
+    @State var cancelSessionAlert: Bool = false
+    
     var body: some View {
         
         Form {
@@ -35,14 +38,15 @@ struct EditSession: View {
                 }
                 DatePicker("Fecha", selection: $sessionDate)
             }
+            
+            // if session is active
             Section ("Acciones") {
                 Button (role: .destructive) {
-                    // cancel session
+                    cancelSessionAlert = true
                 } label: {
-                    Text("Cancelar sesión")
+                    Text("Anular sesión")
                 }
             }
-
         }
         .navigationTitle("Detalles")
         .navigationBarTitleDisplayMode(.inline)
@@ -64,6 +68,14 @@ struct EditSession: View {
         }
         .onAppear {
             updateSession()
+        }
+        .alert("¿Estás seguro de que deseas anular la sesión?", isPresented: $cancelSessionAlert) {
+            Button(role: .destructive) {
+                // set the session state to cancelled
+            } label: {
+                Text("Confirmar")
+            }
+
         }
     }
     
