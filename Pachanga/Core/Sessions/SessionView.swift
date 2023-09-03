@@ -151,6 +151,7 @@ struct SessionView: View {
     func updateSession() async throws {
         do {
             let updatedSession = try await SessionManager.shared.getSession(sessionId: session.sessionId)
+            session.status = updatedSession.status
             session.location = updatedSession.location
             session.sessionDate = updatedSession.sessionDate
             session.players = updatedSession.players

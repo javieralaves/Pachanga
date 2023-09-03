@@ -74,14 +74,15 @@ struct EditSession: View {
             Button(role: .destructive) {
                 let data: [AnyHashable : Any] = [
                     // set status to cancelled
-                    Session.CodingKeys.status : "cancelled",
-                    // remove all players
-                    Session.CodingKeys.players : [String]()
+                    Session.CodingKeys.status.rawValue : "cancelled",
+                    // remove players
+                    Session.CodingKeys.players.rawValue : [String]()
                 ]
                 
                 Task {
                     let sessionCollection = Firestore.firestore().collection("sessions")
                     try await sessionCollection.document(session.sessionId).updateData(data)
+                    dismiss()
                 }
             } label: {
                 Text("Confirmar")
