@@ -35,6 +35,14 @@ struct EditSession: View {
                 }
                 DatePicker("Fecha", selection: $sessionDate)
             }
+            Section ("Acciones") {
+                Button (role: .destructive) {
+                    // cancel session
+                } label: {
+                    Text("Cancelar sesión")
+                }
+            }
+
         }
         .navigationTitle("Detalles")
         .navigationBarTitleDisplayMode(.inline)
