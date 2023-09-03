@@ -65,7 +65,7 @@ struct SessionView: View {
                         // matches
                         Section ("Partidos") {
                             ForEach(sessionMatches, id: \.self) { match in
-                                Text(match.matchId)
+                                MatchCell(match: match)
                             }
                             NavigationLink("Añadir partido") {
                                 NewMatch(session: session)
@@ -207,7 +207,7 @@ struct SessionView_Previews: PreviewProvider {
         NavigationStack {
             SessionView(session: Session(sessionId: "001",
                                          dateCreated: Date.now,
-                                         status: "cancelled",
+                                         status: "active",
                                          location: "Restaurante Niza",
                                          sessionDate: Date.now.advanced(by: 86400),
                                          players: [],
