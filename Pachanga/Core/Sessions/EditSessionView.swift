@@ -39,12 +39,13 @@ struct EditSession: View {
                 DatePicker("Fecha", selection: $sessionDate)
             }
             
-            // if session is active
-            Section ("Acciones") {
-                Button (role: .destructive) {
-                    cancelSessionAlert = true
-                } label: {
-                    Text("Anular sesión")
+            if session.status == "active" {
+                Section ("Acciones") {
+                    Button (role: .destructive) {
+                        cancelSessionAlert = true
+                    } label: {
+                        Text("Anular sesión")
+                    }
                 }
             }
         }
@@ -71,11 +72,20 @@ struct EditSession: View {
         }
         .alert("¿Estás seguro de que deseas anular la sesión?", isPresented: $cancelSessionAlert) {
             Button(role: .destructive) {
-                // set the session state to cancelled
+                let data: [AnyHashable : Any] = [
+                    // set status to cancelled
+                    Session.CodingKeys.status : "cancelled",
+                    // remove all players
+                    Session.CodingKeys.players : [String]()
+                ]
+                
+                Task {
+                    let sessionCollection = Firestore.firestore().collection("sessions")
+                    try await sessionCollection.document(session.sessionId).updateData(data)
+                }
             } label: {
                 Text("Confirmar")
             }
-
         }
     }
     
