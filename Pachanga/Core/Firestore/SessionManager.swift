@@ -102,6 +102,16 @@ final class SessionManager {
         sessionCollection.document(sessionId)
     }
     
+    // reference to session players subcollection in the db
+    private func sessionPlayersCollection(sessionId: String) -> CollectionReference {
+        sessionDocument(sessionId: sessionId).collection("session_players")
+    }
+    
+    // reference to a specific player in the session players subcollection by session id
+    private func sessionPlayerDocument(sessionId: String, sessionPlayerId: String) -> DocumentReference {
+        sessionPlayersCollection(sessionId: sessionId).document(sessionPlayerId)
+    }
+    
     // push new session to db
     func createNewSession(session: Session) async throws {
         try sessionDocument(sessionId: session.sessionId).setData(from: session, merge: false)
@@ -169,6 +179,27 @@ final class SessionManager {
         return try await matchesCollection.whereField("session_id", isEqualTo: session.sessionId).getDocuments(as: Match.self)
     }
     
+    // add player to session of a specific id to subcollection
+    func addSessionPlayer(sessionId: String, userId: String) async throws {
+        
+        // generate an empty document inside subcollection
+        let document = sessionPlayersCollection(sessionId: sessionId).document()
+        let documentId = document.documentID
+        
+        // create data that gets passed into session player document
+        let data: [String:Any] = [
+            "id" : documentId,
+            "user_id" : userId,
+            "date_added" : Timestamp()
+        ]
+        
+        // set data
+        try await document.setData(data, merge: false)
+    }
+    
+    func removeSessionPlayer(sessionId: String, sessionPlayerId: String) async throws {
+        try await sessionPlayerDocument(sessionId: sessionId, sessionPlayerId: sessionPlayerId).delete()
+    }
     
 }
 
