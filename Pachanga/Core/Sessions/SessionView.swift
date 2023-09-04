@@ -13,6 +13,10 @@ struct SessionView: View {
     
     @State var session: Session
     
+    // empty array of players to be populated in view
+    // includes reference to both the session player and the underlying user
+    @State private var sessionPlayers: [(sessionPlayer: SessionPlayer, user: DBUser)] = []
+    
     // bool to display sheet that appears after tapping on join button
     @State private var joinSheet: Bool = false
     
@@ -33,22 +37,17 @@ struct SessionView: View {
                     if session.status == "active" {
                         
                         // list of registered players
-                        if !session.players.isEmpty {
+                        if !sessionPlayers.isEmpty {
                             Section {
-                                ForEach(session.players, id: \.self) { player in
+                                ForEach(sessionPlayers, id: \.sessionPlayer.id.self) { player in
                                     HStack {
-                                        // for testing purposes
-                                        if currentUser() == "NwIseDznbPNs5KmZlsHBTsxcsFl2" {
-                                            Text("Javier Alaves")
-                                        } else {
-                                            Text(player)
-                                        }
+                                        Text(player.user.name ?? "Juan Doe")
                                         
                                         Spacer()
-                                        if session.bringsBall.contains(player) {
+                                        if session.bringsBall.contains(player.user.userId) {
                                             Text("🏐")
                                         }
-                                        if session.bringsLines.contains(player) {
+                                        if session.bringsLines.contains(player.user.userId) {
                                             Text("🪢")
                                         }
                                     }
@@ -56,8 +55,8 @@ struct SessionView: View {
                             } header: {
                                 Text("Jugadores")
                             } footer: {
-                                if session.players.count < 4 {
-                                    Text("Faltan \(4 - session.players.count) jugadores más")
+                                if sessionPlayers.count < 4 {
+                                    Text("Faltan \(4 - sessionPlayers.count) jugadores más")
                                 }
                             }
                         }
@@ -127,6 +126,9 @@ struct SessionView: View {
             }
             .onAppear {
                 Task {
+                    // get players
+                    getSessionPlayers()
+                    
                     // update session data
                     try await updateSession()
                 }
@@ -149,6 +151,22 @@ struct SessionView: View {
             print(error)
         }
         return ""
+    }
+    
+    // returns an array of SessionPlayer containing all players added to session players subcollection
+    func getSessionPlayers() {
+        Task {
+            let sessionPlayers = try await SessionManager.shared.getAllSessionPlayers(sessionId: session.sessionId)
+            
+            var localArray: [(sessionPlayer: SessionPlayer, user: DBUser)] = []
+            for sessionPlayer in sessionPlayers {
+                if let player = try? await UserManager.shared.getUser(userId: sessionPlayer.userId) {
+                    localArray.append((sessionPlayer, player))
+                }
+            }
+            
+            self.sessionPlayers = localArray
+        }
     }
     
     // function to refresh session data every time the view appears

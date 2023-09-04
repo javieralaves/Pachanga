@@ -144,7 +144,6 @@ final class SessionManager {
     func addPlayer(session: Session) async throws {
         // get authenticated user from auth model
         let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
-        print("Received id: \(authDataResult.uid)")
         
         // set data I want to change in db
         let data: [String : Any] = [
@@ -152,9 +151,7 @@ final class SessionManager {
         ]
         
         // update data in session
-        print("Updating data in session: \(session.sessionId)... there are currently \(session.players.count) players")
         try await sessionDocument(sessionId: session.sessionId).updateData(data)
-        print("And now, there are \(session.players.count) players")
     }
     
     // remove authenticated user from session players
@@ -188,9 +185,9 @@ final class SessionManager {
         
         // create data that gets passed into session player document
         let data: [String:Any] = [
-            "id" : documentId,
-            "user_id" : userId,
-            "date_added" : Timestamp()
+            SessionPlayer.CodingKeys.id.rawValue : documentId,
+            SessionPlayer.CodingKeys.userId.rawValue : userId,
+            SessionPlayer.CodingKeys.dateAdded.rawValue : Timestamp()
         ]
         
         // set data
@@ -201,6 +198,36 @@ final class SessionManager {
         try await sessionPlayerDocument(sessionId: sessionId, sessionPlayerId: sessionPlayerId).delete()
     }
     
+    func getAllSessionPlayers(sessionId: String) async throws -> [SessionPlayer] {
+        try await sessionPlayersCollection(sessionId: sessionId).getDocuments(as: SessionPlayer.self)
+    }
+    
+}
+
+struct SessionPlayer: Codable {
+    let id: String
+    let userId: String
+    let dateAdded: Date
+    
+    enum CodingKeys: String, CodingKey {
+        case id = "id"
+        case userId = "user_id"
+        case dateAdded = "date_added"
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decode(String.self, forKey: .id)
+        self.userId = try container.decode(String.self, forKey: .userId)
+        self.dateAdded = try container.decode(Date.self, forKey: .dateAdded)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self.id, forKey: .id)
+        try container.encode(self.userId, forKey: .userId)
+        try container.encode(self.dateAdded, forKey: .dateAdded)
+    }
 }
 
 extension Query {
