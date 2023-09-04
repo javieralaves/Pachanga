@@ -21,7 +21,7 @@ struct DBUser: Codable, Hashable {
     // initializer passing an AuthDataResultModel for authentication flow
     init(auth: AuthDataResultModel) {
         self.userId = auth.uid
-        self.name = auth.name
+        self.name = auth.name ?? "Juan Doe"
         self.email = auth.email
         self.photoUrl = auth.photoURL
         self.dateCreated = Date() // will need to update this flow eventually because it overrides the stored value with a new date every time user logs in
@@ -38,7 +38,7 @@ struct DBUser: Codable, Hashable {
         isPremium: Bool? = nil
     ) {
         self.userId = userId
-        self.name = name
+        self.name = name ?? "Juan Doe"
         self.email = email
         self.photoUrl = photoUrl
         self.dateCreated = dateCreated

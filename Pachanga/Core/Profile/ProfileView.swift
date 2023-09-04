@@ -39,6 +39,10 @@ struct ProfileView: View {
                 if let user = viewModel.user {
                     Text("ID: \(user.userId)")
                     
+                    if let name = user.name {
+                        Text("Nombre: \(name)")
+                    }
+                    
                     if let email = user.email {
                         Text("Email: \(email)")
                     }
