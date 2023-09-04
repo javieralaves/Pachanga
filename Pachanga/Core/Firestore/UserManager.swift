@@ -11,6 +11,7 @@ import Foundation
 
 struct DBUser: Codable, Hashable {
     let userId: String
+    let name: String?
     let email: String?
     let photoUrl: String?
     let dateCreated: Date?
@@ -20,6 +21,7 @@ struct DBUser: Codable, Hashable {
     // initializer passing an AuthDataResultModel for authentication flow
     init(auth: AuthDataResultModel) {
         self.userId = auth.uid
+        self.name = auth.name
         self.email = auth.email
         self.photoUrl = auth.photoURL
         self.dateCreated = Date() // will need to update this flow eventually because it overrides the stored value with a new date every time user logs in
@@ -29,12 +31,14 @@ struct DBUser: Codable, Hashable {
     // initializer to adjust properties
     init(
         userId: String,
+        name: String? = nil,
         email: String? = nil,
         photoUrl: String? = nil,
         dateCreated: Date? = nil,
         isPremium: Bool? = nil
     ) {
         self.userId = userId
+        self.name = name
         self.email = email
         self.photoUrl = photoUrl
         self.dateCreated = dateCreated
@@ -50,6 +54,7 @@ struct DBUser: Codable, Hashable {
     // custom coding strategy
     enum CodingKeys: String, CodingKey {
         case userId = "user_id"
+        case name = "name"
         case email = "email"
         case photoUrl = "photo_url"
         case dateCreated = "date_created"
@@ -59,6 +64,7 @@ struct DBUser: Codable, Hashable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.userId = try container.decode(String.self, forKey: .userId)
+        self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.email = try container.decodeIfPresent(String.self, forKey: .email)
         self.photoUrl = try container.decodeIfPresent(String.self, forKey: .photoUrl)
         self.dateCreated = try container.decodeIfPresent(Date.self, forKey: .dateCreated)
@@ -68,6 +74,7 @@ struct DBUser: Codable, Hashable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(self.userId, forKey: .userId)
+        try container.encodeIfPresent(self.name, forKey: .name)
         try container.encodeIfPresent(self.email, forKey: .email)
         try container.encodeIfPresent(self.photoUrl, forKey: .photoUrl)
         try container.encodeIfPresent(self.dateCreated, forKey: .dateCreated)
