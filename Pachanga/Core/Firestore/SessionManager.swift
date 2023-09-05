@@ -102,6 +102,16 @@ final class SessionManager {
         sessionCollection.document(sessionId)
     }
     
+    // reference to session players subcollection in the db
+    private func sessionPlayersCollection(sessionId: String) -> CollectionReference {
+        sessionDocument(sessionId: sessionId).collection("session_players")
+    }
+    
+    // reference to a specific player in the session players subcollection by session id
+    private func sessionPlayerDocument(sessionId: String, sessionPlayerId: String) -> DocumentReference {
+        sessionPlayersCollection(sessionId: sessionId).document(sessionPlayerId)
+    }
+    
     // push new session to db
     func createNewSession(session: Session) async throws {
         try sessionDocument(sessionId: session.sessionId).setData(from: session, merge: false)
@@ -134,7 +144,6 @@ final class SessionManager {
     func addPlayer(session: Session) async throws {
         // get authenticated user from auth model
         let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
-        print("Received id: \(authDataResult.uid)")
         
         // set data I want to change in db
         let data: [String : Any] = [
@@ -142,9 +151,7 @@ final class SessionManager {
         ]
         
         // update data in session
-        print("Updating data in session: \(session.sessionId)... there are currently \(session.players.count) players")
         try await sessionDocument(sessionId: session.sessionId).updateData(data)
-        print("And now, there are \(session.players.count) players")
     }
     
     // remove authenticated user from session players
@@ -169,7 +176,81 @@ final class SessionManager {
         return try await matchesCollection.whereField("session_id", isEqualTo: session.sessionId).getDocuments(as: Match.self)
     }
     
+    // add player to session of a specific id to subcollection
+    func addSessionPlayer(sessionId: String, userId: String) async throws {
+        
+        // generate an empty document inside subcollection
+        let document = sessionPlayersCollection(sessionId: sessionId).document()
+        let documentId = document.documentID
+        
+        // create data that gets passed into session player document
+        let data: [String:Any] = [
+            SessionPlayer.CodingKeys.id.rawValue : documentId,
+            SessionPlayer.CodingKeys.userId.rawValue : userId,
+            SessionPlayer.CodingKeys.dateAdded.rawValue : Timestamp()
+        ]
+        
+        // set data
+        try await document.setData(data, merge: false)
+    }
     
+    func removeSessionPlayer(sessionId: String, sessionPlayerId: String) async throws {
+        try await sessionPlayerDocument(sessionId: sessionId, sessionPlayerId: sessionPlayerId).delete()
+    }
+    
+    func getAllSessionPlayers(sessionId: String) async throws -> [SessionPlayer] {
+        try await sessionPlayersCollection(sessionId: sessionId).getDocuments(as: SessionPlayer.self)
+    }
+    
+    func hasUserJoined(sessionId: String) async throws -> Bool {
+        
+        // variable to control the boolean
+        var hasJoined = false
+        
+        // authenticated user id
+        let userId = try AuthenticationManager.shared.getAuthenticatedUser().uid
+        
+        // array of session players from session
+        let sessionPlayers = try await getAllSessionPlayers(sessionId: sessionId)
+        
+        // check through array to see if userId is contained
+        for player in sessionPlayers {
+            if player.userId == userId {
+                hasJoined = true
+                break
+            }
+        }
+        
+        // return the bool, true if user is a session player
+        return hasJoined
+    }
+    
+}
+
+struct SessionPlayer: Codable {
+    let id: String
+    let userId: String
+    let dateAdded: Date
+    
+    enum CodingKeys: String, CodingKey {
+        case id = "id"
+        case userId = "user_id"
+        case dateAdded = "date_added"
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decode(String.self, forKey: .id)
+        self.userId = try container.decode(String.self, forKey: .userId)
+        self.dateAdded = try container.decode(Date.self, forKey: .dateAdded)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self.id, forKey: .id)
+        try container.encode(self.userId, forKey: .userId)
+        try container.encode(self.dateAdded, forKey: .dateAdded)
+    }
 }
 
 extension Query {

@@ -47,7 +47,13 @@ struct JoinSheet: View {
     // function to add myself to session
     private func addPlayer() {
         Task {
-            try await SessionManager.shared.addPlayer(session: session)
+            // get authenticated user
+            let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
+            
+            // add session player to players subcollection
+            try? await SessionManager.shared.addSessionPlayer(sessionId: session.sessionId, userId: authDataResult.uid)
+            
+            // update session
             self.session = try await SessionManager.shared.getSession(sessionId: session.sessionId)
         }
     }
@@ -81,7 +87,7 @@ struct JoinSheet: View {
             }
         }
         
-        // add player to session players array
+        // add player to session players subcollection
         addPlayer()
         
         dismiss()

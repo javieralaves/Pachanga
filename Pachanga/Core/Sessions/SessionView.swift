@@ -11,7 +11,14 @@ import SwiftUI
 
 struct SessionView: View {
     
+    // MARK: stored properties
+    
+    // session getting passed into view
     @State var session: Session
+    
+    // empty array of players to be populated in view
+    // includes reference to both the session player and the underlying user
+    @State private var sessionPlayers: [(sessionPlayer: SessionPlayer, user: DBUser)] = []
     
     // bool to display sheet that appears after tapping on join button
     @State private var joinSheet: Bool = false
@@ -19,11 +26,15 @@ struct SessionView: View {
     // empty array of matches to be populated
     @State private var sessionMatches: [Match] = []
     
+    // whether user is part of session or not
+    @State private var isPlayer: Bool = false
+    
     var body: some View {
         
         NavigationStack {
             VStack {
                 List {
+                    
                     // details section
                     Section {
                         Text(session.location)
@@ -33,22 +44,17 @@ struct SessionView: View {
                     if session.status == "active" {
                         
                         // list of registered players
-                        if !session.players.isEmpty {
+                        if !sessionPlayers.isEmpty {
                             Section {
-                                ForEach(session.players, id: \.self) { player in
+                                ForEach(sessionPlayers, id: \.sessionPlayer.id.self) { player in
                                     HStack {
-                                        // for testing purposes
-                                        if currentUser() == "NwIseDznbPNs5KmZlsHBTsxcsFl2" {
-                                            Text("Javier Alaves")
-                                        } else {
-                                            Text(player)
-                                        }
+                                        Text(player.user.name ?? "Juan Doe")
                                         
                                         Spacer()
-                                        if session.bringsBall.contains(player) {
+                                        if session.bringsBall.contains(player.user.userId) {
                                             Text("🏐")
                                         }
-                                        if session.bringsLines.contains(player) {
+                                        if session.bringsLines.contains(player.user.userId) {
                                             Text("🪢")
                                         }
                                     }
@@ -56,8 +62,8 @@ struct SessionView: View {
                             } header: {
                                 Text("Jugadores")
                             } footer: {
-                                if session.players.count < 4 {
-                                    Text("Faltan \(4 - session.players.count) jugadores más")
+                                if sessionPlayers.count < 4 {
+                                    Text("Faltan \(4 - sessionPlayers.count) jugadores más")
                                 }
                             }
                         }
@@ -87,9 +93,10 @@ struct SessionView: View {
                                 }
                             }
                         }
-                        
+                                                
                         // join/unjoin button
-                        if(!session.players.contains(currentUser())) {
+                        
+                        if !isPlayer {
                             Button("Unirme") {
                                 joinSheet.toggle()
                             }
@@ -127,17 +134,36 @@ struct SessionView: View {
             }
             .onAppear {
                 Task {
+                    // check if user is player
+                    isPlayer = try await hasJoined()
+                    
+                    // get players
+                    getSessionPlayers()
+                    
                     // update session data
                     try await updateSession()
                 }
             }
             .onChange(of: joinSheet) { _ in
                 Task {
+                    // check if user is player
+                    isPlayer = try await hasJoined()
+                    
+                    try await updateSession()
+                }
+            }
+            .onChange(of: isPlayer) { _ in
+                Task {
+                    // check if user is player
+                    isPlayer = try await hasJoined()
+                    
                     try await updateSession()
                 }
             }
         }
     }
+    
+    // MARK: view functions
     
     // function that returns userId for authenticated user, for join button state
     func currentUser() -> String {
@@ -149,6 +175,22 @@ struct SessionView: View {
             print(error)
         }
         return ""
+    }
+    
+    // returns an array of SessionPlayer containing all players added to session players subcollection
+    func getSessionPlayers() {
+        Task {
+            let sessionPlayers = try await SessionManager.shared.getAllSessionPlayers(sessionId: session.sessionId)
+            
+            var localArray: [(sessionPlayer: SessionPlayer, user: DBUser)] = []
+            for sessionPlayer in sessionPlayers {
+                if let player = try? await UserManager.shared.getUser(userId: sessionPlayer.userId) {
+                    localArray.append((sessionPlayer, player))
+                }
+            }
+            
+            self.sessionPlayers = localArray
+        }
     }
     
     // function to refresh session data every time the view appears
@@ -163,9 +205,15 @@ struct SessionView: View {
             session.bringsLines = updatedSession.bringsLines
             
             sessionMatches = try await SessionManager.shared.getMatches(session: session)
+            getSessionPlayers()
         } catch {
             print(error)
         }
+    }
+    
+    // check if user has joined as player, returns a bool
+    func hasJoined() async throws -> Bool {
+        try await SessionManager.shared.hasUserJoined(sessionId: session.sessionId)
     }
     
     // function to remove myself from session
@@ -195,8 +243,24 @@ struct SessionView: View {
                 try await sessionCollection.document(session.sessionId).updateData(data)
             }
             
-            // remove player from session players array
-            try await SessionManager.shared.removePlayer(session: session)
+            // get the sessionPlayerId for the authenticated userId
+            var sessionPlayerId = ""
+            
+            for player in sessionPlayers {
+                if player.user.userId == authDataResult.uid {
+                    sessionPlayerId = player.sessionPlayer.id
+                    break
+                }
+            }
+            
+            // remove player from session players subcollection with the sessionPlayerId associated to userId
+            try await SessionManager.shared.removeSessionPlayer(sessionId: session.sessionId, sessionPlayerId: sessionPlayerId)
+            
+            // force a change in the local isPlayer variable
+            isPlayer = false
+            
+            // reload the array of sessionPlayers
+            getSessionPlayers()
             
             // reload session by its id
             self.session = try await SessionManager.shared.getSession(sessionId: session.sessionId)

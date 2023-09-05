@@ -5,11 +5,16 @@
 //  Created by Javier Alaves on 15/8/23.
 //
 
+import FirebaseFirestore
+import FirebaseFirestoreSwift
 import SwiftUI
 
 struct SessionCell: View {
     
     let session: Session
+    
+    // initialized amount of session players
+    @State var playerCount: Int = 0
     
     var body: some View {
         HStack {
@@ -21,12 +26,24 @@ struct SessionCell: View {
             }
             Spacer()
             HStack {
-                Text("\(session.players.count)")
+                Text("\(playerCount)")
                 Image(systemName: "person.crop.circle")
             }
             .fontWeight(.medium)
             .foregroundColor(.secondary)
         }
+        .task {
+            getPlayerCount()
+        }
+    }
+    
+    func getPlayerCount() {
+        
+        Task {
+            let sessionPlayers = try await SessionManager.shared.getAllSessionPlayers(sessionId: session.sessionId)
+            playerCount = sessionPlayers.count
+        }
+        
     }
 }
 
