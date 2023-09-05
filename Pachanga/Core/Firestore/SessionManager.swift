@@ -88,22 +88,14 @@ final class SessionManager {
     static let shared = SessionManager()
     private init() { }
     
+    // MARK: collection functions
+    
     // reference to the sessions collection in the db
     private let sessionCollection = Firestore.firestore().collection("sessions")
     
     // reference to a specific session in the sessions db by session id
     private func sessionDocument(sessionId: String) -> DocumentReference {
         sessionCollection.document(sessionId)
-    }
-    
-    // reference to session players subcollection in the db
-    private func sessionPlayersCollection(sessionId: String) -> CollectionReference {
-        sessionDocument(sessionId: sessionId).collection("session_players")
-    }
-    
-    // reference to a specific player in the session players subcollection by session id
-    private func sessionPlayerDocument(sessionId: String, sessionPlayerId: String) -> DocumentReference {
-        sessionPlayersCollection(sessionId: sessionId).document(sessionPlayerId)
     }
     
     // push new session to db
@@ -134,12 +126,16 @@ final class SessionManager {
             .getDocuments(as: Session.self)
     }
     
-    func getMatches(session: Session) async throws -> [Match] {
-        // reference for matches collection
-        let matchesCollection = Firestore.firestore().collection("matches")
-        
-        // return an array of matches that have been created in session
-        return try await matchesCollection.whereField("session_id", isEqualTo: session.sessionId).getDocuments(as: Match.self)
+    // MARK: players subcollection functions
+    
+    // reference to session players subcollection in the db
+    private func sessionPlayersCollection(sessionId: String) -> CollectionReference {
+        sessionDocument(sessionId: sessionId).collection("session_players")
+    }
+    
+    // reference to a specific player in the session players subcollection by session id
+    private func sessionPlayerDocument(sessionId: String, sessionPlayerId: String) -> DocumentReference {
+        sessionPlayersCollection(sessionId: sessionId).document(sessionPlayerId)
     }
     
     // add player to session of a specific id to subcollection
@@ -172,7 +168,6 @@ final class SessionManager {
     
     // check if authenticated user has joined for any given session
     func hasUserJoined(sessionId: String) async throws -> Bool {
-        
         // variable to control the boolean
         var hasJoined = false
         
@@ -192,6 +187,28 @@ final class SessionManager {
         
         // return the bool, true if user is a session player
         return hasJoined
+    }
+    
+    // MARK: matches subcollection functions
+    
+    // reference to session matches subcollection in the db
+    private func sessionMatchesCollection(sessionId: String) -> CollectionReference {
+        sessionDocument(sessionId: sessionId).collection("session_matches")
+    }
+    
+    // reference to a specific match in the session matches subcollection by session id
+    private func sessionMatchDocument(sessionId: String, sessionMatchId: String) -> DocumentReference {
+        sessionMatchesCollection(sessionId: sessionId).document(sessionMatchId)
+    }
+    
+    // MARK: deprecating soon
+    
+    func getMatches(session: Session) async throws -> [Match] {
+        // reference for matches collection
+        let matchesCollection = Firestore.firestore().collection("matches")
+        
+        // return an array of matches that have been created in session
+        return try await matchesCollection.whereField("session_id", isEqualTo: session.sessionId).getDocuments(as: Match.self)
     }
     
 }
