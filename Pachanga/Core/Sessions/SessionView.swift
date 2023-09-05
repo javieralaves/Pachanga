@@ -11,6 +11,8 @@ import SwiftUI
 
 struct SessionView: View {
     
+    // MARK: stored properties
+    
     // session getting passed into view
     @State var session: Session
     
@@ -32,6 +34,7 @@ struct SessionView: View {
         NavigationStack {
             VStack {
                 List {
+                    
                     // details section
                     Section {
                         Text(session.location)
@@ -90,9 +93,7 @@ struct SessionView: View {
                                 }
                             }
                         }
-                        
-                        Text("Is user in this session? \(isPlayer.description)")
-                        
+                                                
                         // join/unjoin button
                         
                         if !isPlayer {
@@ -161,6 +162,8 @@ struct SessionView: View {
             }
         }
     }
+    
+    // MARK: view functions
     
     // function that returns userId for authenticated user, for join button state
     func currentUser() -> String {
