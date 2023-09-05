@@ -18,7 +18,6 @@ struct Match: Codable, Hashable {
     let dateCreated: Date
     var location: String
     var matchDate: Date
-    var players: [String]
     var teamOne: [String]
     var teamTwo: [String]
     var teamOneScore: Int
@@ -41,7 +40,6 @@ struct Match: Codable, Hashable {
         self.dateCreated = Date.now
         self.location = location
         self.matchDate = matchDate
-        self.players = players
         self.teamOne = teamOne
         self.teamTwo = teamTwo
         self.teamOneScore = teamOneScore
@@ -64,7 +62,6 @@ struct Match: Codable, Hashable {
         self.dateCreated = session.dateCreated
         self.location = session.location
         self.matchDate = session.sessionDate
-        self.players = players
         self.teamOne = teamOne
         self.teamTwo = teamTwo
         self.teamOneScore = teamOneScore
@@ -79,7 +76,6 @@ struct Match: Codable, Hashable {
         case dateCreated = "date_created"
         case location = "location"
         case matchDate = "match_date"
-        case players = "players"
         case teamOne = "team_one"
         case teamTwo = "team_two"
         case teamOneScore = "team_one_score"
@@ -95,7 +91,6 @@ struct Match: Codable, Hashable {
         self.dateCreated = try container.decode(Date.self, forKey: .dateCreated)
         self.location = try container.decode(String.self, forKey: .location)
         self.matchDate = try container.decode(Date.self, forKey: .matchDate)
-        self.players = try container.decode([String].self, forKey: .players)
         self.teamOne = try container.decode([String].self, forKey: .teamOne)
         self.teamTwo = try container.decode([String].self, forKey: .teamTwo)
         self.teamOneScore = try container.decode(Int.self, forKey: .teamOneScore)
@@ -111,7 +106,6 @@ struct Match: Codable, Hashable {
         try container.encode(self.dateCreated, forKey: .dateCreated)
         try container.encode(self.location, forKey: .location)
         try container.encode(self.matchDate, forKey: .matchDate)
-        try container.encode(self.players, forKey: .players)
         try container.encode(self.teamOne, forKey: .teamOne)
         try container.encode(self.teamTwo, forKey: .teamTwo)
         try container.encode(self.teamOneScore, forKey: .teamOneScore)
