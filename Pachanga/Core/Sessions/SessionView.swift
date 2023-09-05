@@ -110,25 +110,6 @@ struct SessionView: View {
                                 Text("Salirme")
                             }
                         }
-                        
-                        
-                        
-                        // join/unjoin button
-//                        if(!session.players.contains(currentUser())) {
-//                            Button("Unirme") {
-//                                joinSheet.toggle()
-//                            }
-//                            .sheet(isPresented: $joinSheet) {
-//                                JoinSheet(session: session)
-//                                    .presentationDetents([.medium])
-//                            }
-//                        } else {
-//                            Button(role: .destructive) {
-//                                removePlayer()
-//                            } label: {
-//                                Text("Salirme")
-//                            }
-//                        }
                                                 
                     }
                     
@@ -164,6 +145,17 @@ struct SessionView: View {
             }
             .onChange(of: joinSheet) { _ in
                 Task {
+                    // check if user is player
+                    isPlayer = try await hasJoined()
+                    
+                    try await updateSession()
+                }
+            }
+            .onChange(of: isPlayer) { _ in
+                Task {
+                    // check if user is player
+                    isPlayer = try await hasJoined()
+                    
                     try await updateSession()
                 }
             }
@@ -216,6 +208,7 @@ struct SessionView: View {
         }
     }
     
+    // check if user has joined as player, returns a bool
     func hasJoined() async throws -> Bool {
         try await SessionManager.shared.hasUserJoined(sessionId: session.sessionId)
     }
@@ -259,6 +252,12 @@ struct SessionView: View {
             
             // remove player from session players subcollection with the sessionPlayerId associated to userId
             try await SessionManager.shared.removeSessionPlayer(sessionId: session.sessionId, sessionPlayerId: sessionPlayerId)
+            
+            // force a change in the local isPlayer variable
+            isPlayer = false
+            
+            // reload the array of sessionPlayers
+            getSessionPlayers()
             
             // reload session by its id
             self.session = try await SessionManager.shared.getSession(sessionId: session.sessionId)
