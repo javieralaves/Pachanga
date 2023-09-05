@@ -160,14 +160,17 @@ final class SessionManager {
         try await document.setData(data, merge: false)
     }
     
+    // remove player from session given a session id and a sessionPlayerId (not the userId)
     func removeSessionPlayer(sessionId: String, sessionPlayerId: String) async throws {
         try await sessionPlayerDocument(sessionId: sessionId, sessionPlayerId: sessionPlayerId).delete()
     }
     
+    // return an array of SessionPlayers for a given session
     func getAllSessionPlayers(sessionId: String) async throws -> [SessionPlayer] {
         try await sessionPlayersCollection(sessionId: sessionId).getDocuments(as: SessionPlayer.self)
     }
     
+    // check if authenticated user has joined for any given session
     func hasUserJoined(sessionId: String) async throws -> Bool {
         
         // variable to control the boolean
