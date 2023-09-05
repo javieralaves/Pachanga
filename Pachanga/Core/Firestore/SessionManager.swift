@@ -202,6 +202,29 @@ final class SessionManager {
         try await sessionPlayersCollection(sessionId: sessionId).getDocuments(as: SessionPlayer.self)
     }
     
+    func hasUserJoined(sessionId: String) async throws -> Bool {
+        
+        // variable to control the boolean
+        var hasJoined = false
+        
+        // authenticated user id
+        let userId = try AuthenticationManager.shared.getAuthenticatedUser().uid
+        
+        // array of session players from session
+        let sessionPlayers = try await getAllSessionPlayers(sessionId: sessionId)
+        
+        // check through array to see if userId is contained
+        for player in sessionPlayers {
+            if player.userId == userId {
+                hasJoined = true
+                break
+            }
+        }
+        
+        // return the bool, true if user is a session player
+        return hasJoined
+    }
+    
 }
 
 struct SessionPlayer: Codable {

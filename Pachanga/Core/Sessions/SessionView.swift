@@ -11,6 +11,7 @@ import SwiftUI
 
 struct SessionView: View {
     
+    // session getting passed into view
     @State var session: Session
     
     // empty array of players to be populated in view
@@ -22,6 +23,9 @@ struct SessionView: View {
     
     // empty array of matches to be populated
     @State private var sessionMatches: [Match] = []
+    
+    // whether user is part of session or not
+    @State private var isPlayer: Bool = false
     
     var body: some View {
         
@@ -87,8 +91,11 @@ struct SessionView: View {
                             }
                         }
                         
+                        Text("Is user in this session? \(isPlayer.description)")
+                        
                         // join/unjoin button
-                        if(!session.players.contains(currentUser())) {
+                        
+                        if !isPlayer {
                             Button("Unirme") {
                                 joinSheet.toggle()
                             }
@@ -103,6 +110,25 @@ struct SessionView: View {
                                 Text("Salirme")
                             }
                         }
+                        
+                        
+                        
+                        // join/unjoin button
+//                        if(!session.players.contains(currentUser())) {
+//                            Button("Unirme") {
+//                                joinSheet.toggle()
+//                            }
+//                            .sheet(isPresented: $joinSheet) {
+//                                JoinSheet(session: session)
+//                                    .presentationDetents([.medium])
+//                            }
+//                        } else {
+//                            Button(role: .destructive) {
+//                                removePlayer()
+//                            } label: {
+//                                Text("Salirme")
+//                            }
+//                        }
                                                 
                     }
                     
@@ -126,6 +152,9 @@ struct SessionView: View {
             }
             .onAppear {
                 Task {
+                    // check if user is player
+                    isPlayer = try await hasJoined()
+                    
                     // get players
                     getSessionPlayers()
                     
@@ -181,9 +210,14 @@ struct SessionView: View {
             session.bringsLines = updatedSession.bringsLines
             
             sessionMatches = try await SessionManager.shared.getMatches(session: session)
+            getSessionPlayers()
         } catch {
             print(error)
         }
+    }
+    
+    func hasJoined() async throws -> Bool {
+        try await SessionManager.shared.hasUserJoined(sessionId: session.sessionId)
     }
     
     // function to remove myself from session
@@ -213,8 +247,18 @@ struct SessionView: View {
                 try await sessionCollection.document(session.sessionId).updateData(data)
             }
             
-            // remove player from session players array
-            try await SessionManager.shared.removePlayer(session: session)
+            // get the sessionPlayerId for the authenticated userId
+            var sessionPlayerId = ""
+            
+            for player in sessionPlayers {
+                if player.user.userId == authDataResult.uid {
+                    sessionPlayerId = player.sessionPlayer.id
+                    break
+                }
+            }
+            
+            // remove player from session players subcollection with the sessionPlayerId associated to userId
+            try await SessionManager.shared.removeSessionPlayer(sessionId: session.sessionId, sessionPlayerId: sessionPlayerId)
             
             // reload session by its id
             self.session = try await SessionManager.shared.getSession(sessionId: session.sessionId)
