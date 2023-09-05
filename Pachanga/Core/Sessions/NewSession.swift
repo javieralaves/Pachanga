@@ -50,7 +50,6 @@ struct NewSession: View {
                                          status: "active",
                                          location: location,
                                          sessionDate: sessionDate,
-                                         players: [String](),
                                          matches: [String](),
                                          bringsBall: [String](),
                                          bringsLines: [String]())

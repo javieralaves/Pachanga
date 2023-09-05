@@ -75,8 +75,6 @@ struct EditSession: View {
                 let data: [AnyHashable : Any] = [
                     // set status to cancelled
                     Session.CodingKeys.status.rawValue : "cancelled",
-                    // remove players
-                    Session.CodingKeys.players.rawValue : [String]()
                 ]
                 
                 Task {
@@ -105,7 +103,6 @@ struct EditSession_Previews: PreviewProvider {
                                          status: "active",
                                          location: "Restaurante Niza",
                                          sessionDate: Date.now.advanced(by: 86400),
-                                         players: [],
                                          matches: [],
                                          bringsBall: [],
                                          bringsLines: []))

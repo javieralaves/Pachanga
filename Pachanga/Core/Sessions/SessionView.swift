@@ -200,7 +200,6 @@ struct SessionView: View {
             session.status = updatedSession.status
             session.location = updatedSession.location
             session.sessionDate = updatedSession.sessionDate
-            session.players = updatedSession.players
             session.bringsBall = updatedSession.bringsBall
             session.bringsLines = updatedSession.bringsLines
             
@@ -278,7 +277,6 @@ struct SessionView_Previews: PreviewProvider {
                                          status: "active",
                                          location: "Restaurante Niza",
                                          sessionDate: Date.now.advanced(by: 86400),
-                                         players: [],
                                          matches: [],
                                          bringsBall: [],
                                          bringsLines: []))

@@ -102,7 +102,6 @@ struct JoinSheet_Previews: PreviewProvider {
                                        status: "active",
                                        location: "Restaurante Niza",
                                        sessionDate: Date.now.advanced(by: 86400),
-                                       players: [],
                                        matches: [],
                                        bringsBall: [],
                                        bringsLines: []))

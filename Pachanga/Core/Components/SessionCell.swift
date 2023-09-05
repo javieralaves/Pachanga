@@ -55,7 +55,6 @@ struct SessionCell_Previews: PreviewProvider {
                                          status: "active",
                                          location: "Club Muchavista",
                                          sessionDate: Date.now,
-                                         players: ["javi"],
                                          matches: [],
                                          bringsBall: [],
                                          bringsLines: []))

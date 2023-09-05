@@ -18,7 +18,6 @@ struct Session: Codable {
     var status: String
     var location: String
     var sessionDate: Date
-    var players: [String]
     var matches: [String]
     var bringsBall: [String]
     var bringsLines: [String]
@@ -30,7 +29,6 @@ struct Session: Codable {
         status: String,
         location: String,
         sessionDate: Date,
-        players: [String],
         matches: [String],
         bringsBall: [String],
         bringsLines: [String]
@@ -40,7 +38,6 @@ struct Session: Codable {
         self.status = status
         self.location = location
         self.sessionDate = sessionDate
-        self.players = players
         self.matches = matches
         self.bringsBall = bringsBall
         self.bringsLines = bringsLines
@@ -53,7 +50,6 @@ struct Session: Codable {
         case status = "status"
         case location = "location"
         case sessionDate = "session_date"
-        case players = "players"
         case matches = "matches"
         case bringsBall = "bringsBall"
         case bringsLines = "bringsLines"
@@ -67,7 +63,6 @@ struct Session: Codable {
         self.status = try container.decode(String.self, forKey: .status)
         self.location = try container.decode(String.self, forKey: .location)
         self.sessionDate = try container.decode(Date.self, forKey: .sessionDate)
-        self.players = try container.decode([String].self, forKey: .players)
         self.matches = try container.decode([String].self, forKey: .matches)
         self.bringsBall = try container.decode([String].self, forKey: .bringsBall)
         self.bringsLines = try container.decode([String].self, forKey: .bringsLines)
@@ -81,7 +76,6 @@ struct Session: Codable {
         try container.encode(self.status, forKey: .status)
         try container.encode(self.location, forKey: .location)
         try container.encode(self.sessionDate, forKey: .sessionDate)
-        try container.encode(self.players, forKey: .players)
         try container.encode(self.matches, forKey: .matches)
         try container.encode(self.bringsBall, forKey: .bringsBall)
         try container.encode(self.bringsLines, forKey: .bringsLines)
@@ -138,34 +132,6 @@ final class SessionManager {
             .whereField("session_date", isGreaterThan: Date.now)
             .whereField("status", isEqualTo: "active")
             .getDocuments(as: Session.self)
-    }
-    
-    // add authenticated user to session players
-    func addPlayer(session: Session) async throws {
-        // get authenticated user from auth model
-        let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
-        
-        // set data I want to change in db
-        let data: [String : Any] = [
-            Session.CodingKeys.players.rawValue : FieldValue.arrayUnion([authDataResult.uid])
-        ]
-        
-        // update data in session
-        try await sessionDocument(sessionId: session.sessionId).updateData(data)
-    }
-    
-    // remove authenticated user from session players
-    func removePlayer(session: Session) async throws {
-        // get authenticated user from auth model
-        let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
-        
-        // set data I want to change in db
-        let data: [String : Any] = [
-            Session.CodingKeys.players.rawValue : FieldValue.arrayRemove([authDataResult.uid])
-        ]
-        
-        // update data in session
-        try await sessionDocument(sessionId: session.sessionId).updateData(data)
     }
     
     func getMatches(session: Session) async throws -> [Match] {
