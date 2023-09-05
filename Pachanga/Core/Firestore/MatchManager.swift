@@ -120,6 +120,8 @@ final class MatchManager {
     static let shared = MatchManager()
     private init() { }
     
+    // MARK: collection functions
+    
     // reference to matches collection in the db
     private let matchesCollection = Firestore.firestore().collection("matches")
     
@@ -143,4 +145,74 @@ final class MatchManager {
         match.teamOneScore > match.teamTwoScore ? match.teamOne : match.teamTwo
     }
     
+    // MARK: players subcollection functions
+    
+    // reference to match players subcollection
+    private func matchPlayersCollection(matchId: String) -> CollectionReference {
+        matchDocument(matchId: matchId).collection("match_players")
+    }
+    
+    // reference to a specific player in the match players subcollection by match id
+    private func matchPlayerDocument(matchId: String, matchPlayerId: String) -> DocumentReference {
+        matchPlayersCollection(matchId: matchId).document(matchPlayerId)
+    }
+    
+    // add a player to match players subcollection
+    func addMatchPlayer(matchId: String, userId: String, team: Int) async throws {
+        // generate an empty document inside subcollection
+        let document = matchPlayersCollection(matchId: matchId).document()
+        let documentId = document.documentID
+        
+        // create data that gets passed into match player document
+        let data: [String:Any] = [
+            MatchPlayer.CodingKeys.id.rawValue : documentId,
+            MatchPlayer.CodingKeys.userId.rawValue : userId,
+            MatchPlayer.CodingKeys.dateAdded.rawValue : Timestamp(),
+            MatchPlayer.CodingKeys.team.rawValue : team
+        ]
+        
+        // set data
+        try await document.setData(data, merge: false)
+    }
+    
+    // return an array of MatchPlayers for a given match
+    func getAllMatchPlayers(matchId: String) async throws -> [MatchPlayer] {
+        try await matchPlayersCollection(matchId: matchId).getDocuments(as: MatchPlayer.self)
+    }
+    
+    // return array of MatchPlayers for a given team within a match
+    func getMatchTeamPlayers(matchId: String, team: Int) async throws -> [MatchPlayer] {
+        try await matchPlayersCollection(matchId: matchId).whereField("team", isEqualTo: team).getDocuments(as: MatchPlayer.self)
+    }
+    
+}
+
+struct MatchPlayer: Codable {
+    let id: String
+    let userId: String
+    let dateAdded: Date
+    let team: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case id = "id"
+        case userId = "user_id"
+        case dateAdded = "date_added"
+        case team = "team"
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decode(String.self, forKey: .id)
+        self.userId = try container.decode(String.self, forKey: .userId)
+        self.dateAdded = try container.decode(Date.self, forKey: .dateAdded)
+        self.team = try container.decode(Int.self, forKey: .team)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self.id, forKey: .id)
+        try container.encode(self.userId, forKey: .userId)
+        try container.encode(self.dateAdded, forKey: .dateAdded)
+        try container.encode(self.team, forKey: .team)
+    }
 }
