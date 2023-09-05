@@ -201,6 +201,34 @@ final class SessionManager {
         sessionMatchesCollection(sessionId: sessionId).document(sessionMatchId)
     }
     
+    // adds a match to a session subcollection
+    func addSessionMatch(sessionId: String, matchId: String) async throws {
+        
+        // generate an empty document inside subcollection
+        let document = sessionMatchesCollection(sessionId: sessionId).document()
+        let documentId = document.documentID
+        
+        // create data that gets passed into session match document
+        let data: [String:Any] = [
+            SessionMatch.CodingKeys.id.rawValue : documentId,
+            SessionMatch.CodingKeys.matchId.rawValue : matchId,
+            SessionMatch.CodingKeys.dateAdded.rawValue : Timestamp()
+        ]
+        
+        // set data
+        try await document.setData(data, merge: false)
+    }
+    
+    // removes a session match from the session subcollection
+    func removeSessionMatch(sessionId: String, sessionMatchId: String) async throws {
+        try await sessionMatchDocument(sessionId: sessionId, sessionMatchId: sessionMatchId).delete()
+    }
+    
+    // return an array of session matches for a given session
+    func getAllSessionMatches(sessionId: String) async throws -> [SessionMatch] {
+        try await sessionMatchesCollection(sessionId: sessionId).getDocuments(as: SessionMatch.self)
+    }
+    
     // MARK: deprecating soon
     
     func getMatches(session: Session) async throws -> [Match] {
@@ -235,6 +263,32 @@ struct SessionPlayer: Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(self.id, forKey: .id)
         try container.encode(self.userId, forKey: .userId)
+        try container.encode(self.dateAdded, forKey: .dateAdded)
+    }
+}
+
+struct SessionMatch: Codable {
+    let id: String
+    let matchId: String
+    let dateAdded: Date
+    
+    enum CodingKeys: String, CodingKey {
+        case id = "id"
+        case matchId = "match_id"
+        case dateAdded = "date_added"
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decode(String.self, forKey: .id)
+        self.matchId = try container.decode(String.self, forKey: .matchId)
+        self.dateAdded = try container.decode(Date.self, forKey: .dateAdded)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self.id, forKey: .id)
+        try container.encode(self.matchId, forKey: .matchId)
         try container.encode(self.dateAdded, forKey: .dateAdded)
     }
 }
