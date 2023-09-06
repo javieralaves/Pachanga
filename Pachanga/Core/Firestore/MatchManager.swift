@@ -28,7 +28,6 @@ struct Match: Codable, Hashable {
     init(
         location: String,
         matchDate: Date,
-        players: [String],
         teamOne: [String],
         teamTwo: [String],
         teamOneScore: Int,
@@ -50,7 +49,6 @@ struct Match: Codable, Hashable {
     // init from session
     init(
         session: Session,
-        players: [String],
         teamOne: [String],
         teamTwo: [String],
         teamOneScore: Int,
@@ -187,7 +185,7 @@ final class MatchManager {
     
 }
 
-struct MatchPlayer: Codable {
+struct MatchPlayer: Codable, Hashable {
     let id: String
     let userId: String
     let dateAdded: Date

@@ -18,9 +18,6 @@ struct Session: Codable {
     var status: String
     var location: String
     var sessionDate: Date
-    var matches: [String]
-    var bringsBall: [String]
-    var bringsLines: [String]
     
     // custom init
     init(
@@ -28,19 +25,13 @@ struct Session: Codable {
         dateCreated: Date,
         status: String,
         location: String,
-        sessionDate: Date,
-        matches: [String],
-        bringsBall: [String],
-        bringsLines: [String]
+        sessionDate: Date
     ) {
         self.sessionId = sessionId
         self.dateCreated = dateCreated
         self.status = status
         self.location = location
         self.sessionDate = sessionDate
-        self.matches = matches
-        self.bringsBall = bringsBall
-        self.bringsLines = bringsLines
     }
     
     // custom coding strategy
@@ -50,9 +41,6 @@ struct Session: Codable {
         case status = "status"
         case location = "location"
         case sessionDate = "session_date"
-        case matches = "matches"
-        case bringsBall = "bringsBall"
-        case bringsLines = "bringsLines"
     }
     
     // to load a session from db with decoder
@@ -63,9 +51,6 @@ struct Session: Codable {
         self.status = try container.decode(String.self, forKey: .status)
         self.location = try container.decode(String.self, forKey: .location)
         self.sessionDate = try container.decode(Date.self, forKey: .sessionDate)
-        self.matches = try container.decode([String].self, forKey: .matches)
-        self.bringsBall = try container.decode([String].self, forKey: .bringsBall)
-        self.bringsLines = try container.decode([String].self, forKey: .bringsLines)
     }
     
     // to encode session instance into db with encoder
@@ -76,9 +61,6 @@ struct Session: Codable {
         try container.encode(self.status, forKey: .status)
         try container.encode(self.location, forKey: .location)
         try container.encode(self.sessionDate, forKey: .sessionDate)
-        try container.encode(self.matches, forKey: .matches)
-        try container.encode(self.bringsBall, forKey: .bringsBall)
-        try container.encode(self.bringsLines, forKey: .bringsLines)
     }
     
 }
@@ -91,10 +73,10 @@ final class SessionManager {
     // MARK: collection functions
     
     // reference to the sessions collection in the db
-    private let sessionCollection = Firestore.firestore().collection("sessions")
+    let sessionCollection = Firestore.firestore().collection("sessions")
     
     // reference to a specific session in the sessions db by session id
-    private func sessionDocument(sessionId: String) -> DocumentReference {
+    func sessionDocument(sessionId: String) -> DocumentReference {
         sessionCollection.document(sessionId)
     }
     
@@ -126,44 +108,46 @@ final class SessionManager {
             .getDocuments(as: Session.self)
     }
     
-    // MARK: players subcollection functions
+    // MARK: session_members subcollection
     
-    // reference to session players subcollection in the db
-    private func sessionPlayersCollection(sessionId: String) -> CollectionReference {
-        sessionDocument(sessionId: sessionId).collection("session_players")
+    //  subcollection reference
+    func sessionMembersCollection(sessionId: String) -> CollectionReference {
+        sessionDocument(sessionId: sessionId).collection("session_members")
     }
     
-    // reference to a specific player in the session players subcollection by session id
-    private func sessionPlayerDocument(sessionId: String, sessionPlayerId: String) -> DocumentReference {
-        sessionPlayersCollection(sessionId: sessionId).document(sessionPlayerId)
+    // session member document reference
+    func sessionMemberDocument(sessionId: String, sessionMemberId: String) -> DocumentReference {
+        sessionMembersCollection(sessionId: sessionId).document(sessionMemberId)
     }
     
-    // add player to session of a specific id to subcollection
-    func addSessionPlayer(sessionId: String, userId: String) async throws {
+    // add user to session as session member
+    func addSessionMember(sessionId: String, userId: String, bringsBall: Bool, bringsLines: Bool) async throws {
         
         // generate an empty document inside subcollection
-        let document = sessionPlayersCollection(sessionId: sessionId).document()
+        let document = sessionMembersCollection(sessionId: sessionId).document()
         let documentId = document.documentID
         
         // create data that gets passed into session player document
         let data: [String:Any] = [
-            SessionPlayer.CodingKeys.id.rawValue : documentId,
-            SessionPlayer.CodingKeys.userId.rawValue : userId,
-            SessionPlayer.CodingKeys.dateAdded.rawValue : Timestamp()
+            SessionMember.CodingKeys.id.rawValue : documentId,
+            SessionMember.CodingKeys.userId.rawValue : userId,
+            SessionMember.CodingKeys.bringsBall.rawValue : bringsBall,
+            SessionMember.CodingKeys.bringsLines.rawValue : bringsLines,
+            SessionMember.CodingKeys.dateAdded.rawValue : Timestamp()
         ]
         
         // set data
         try await document.setData(data, merge: false)
     }
     
-    // remove player from session given a session id and a sessionPlayerId (not the userId)
-    func removeSessionPlayer(sessionId: String, sessionPlayerId: String) async throws {
-        try await sessionPlayerDocument(sessionId: sessionId, sessionPlayerId: sessionPlayerId).delete()
+    // remove member from session
+    func removeSessionMember(sessionId: String, sessionMemberId: String) async throws {
+        try await sessionMemberDocument(sessionId: sessionId, sessionMemberId: sessionMemberId).delete()
     }
     
-    // return an array of SessionPlayers for a given session
-    func getAllSessionPlayers(sessionId: String) async throws -> [SessionPlayer] {
-        try await sessionPlayersCollection(sessionId: sessionId).getDocuments(as: SessionPlayer.self)
+    // return an array of session members for a given session
+    func getAllSessionMembers(sessionId: String) async throws -> [SessionMember] {
+        try await sessionMembersCollection(sessionId: sessionId).getDocuments(as: SessionMember.self)
     }
     
     // check if authenticated user has joined for any given session
@@ -175,10 +159,10 @@ final class SessionManager {
         let userId = try AuthenticationManager.shared.getAuthenticatedUser().uid
         
         // array of session players from session
-        let sessionPlayers = try await getAllSessionPlayers(sessionId: sessionId)
+        let sessionMembers = try await getAllSessionMembers(sessionId: sessionId)
         
         // check through array to see if userId is contained
-        for player in sessionPlayers {
+        for player in sessionMembers {
             if player.userId == userId {
                 hasJoined = true
                 break
@@ -189,7 +173,7 @@ final class SessionManager {
         return hasJoined
     }
     
-    // MARK: matches subcollection functions
+    // MARK: session_matches subcollection
     
     // reference to session matches subcollection in the db
     private func sessionMatchesCollection(sessionId: String) -> CollectionReference {
@@ -202,17 +186,23 @@ final class SessionManager {
     }
     
     // adds a match to a session subcollection
-    func addSessionMatch(sessionId: String, matchId: String) async throws {
+    func addSessionMatch(session: Session, matchId: String, t1p1: String, t1p2: String, t2p1: String, t2p2: String, score1: Int, score2: Int) async throws {
         
         // generate an empty document inside subcollection
-        let document = sessionMatchesCollection(sessionId: sessionId).document()
+        let document = sessionMatchesCollection(sessionId: session.sessionId).document()
         let documentId = document.documentID
         
         // create data that gets passed into session match document
         let data: [String:Any] = [
             SessionMatch.CodingKeys.id.rawValue : documentId,
-            SessionMatch.CodingKeys.matchId.rawValue : matchId,
-            SessionMatch.CodingKeys.dateAdded.rawValue : Timestamp()
+            SessionMatch.CodingKeys.sessionId.rawValue : session.sessionId,
+            SessionMatch.CodingKeys.dateCreated.rawValue : Timestamp(),
+            SessionMatch.CodingKeys.location.rawValue : session.location,
+            SessionMatch.CodingKeys.matchDate.rawValue : session.sessionDate,
+            SessionMatch.CodingKeys.teamOne.rawValue : [t1p1, t1p2],
+            SessionMatch.CodingKeys.teamTwo.rawValue : [t2p1, t2p2],
+            SessionMatch.CodingKeys.scoreOne.rawValue : score1,
+            SessionMatch.CodingKeys.scoreTwo.rawValue : score2
         ]
         
         // set data
@@ -229,26 +219,20 @@ final class SessionManager {
         try await sessionMatchesCollection(sessionId: sessionId).getDocuments(as: SessionMatch.self)
     }
     
-    // MARK: deprecating soon
-    
-    func getMatches(session: Session) async throws -> [Match] {
-        // reference for matches collection
-        let matchesCollection = Firestore.firestore().collection("matches")
-        
-        // return an array of matches that have been created in session
-        return try await matchesCollection.whereField("session_id", isEqualTo: session.sessionId).getDocuments(as: Match.self)
-    }
-    
 }
 
-struct SessionPlayer: Codable {
+struct SessionMember: Codable, Identifiable {
     let id: String
     let userId: String
+    var bringsBall: Bool
+    var bringsLines: Bool
     let dateAdded: Date
     
     enum CodingKeys: String, CodingKey {
         case id = "id"
         case userId = "user_id"
+        case bringsBall = "brings_ball"
+        case bringsLines = "brings_lines"
         case dateAdded = "date_added"
     }
     
@@ -256,6 +240,8 @@ struct SessionPlayer: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(String.self, forKey: .id)
         self.userId = try container.decode(String.self, forKey: .userId)
+        self.bringsBall = try container.decode(Bool.self, forKey: .bringsBall)
+        self.bringsLines = try container.decode(Bool.self, forKey: .bringsLines)
         self.dateAdded = try container.decode(Date.self, forKey: .dateAdded)
     }
     
@@ -263,34 +249,61 @@ struct SessionPlayer: Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(self.id, forKey: .id)
         try container.encode(self.userId, forKey: .userId)
+        try container.encode(self.bringsBall, forKey: .bringsBall)
+        try container.encode(self.bringsLines, forKey: .bringsLines)
         try container.encode(self.dateAdded, forKey: .dateAdded)
     }
 }
 
-struct SessionMatch: Codable {
+struct SessionMatch: Codable, Identifiable {
     let id: String
-    let matchId: String
-    let dateAdded: Date
+    let sessionId: String
+    let dateCreated: Date
+    var location: String
+    var matchDate: Date
+    var teamOne: [String]
+    var teamTwo: [String]
+    var scoreOne: Int
+    var scoreTwo: Int
     
     enum CodingKeys: String, CodingKey {
         case id = "id"
-        case matchId = "match_id"
-        case dateAdded = "date_added"
+        case sessionId = "session_id"
+        case dateCreated = "date_created"
+        case location = "location"
+        case matchDate = "match_date"
+        case teamOne = "team_one"
+        case teamTwo = "team_two"
+        case scoreOne = "score_one"
+        case scoreTwo = "score_two"
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(String.self, forKey: .id)
-        self.matchId = try container.decode(String.self, forKey: .matchId)
-        self.dateAdded = try container.decode(Date.self, forKey: .dateAdded)
+        self.sessionId = try container.decode(String.self, forKey: .sessionId)
+        self.dateCreated = try container.decode(Date.self, forKey: .dateCreated)
+        self.location = try container.decode(String.self, forKey: .location)
+        self.matchDate = try container.decode(Date.self, forKey: .matchDate)
+        self.teamOne = try container.decode([String].self, forKey: .teamOne)
+        self.teamTwo = try container.decode([String].self, forKey: .teamTwo)
+        self.scoreOne = try container.decode(Int.self, forKey: .scoreOne)
+        self.scoreTwo = try container.decode(Int.self, forKey: .scoreTwo)
     }
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(self.id, forKey: .id)
-        try container.encode(self.matchId, forKey: .matchId)
-        try container.encode(self.dateAdded, forKey: .dateAdded)
+        try container.encode(self.sessionId, forKey: .sessionId)
+        try container.encode(self.dateCreated, forKey: .dateCreated)
+        try container.encode(self.location, forKey: .location)
+        try container.encode(self.matchDate, forKey: .matchDate)
+        try container.encode(self.teamOne, forKey: .teamOne)
+        try container.encode(self.teamTwo, forKey: .teamTwo)
+        try container.encode(self.scoreOne, forKey: .scoreOne)
+        try container.encode(self.scoreTwo, forKey: .scoreTwo)
     }
+    
 }
 
 extension Query {

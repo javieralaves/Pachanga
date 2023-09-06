@@ -11,7 +11,6 @@ import SwiftUI
 
 struct EditSession: View {
     
-    // to dismiss view on save
     @Environment(\.dismiss) var dismiss
     
     let session: Session
@@ -27,7 +26,6 @@ struct EditSession: View {
     @State var cancelSessionAlert: Bool = false
     
     var body: some View {
-        
         Form {
             // session details
             Section ("Detalles") {
@@ -101,11 +99,8 @@ struct EditSession_Previews: PreviewProvider {
             EditSession(session: Session(sessionId: "001",
                                          dateCreated: Date.now,
                                          status: "active",
-                                         location: "Restaurante Niza",
-                                         sessionDate: Date.now.advanced(by: 86400),
-                                         matches: [],
-                                         bringsBall: [],
-                                         bringsLines: []))
+                                         location: "El Campello",
+                                         sessionDate: Date.now))
         }
     }
 }

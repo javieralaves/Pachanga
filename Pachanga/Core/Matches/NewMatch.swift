@@ -1,150 +1,144 @@
+////
+////  NewSessionMatch.swift
+////  Pachanga
+////
+////  Created by Javier Alaves on 5/9/23.
+////
 //
-//  NewMatch.swift
-//  Pachanga
+//import SwiftUI
 //
-//  Created by Javier Alaves on 29/8/23.
+//struct NewMatch: View {
 //
-
-import FirebaseFirestore
-import FirebaseFirestoreSwift
-import SwiftUI
-
-struct NewMatch: View {
-    
-    // dismiss view on save
-    @Environment(\.dismiss) var dismiss
-    
-    // session associated to match that gets passed in
-    let session: Session
-    
-    // temp array
-    let sessionPlayers = [String]()
-    
-    // player values initialized as empty strings
-    @State private var t1p1: String = ""
-    @State private var t1p2: String = ""
-    @State private var t2p1: String = ""
-    @State private var t2p2: String = ""
-    
-    // score values initialized at zero
-    @State private var score1: Int = 0
-    @State private var score2: Int = 0
-    
-    var body: some View {
-        
-        Text("wip")
-        
-        //        NavigationStack {
-        //            VStack {
-        //                Form {
-        //                    // team one
-        //                    Section ("Primer equipo") {
-        //                        Picker("Primer jugador", selection: $t1p1) {
-        //
-        //                            // placeholder
-        //                            if t1p1 == "" {
-        //                                Text("Selecciona...").tag("Placeholder")
-        //                            }
-        //
-        //                            ForEach(session.players, id: \.self) {
-        //                                Text($0)
-        //                            }
-        //                        }
-        //                        Picker("Segundo jugador", selection: $t1p2) {
-        //
-        //                            // placeholder
-        //                            if t1p2 == "" {
-        //                                Text("Selecciona...").tag("Placeholder")
-        //                            }
-        //
-        //                            ForEach(session.players, id: \.self) {
-        //                                Text($0)
-        //                            }
-        //                        }
-        //                    }
-        //
-        //                    // team two
-        //                    Section ("Segundo equipo") {
-        //                        Picker("Primer jugador", selection: $t2p1) {
-        //
-        //                            // placeholder
-        //                            if t2p1 == "" {
-        //                                Text("Selecciona...").tag("Placeholder")
-        //                            }
-        //
-        //                            ForEach(session.players, id: \.self) {
-        //                                Text($0)
-        //                            }
-        //                        }
-        //                        Picker("Segundo jugador", selection: $t2p2) {
-        //
-        //                            // placeholder
-        //                            if t2p2 == "" {
-        //                                Text("Selecciona...").tag("Placeholder")
-        //                            }
-        //
-        //                            ForEach(session.players, id: \.self) {
-        //                                Text($0)
-        //                            }
-        //                        }
-        //                    }
-        //
-        //                    // score
-        //                    Section ("Resultado") {
-        //                        HStack {
-        //                            Text("Primer equipo:")
-        //                            TextField("Primer equipo", value: $score1, format: .number)
-        //                                .keyboardType(.decimalPad)
-        //                        }
-        //                        HStack {
-        //                            Text("Segundo equipo:")
-        //                            TextField("Segundo equipo", value: $score2, format: .number)
-        //                                .keyboardType(.decimalPad)
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //            .navigationTitle("Nuevo partido")
-        //            .toolbar {
-        //                Button("Crear") {
-        //
-        //                    let newMatch = Match(session: session,
-        //                                         players: session.players,
-        //                                         teamOne: [t1p1, t1p2],
-        //                                         teamTwo: [t2p1, t2p2],
-        //                                         teamOneScore: score1,
-        //                                         teamTwoScore: score2,
-        //                                         isRanked: false)
-        //
-        //                    Task {
-        //                        do {
-        //                            // create match in database
-        //                            try await MatchManager.shared.createNewMatch(match: newMatch)
-        //                            dismiss()
-        //                        } catch {
-        //                            print(error)
-        //                        }
-        //                    }
-        //
-        //                }
-        //            }
-        //        }
-        //    }
-        
-    }
-    
-    struct NewMatch_Previews: PreviewProvider {
-        static var previews: some View {
-            NavigationStack {
-                NewMatch(session: Session(sessionId: "001",
-                                          dateCreated: Date.now,
-                                          status: "active",
-                                          location: "Restaurante Niza",
-                                          sessionDate: Date.now.advanced(by: 86400),
-                                          matches: [],
-                                          bringsBall: [],
-                                          bringsLines: []))
-            }
-        }
-    }
-}
+//    let session: Session
+//
+//    @Environment(\.dismiss) var dismiss
+//
+//    @State var sessionPlayers: [DBUser] = []
+//
+//    @State var teamOnePlayerOne: String = ""
+//    @State var teamOnePlayerTwo: String = ""
+//
+//    @State var teamTwoPlayerOne: String = ""
+//    @State var teamTwoPlayerTwo: String = ""
+//
+//    @State var scoreOne: Int = 0
+//    @State var scoreTwo: Int = 0
+//
+//    var body: some View {
+//        NavigationStack {
+//            VStack {
+//                Form {
+//                    Section("Primer equipo") {
+//                        Picker("Primer jugador", selection: $teamOnePlayerOne) {
+//                            // placeholder
+//                            if teamOnePlayerOne == "" {
+//                                Text("").tag("Placeholder")
+//                            }
+//
+//                            ForEach(sessionPlayers, id: \.userId) { player in
+//                                Text(player.name ?? "Juan Doe")
+//                            }
+//                        }
+//                        Picker("Segundo jugador", selection: $teamOnePlayerTwo) {
+//                            // placeholder
+//                            if teamOnePlayerTwo == "" {
+//                                Text("").tag("Placeholder")
+//                            }
+//
+//                            ForEach(sessionPlayers, id: \.userId) { player in
+//                                Text(player.name ?? "Juan Doe")
+//                            }
+//                        }
+//                    }
+//
+//                    Section("Segundo equipo") {
+//                        Picker("Primer jugador", selection: $teamTwoPlayerOne) {
+//                            // placeholder
+//                            if teamTwoPlayerOne == "" {
+//                                Text("").tag("Placeholder")
+//                            }
+//
+//                            ForEach(sessionPlayers, id: \.userId) { player in
+//                                Text(player.name ?? "Juan Doe")
+//                            }
+//                        }
+//                        Picker("Segundo jugador", selection: $teamTwoPlayerTwo) {
+//                            // placeholder
+//                            if teamTwoPlayerTwo == "" {
+//                                Text("").tag("Placeholder")
+//                            }
+//
+//                            ForEach(sessionPlayers, id: \.userId) { player in
+//                                Text(player.name ?? "Juan Doe")
+//                            }
+//                        }
+//                    }
+//
+//                    Section("Resultado") {
+//                        HStack {
+//                            Text("Primer equipo:")
+//                            TextField("Primer equipo", value: $scoreOne, format: .number)
+//                                .keyboardType(.decimalPad)
+//                        }
+//                        HStack {
+//                            Text("Segundo equipo:")
+//                            TextField("Segundo equipo", value: $scoreTwo, format: .number)
+//                                .keyboardType(.decimalPad)
+//                        }
+//                    }
+//
+//                    Button("Guardar") {
+//
+//                        print("Team 1: \(teamOnePlayerOne) and \(teamOnePlayerTwo)")
+//                        print("Team 2: \(teamTwoPlayerOne) and \(teamTwoPlayerTwo)")
+//
+//                        // initialize new match
+//                        let newMatch = Match(session: session,
+//                                             teamOne: [teamOnePlayerOne, teamOnePlayerTwo],
+//                                             teamTwo: [teamTwoPlayerOne, teamTwoPlayerTwo],
+//                                             teamOneScore: scoreOne,
+//                                             teamTwoScore: scoreTwo,
+//                                             isRanked: false)
+//
+//                        // store match in db
+//                        Task {
+//                            try await MatchManager.shared.createNewMatch(match: newMatch)
+//                        }
+//
+//                        // add match to session_matches
+//
+//                        Task {
+//                            try await SessionManager.shared.addSessionMatch(sessionId: session.sessionId, matchId: newMatch.matchId)
+//                        }
+//
+//                        // store players in match players subcollection
+//                        Task {
+//                            try await MatchManager.shared.addMatchPlayer(matchId: newMatch.matchId, userId: teamOnePlayerOne, team: 1)
+//                            try await MatchManager.shared.addMatchPlayer(matchId: newMatch.matchId, userId: teamOnePlayerTwo, team: 1)
+//                            try await MatchManager.shared.addMatchPlayer(matchId: newMatch.matchId, userId: teamTwoPlayerOne, team: 2)
+//                            try await MatchManager.shared.addMatchPlayer(matchId: newMatch.matchId, userId: teamTwoPlayerTwo, team: 2)
+//                        }
+//
+//                        // dismiss
+//                        dismiss()
+//
+//                    }
+//                }
+//            }
+//        }
+//        .task {
+//            getSessionPlayers()
+//        }
+//    }
+//
+//    func getSessionPlayers() {
+//        Task {
+//            let sessionPlayers = try await SessionManager.shared.getAllSessionPlayers(sessionId: session.sessionId)
+//            for sessionPlayer in sessionPlayers {
+//                let user = try await UserManager.shared.getUser(userId: sessionPlayer.userId)
+//                self.sessionPlayers.append(user)
+//            }
+//        }
+//    }
+//}
+//

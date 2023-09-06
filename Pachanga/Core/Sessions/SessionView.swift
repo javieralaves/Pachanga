@@ -11,31 +11,30 @@ import SwiftUI
 
 struct SessionView: View {
     
-    // MARK: stored properties
-    
-    // session getting passed into view
     @State var session: Session
     
-    // empty array of players to be populated in view
-    // includes reference to both the session player and the underlying user
-    @State private var sessionPlayers: [(sessionPlayer: SessionPlayer, user: DBUser)] = []
+    // empty array of members to be populated onAppear by func getMembers
+    @State private var sessionMembers: [(sessionMember: SessionMember, user: DBUser)] = []
+    
+    // empty array of matches to be populated onAppear by func getMatches
+    @State private var sessionMatches: [SessionMatch] = []
+    
+    // equipment variables
+    @State private var ballAvailable: Bool = false
+    @State private var linesAvailable: Bool = false
     
     // bool to display sheet that appears after tapping on join button
     @State private var joinSheet: Bool = false
     
-    // empty array of matches to be populated
-    @State private var sessionMatches: [Match] = []
-    
-    // whether user is part of session or not
-    @State private var isPlayer: Bool = false
+    // variable that controls whether user is a session member
+    @State private var isMember: Bool = false
     
     var body: some View {
         
         NavigationStack {
             VStack {
                 List {
-                    
-                    // details section
+                    // details
                     Section {
                         Text(session.location)
                         Text(session.sessionDate.formatted(date: .abbreviated, time: .shortened))
@@ -43,18 +42,19 @@ struct SessionView: View {
                     
                     if session.status == "active" {
                         
-                        // list of registered players
-                        if !sessionPlayers.isEmpty {
+                        // session members
+                        if !sessionMembers.isEmpty {
                             Section {
-                                ForEach(sessionPlayers, id: \.sessionPlayer.id.self) { player in
+                                ForEach(sessionMembers, id: \.sessionMember.id) { member in
                                     HStack {
-                                        Text(player.user.name ?? "Juan Doe")
-                                        
+                                        if let name = member.user.name {
+                                            Text(name)
+                                        }
                                         Spacer()
-                                        if session.bringsBall.contains(player.user.userId) {
+                                        if member.sessionMember.bringsBall {
                                             Text("🏐")
                                         }
-                                        if session.bringsLines.contains(player.user.userId) {
+                                        if member.sessionMember.bringsLines {
                                             Text("🪢")
                                         }
                                     }
@@ -62,41 +62,41 @@ struct SessionView: View {
                             } header: {
                                 Text("Jugadores")
                             } footer: {
-                                if sessionPlayers.count < 4 {
-                                    Text("Faltan \(4 - sessionPlayers.count) jugadores más")
+                                if sessionMembers.count < 4 {
+                                    Text("Faltan \(4 - sessionMembers.count) jugadores más")
                                 }
                             }
                         }
                         
                         // matches
                         Section ("Partidos") {
-                            ForEach(sessionMatches, id: \.self) { match in
+                            ForEach(sessionMatches) { match in
                                 NavigationLink {
-//                                    EditMatchView(match: match)
+                                    // Edit match
                                 } label: {
-                                    MatchCell(match: match)
+                                    // Display match info here per match
+                                    Text("Match")
                                 }
                             }
                             NavigationLink("Añadir partido") {
-                                NewMatch(session: session)
+                                // NewMatch(session: session)
                             }
                         }
                         
                         // match alerts
-                        if(session.bringsBall.isEmpty || session.bringsLines.isEmpty) {
+                        if(!ballAvailable || !linesAvailable) {
                             Section ("Atención") {
-                                if session.bringsBall.isEmpty {
+                                if !ballAvailable {
                                     Text("Falta bola")
                                 }
-                                if session.bringsLines.isEmpty {
+                                if !linesAvailable {
                                     Text("Faltan líneas")
                                 }
                             }
                         }
-                                                
-                        // join/unjoin button
                         
-                        if !isPlayer {
+                        // join/unjoin button
+                        if !isMember {
                             Button("Unirme") {
                                 joinSheet.toggle()
                             }
@@ -106,20 +106,18 @@ struct SessionView: View {
                             }
                         } else {
                             Button(role: .destructive) {
-                                removePlayer()
+                                removeMember()
                             } label: {
                                 Text("Salirme")
                             }
                         }
-                                                
+                        
                     }
                     
                     if session.status == "cancelled" {
-                        Text("Esta sesión ha sido cancelada")
+                        Text("Esta sesión ha sido cancelada.")
                     }
-
                 }
-                
             }
             .navigationTitle("Sesión")
             .navigationBarTitleDisplayMode(.inline)
@@ -129,140 +127,104 @@ struct SessionView: View {
                         EditSession(session: session)
                     } label: {
                         Text("Editar")
-                    }                    
+                    }
                 }
             }
             .onAppear {
                 Task {
-                    // check if user is player
-                    isPlayer = try await hasJoined()
-                    
-                    // get players
-                    getSessionPlayers()
-                    
-                    // update session data
-                    try await updateSession()
+                    updateSession()
                 }
             }
             .onChange(of: joinSheet) { _ in
                 Task {
-                    // check if user is player
-                    isPlayer = try await hasJoined()
-                    
-                    try await updateSession()
+                    updateSession()
                 }
             }
-            .onChange(of: isPlayer) { _ in
+            .onChange(of: isMember) { _ in
                 Task {
-                    // check if user is player
-                    isPlayer = try await hasJoined()
-                    
-                    try await updateSession()
+                    updateSession()
                 }
             }
         }
     }
     
-    // MARK: view functions
-    
-    // function that returns userId for authenticated user, for join button state
-    func currentUser() -> String {
-        // bser is always going to be verified so throw will never happen
-        // but we still have to handle it anyway ¯\_(ツ)_/¯
-        do {
-            return try AuthenticationManager.shared.getAuthenticatedUser().uid
-        } catch {
-            print(error)
-        }
-        return ""
-    }
-    
-    // returns an array of SessionPlayer containing all players added to session players subcollection
-    func getSessionPlayers() {
+    func updateSession() {
         Task {
-            let sessionPlayers = try await SessionManager.shared.getAllSessionPlayers(sessionId: session.sessionId)
-            
-            var localArray: [(sessionPlayer: SessionPlayer, user: DBUser)] = []
-            for sessionPlayer in sessionPlayers {
-                if let player = try? await UserManager.shared.getUser(userId: sessionPlayer.userId) {
-                    localArray.append((sessionPlayer, player))
-                }
-            }
-            
-            self.sessionPlayers = localArray
-        }
-    }
-    
-    // function to refresh session data every time the view appears
-    func updateSession() async throws {
-        do {
+            // refresh variables
             let updatedSession = try await SessionManager.shared.getSession(sessionId: session.sessionId)
-            session.status = updatedSession.status
             session.location = updatedSession.location
             session.sessionDate = updatedSession.sessionDate
-            session.bringsBall = updatedSession.bringsBall
-            session.bringsLines = updatedSession.bringsLines
+            session.status = updatedSession.status
+            print("Session happening in \(session.location) on \(session.sessionDate).")
             
-            sessionMatches = try await SessionManager.shared.getMatches(session: session)
-            getSessionPlayers()
-        } catch {
-            print(error)
-        }
-    }
-    
-    // check if user has joined as player, returns a bool
-    func hasJoined() async throws -> Bool {
-        try await SessionManager.shared.hasUserJoined(sessionId: session.sessionId)
-    }
-    
-    // function to remove myself from session
-    func removePlayer() {
-        Task {
+            // check if player is a member of the session
+            let hasJoined = try await SessionManager.shared.hasUserJoined(sessionId: session.sessionId)
+            self.isMember = hasJoined
+            print("Is user a member of this session? \(hasJoined.description).")
             
-            // get authenticated user
-            let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
+            // get members
+            let sessionMembers = try await SessionManager.shared.getAllSessionMembers(sessionId: session.sessionId)
+            print("There are currently \(sessionMembers.count) members in the session_members subcollection.")
             
-            // check if user was bringing ball to remove reference
-            if session.bringsBall.contains(authDataResult.uid) {
-                let data: [String : Any] = [
-                    Session.CodingKeys.bringsBall.rawValue : FieldValue.arrayRemove([authDataResult.uid])
-                ]
-                
-                let sessionCollection = Firestore.firestore().collection("sessions")
-                try await sessionCollection.document(session.sessionId).updateData(data)
+            var localArray: [(sessionMember: SessionMember, user: DBUser)] = []
+            for member in sessionMembers {
+                if let user = try? await UserManager.shared.getUser(userId: member.userId) {
+                    localArray.append((member, user))
+                }
             }
             
-            // check if user was bringing lines to remove reference
-            if session.bringsLines.contains(authDataResult.uid) {
-                let data: [String : Any] = [
-                    Session.CodingKeys.bringsLines.rawValue : FieldValue.arrayRemove([authDataResult.uid])
-                ]
-                
-                let sessionCollection = Firestore.firestore().collection("sessions")
-                try await sessionCollection.document(session.sessionId).updateData(data)
-            }
+            self.sessionMembers = localArray
+            print("Members have been added to local array. Count is \(sessionMembers.count).")
             
-            // get the sessionPlayerId for the authenticated userId
-            var sessionPlayerId = ""
-            
-            for player in sessionPlayers {
-                if player.user.userId == authDataResult.uid {
-                    sessionPlayerId = player.sessionPlayer.id
+            // ball check
+            for member in sessionMembers {
+                if member.bringsBall {
+                    self.ballAvailable = true
                     break
                 }
             }
             
-            // remove player from session players subcollection with the sessionPlayerId associated to userId
-            try await SessionManager.shared.removeSessionPlayer(sessionId: session.sessionId, sessionPlayerId: sessionPlayerId)
+            // lines check
+            for member in sessionMembers {
+                if member.bringsLines {
+                    self.linesAvailable = true
+                    break
+                }
+            }
             
-            // force a change in the local isPlayer variable
-            isPlayer = false
+            // get matches
+            let sessionMatches = try await SessionManager.shared.getAllSessionMatches(sessionId: session.sessionId)
+            print("There are currently \(sessionMatches.count) matches in the session_matches subcollection.")
             
-            // reload the array of sessionPlayers
-            getSessionPlayers()
+            self.sessionMatches = sessionMatches
+            print("Matches have been added to local array. Count is \(sessionMatches.count).")
+        }
+    }
+    
+    // function to remove myself from session
+    func removeMember() {
+        Task {
+            // get my id
+            let myId = try AuthenticationManager.shared.getAuthenticatedUser().uid
             
-            // reload session by its id
-            self.session = try await SessionManager.shared.getSession(sessionId: session.sessionId)
+            // get all session members
+            let sessionMembers = self.sessionMembers
+            
+            // initialize an empty sessionMemberId to be filled below
+            var sessionMemberId = ""
+            
+            // check if session member userId matches my id & take the sessionMemberId and store it somewhere
+            for member in sessionMembers {
+                if (member.user.userId == myId) {
+                    sessionMemberId = member.sessionMember.id
+                    break
+                }
+            }
+            
+            try await SessionManager.shared.removeSessionMember(sessionId: session.sessionId,
+                                                                sessionMemberId: sessionMemberId)
+            
+            updateSession()
         }
     }
     
@@ -272,14 +234,11 @@ struct SessionView_Previews: PreviewProvider {
     
     static var previews: some View {
         NavigationStack {
-            SessionView(session: Session(sessionId: "001",
+            SessionView(session: Session(sessionId: "",
                                          dateCreated: Date.now,
                                          status: "active",
-                                         location: "Restaurante Niza",
-                                         sessionDate: Date.now.advanced(by: 86400),
-                                         matches: [],
-                                         bringsBall: [],
-                                         bringsLines: []))
+                                         location: "El Campello",
+                                         sessionDate: Date.now))
         }
     }
 }
