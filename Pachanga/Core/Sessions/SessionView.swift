@@ -13,11 +13,11 @@ struct SessionView: View {
     
     @State var session: Session
     
-    // empty array of members to be populated onAppear by func getMembers
+    // empty array of members to be populated onAppear
     @State private var sessionMembers: [(sessionMember: SessionMember, user: DBUser)] = []
     
-    // empty array of matches to be populated onAppear by func getMatches
-    @State private var sessionMatches: [SessionMatch] = []
+    // empty array of matches to be populated onAppear
+    @State private var sessionMatches: [(sessionMatch: SessionMatch, t1p1: DBUser, t1p2: DBUser, t2p1: DBUser, t2p2: DBUser)] = []
     
     // equipment variables
     @State private var ballAvailable: Bool = false
@@ -70,14 +70,27 @@ struct SessionView: View {
                         
                         // matches
                         Section ("Partidos") {
-                            ForEach(sessionMatches) { match in
-                                NavigationLink {
-                                    // Edit match
-                                } label: {
-                                    // Display match info here per match
-                                    Text("Match")
+                            ForEach(sessionMatches, id: \.sessionMatch.id) { match in
+                                VStack(alignment: .leading, spacing: 4) {
+                                    HStack {
+                                        if let t1p1 = match.t1p1.name, let t1p2 = match.t1p2.name {
+                                            Text("\(t1p1) y \(t1p2)")
+                                        }
+                                        Spacer()
+                                        Text("\(match.sessionMatch.scoreOne)")
+                                            .foregroundColor(.secondary)
+                                    }
+                                    HStack {
+                                        if let t2p1 = match.t2p1.name, let t2p2 = match.t2p2.name {
+                                            Text("\(t2p1) y \(t2p2)")
+                                        }
+                                        Spacer()
+                                        Text("\(match.sessionMatch.scoreTwo)")
+                                            .foregroundColor(.secondary)
+                                    }
                                 }
                             }
+
                             NavigationLink("Añadir partido") {
                                 NewMatchView(session: session,
                                              sessionMembers: sessionMembers)
@@ -167,14 +180,14 @@ struct SessionView: View {
             let sessionMembers = try await SessionManager.shared.getAllSessionMembers(sessionId: session.sessionId)
             print("There are currently \(sessionMembers.count) members in the session_members subcollection.")
             
-            var localArray: [(sessionMember: SessionMember, user: DBUser)] = []
+            var localMembers: [(sessionMember: SessionMember, user: DBUser)] = []
             for member in sessionMembers {
                 if let user = try? await UserManager.shared.getUser(userId: member.userId) {
-                    localArray.append((member, user))
+                    localMembers.append((member, user))
                 }
             }
             
-            self.sessionMembers = localArray
+            self.sessionMembers = localMembers
             print("Members have been added to local array. Count is \(sessionMembers.count).")
             
             // ball check
@@ -197,8 +210,20 @@ struct SessionView: View {
             let sessionMatches = try await SessionManager.shared.getAllSessionMatches(sessionId: session.sessionId)
             print("There are currently \(sessionMatches.count) matches in the session_matches subcollection.")
             
-            self.sessionMatches = sessionMatches
-            print("Matches have been added to local array. Count is \(sessionMatches.count).")
+            var localMatches: [(sessionMatch: SessionMatch, t1p1: DBUser, t1p2: DBUser, t2p1: DBUser, t2p2: DBUser)] = []
+            
+            for match in sessionMatches {
+                let t1p1 = try await UserManager.shared.getUser(userId: match.t1p1)
+                let t1p2 = try await UserManager.shared.getUser(userId: match.t1p2)
+                let t2p1 = try await UserManager.shared.getUser(userId: match.t2p1)
+                let t2p2 = try await UserManager.shared.getUser(userId: match.t2p2)
+                
+                localMatches.append((match, t1p1, t1p2, t2p1, t2p2))
+            }
+            
+            // update sessionMatches with localMatches
+            self.sessionMatches = localMatches
+            
         }
     }
     

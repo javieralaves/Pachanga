@@ -145,6 +145,11 @@ final class SessionManager {
         try await sessionMemberDocument(sessionId: sessionId, sessionMemberId: sessionMemberId).delete()
     }
     
+    // return session member given the session id and document id
+    func getSessionMember(sessionId: String, sessionMemberId: String) async throws -> SessionMember {
+        try await sessionMemberDocument(sessionId: sessionId, sessionMemberId: sessionMemberId).getDocument(as: SessionMember.self)
+    }
+    
     // return an array of session members for a given session
     func getAllSessionMembers(sessionId: String) async throws -> [SessionMember] {
         try await sessionMembersCollection(sessionId: sessionId).getDocuments(as: SessionMember.self)
@@ -199,8 +204,10 @@ final class SessionManager {
             SessionMatch.CodingKeys.dateCreated.rawValue : Timestamp(),
             SessionMatch.CodingKeys.location.rawValue : session.location,
             SessionMatch.CodingKeys.matchDate.rawValue : session.sessionDate,
-            SessionMatch.CodingKeys.teamOne.rawValue : [t1p1, t1p2],
-            SessionMatch.CodingKeys.teamTwo.rawValue : [t2p1, t2p2],
+            SessionMatch.CodingKeys.t1p1.rawValue : t1p1,
+            SessionMatch.CodingKeys.t1p2.rawValue : t1p2,
+            SessionMatch.CodingKeys.t2p1.rawValue : t2p1,
+            SessionMatch.CodingKeys.t2p2.rawValue : t2p2,
             SessionMatch.CodingKeys.scoreOne.rawValue : score1,
             SessionMatch.CodingKeys.scoreTwo.rawValue : score2
         ]
@@ -261,8 +268,10 @@ struct SessionMatch: Codable, Identifiable {
     let dateCreated: Date
     var location: String
     var matchDate: Date
-    var teamOne: [String]
-    var teamTwo: [String]
+    var t1p1: String
+    var t1p2: String
+    var t2p1: String
+    var t2p2: String
     var scoreOne: Int
     var scoreTwo: Int
     
@@ -272,8 +281,10 @@ struct SessionMatch: Codable, Identifiable {
         case dateCreated = "date_created"
         case location = "location"
         case matchDate = "match_date"
-        case teamOne = "team_one"
-        case teamTwo = "team_two"
+        case t1p1 = "t1p1"
+        case t1p2 = "t1p2"
+        case t2p1 = "t2p1"
+        case t2p2 = "t2p2"
         case scoreOne = "score_one"
         case scoreTwo = "score_two"
     }
@@ -285,8 +296,10 @@ struct SessionMatch: Codable, Identifiable {
         self.dateCreated = try container.decode(Date.self, forKey: .dateCreated)
         self.location = try container.decode(String.self, forKey: .location)
         self.matchDate = try container.decode(Date.self, forKey: .matchDate)
-        self.teamOne = try container.decode([String].self, forKey: .teamOne)
-        self.teamTwo = try container.decode([String].self, forKey: .teamTwo)
+        self.t1p1 = try container.decode(String.self, forKey: .t1p1)
+        self.t1p2 = try container.decode(String.self, forKey: .t1p2)
+        self.t2p1 = try container.decode(String.self, forKey: .t2p1)
+        self.t2p2 = try container.decode(String.self, forKey: .t2p2)
         self.scoreOne = try container.decode(Int.self, forKey: .scoreOne)
         self.scoreTwo = try container.decode(Int.self, forKey: .scoreTwo)
     }
@@ -298,8 +311,10 @@ struct SessionMatch: Codable, Identifiable {
         try container.encode(self.dateCreated, forKey: .dateCreated)
         try container.encode(self.location, forKey: .location)
         try container.encode(self.matchDate, forKey: .matchDate)
-        try container.encode(self.teamOne, forKey: .teamOne)
-        try container.encode(self.teamTwo, forKey: .teamTwo)
+        try container.encode(self.t1p1, forKey: .t1p1)
+        try container.encode(self.t1p2, forKey: .t1p2)
+        try container.encode(self.t2p1, forKey: .t2p1)
+        try container.encode(self.t2p2, forKey: .t2p2)
         try container.encode(self.scoreOne, forKey: .scoreOne)
         try container.encode(self.scoreTwo, forKey: .scoreTwo)
     }

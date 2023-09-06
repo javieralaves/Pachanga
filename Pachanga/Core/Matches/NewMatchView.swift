@@ -31,7 +31,7 @@ struct NewMatchView: View {
                             if t1p1 == "" {
                                 Text("").tag("Placeholder")
                             }
-                            ForEach(sessionMembers, id: \.sessionMember.id) { member in
+                            ForEach(sessionMembers, id: \.user.userId) { member in
                                 if let name = member.user.name {
                                     Text(name)
                                 }
@@ -41,7 +41,7 @@ struct NewMatchView: View {
                             if t1p2 == "" {
                                 Text("").tag("Placeholder")
                             }
-                            ForEach(sessionMembers, id: \.sessionMember.id) { member in
+                            ForEach(sessionMembers, id: \.user.userId) { member in
                                 if let name = member.user.name {
                                     Text(name)
                                 }
@@ -54,7 +54,7 @@ struct NewMatchView: View {
                             if t2p1 == "" {
                                 Text("").tag("Placeholder")
                             }
-                            ForEach(sessionMembers, id: \.sessionMember.id) { member in
+                            ForEach(sessionMembers, id: \.user.userId) { member in
                                 if let name = member.user.name {
                                     Text(name)
                                 }
@@ -64,7 +64,7 @@ struct NewMatchView: View {
                             if t2p2 == "" {
                                 Text("").tag("Placeholder")
                             }
-                            ForEach(sessionMembers, id: \.sessionMember.id) { member in
+                            ForEach(sessionMembers, id: \.user.userId) { member in
                                 if let name = member.user.name {
                                     Text(name)
                                 }
