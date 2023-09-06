@@ -92,16 +92,3 @@ struct EditSession: View {
         sessionDate = session.sessionDate
     }
 }
-
-struct EditSession_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            EditSession(session: Session(sessionId: "001",
-                                         dateCreated: Date.now,
-                                         status: "active",
-                                         location: "El Campello",
-                                         sessionDate: Date.now,
-                                         members: []))
-        }
-    }
-}
