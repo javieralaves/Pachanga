@@ -52,7 +52,7 @@ struct JoinSheet: View {
             dismiss()
         }
     }
-
+    
 }
 
 struct JoinSheet_Previews: PreviewProvider {
@@ -62,7 +62,8 @@ struct JoinSheet_Previews: PreviewProvider {
                                        dateCreated: Date.now,
                                        status: "active",
                                        location: "El Campello",
-                                       sessionDate: Date.now))
+                                       sessionDate: Date.now,
+                                       members: []))
         }
     }
 }
