@@ -176,17 +176,17 @@ final class SessionManager {
     // MARK: session_matches subcollection
     
     // reference to session matches subcollection in the db
-    private func sessionMatchesCollection(sessionId: String) -> CollectionReference {
+    func sessionMatchesCollection(sessionId: String) -> CollectionReference {
         sessionDocument(sessionId: sessionId).collection("session_matches")
     }
     
     // reference to a specific match in the session matches subcollection by session id
-    private func sessionMatchDocument(sessionId: String, sessionMatchId: String) -> DocumentReference {
+    func sessionMatchDocument(sessionId: String, sessionMatchId: String) -> DocumentReference {
         sessionMatchesCollection(sessionId: sessionId).document(sessionMatchId)
     }
     
     // adds a match to a session subcollection
-    func addSessionMatch(session: Session, matchId: String, t1p1: String, t1p2: String, t2p1: String, t2p2: String, score1: Int, score2: Int) async throws {
+    func addSessionMatch(session: Session, t1p1: String, t1p2: String, t2p1: String, t2p2: String, score1: Int, score2: Int) async throws {
         
         // generate an empty document inside subcollection
         let document = sessionMatchesCollection(sessionId: session.sessionId).document()

@@ -79,7 +79,8 @@ struct SessionView: View {
                                 }
                             }
                             NavigationLink("Añadir partido") {
-                                // NewMatch(session: session)
+                                NewMatchView(session: session,
+                                             sessionMembers: sessionMembers)
                             }
                         }
                         
