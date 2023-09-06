@@ -33,6 +33,8 @@ struct ProfileView: View {
     @StateObject private var viewModel = ProfileViewModel()
     @Binding var showSignInView: Bool
     
+    @State var userRating: Double = 1.0
+    
     var body: some View {
         VStack {
             List {
@@ -47,12 +49,17 @@ struct ProfileView: View {
                         Text("Email: \(email)")
                     }
                     
+                    Text("Nivel: \(userRating, specifier: "%.1f")/5.0")
+                    
                     Text("Tu plan: \(user.isPremium ?? false ? "Pro" : "Básico")")
                 }
             }
         }
         .task {
             try? await viewModel.loadCurrentUser()
+        }
+        .onAppear {
+            generateRating()
         }
         .navigationTitle("Perfil")
         .toolbar {
@@ -65,6 +72,13 @@ struct ProfileView: View {
                         .font(.headline)
                 }
             }
+        }
+    }
+    
+    func generateRating() {
+        Task {
+            let userId = try AuthenticationManager.shared.getAuthenticatedUser().uid
+            userRating = try await UserManager.shared.getUserRating(userId: userId)
         }
     }
 }
