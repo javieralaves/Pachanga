@@ -47,7 +47,8 @@ struct NewSession: View {
                         Session.CodingKeys.dateCreated.rawValue : Timestamp(),
                         Session.CodingKeys.status.rawValue : "active",
                         Session.CodingKeys.location.rawValue : location,
-                        Session.CodingKeys.sessionDate.rawValue : sessionDate
+                        Session.CodingKeys.sessionDate.rawValue : sessionDate,
+                        Session.CodingKeys.members.rawValue : [String]()
                     ]
                     
                     // set data

@@ -18,6 +18,7 @@ struct Session: Codable {
     var status: String
     var location: String
     var sessionDate: Date
+    var members: [String]
     
     // custom init
     init(
@@ -25,13 +26,15 @@ struct Session: Codable {
         dateCreated: Date,
         status: String,
         location: String,
-        sessionDate: Date
+        sessionDate: Date,
+        members: [String]
     ) {
         self.sessionId = sessionId
         self.dateCreated = dateCreated
         self.status = status
         self.location = location
         self.sessionDate = sessionDate
+        self.members = members
     }
     
     // custom coding strategy
@@ -41,6 +44,7 @@ struct Session: Codable {
         case status = "status"
         case location = "location"
         case sessionDate = "session_date"
+        case members = "members"
     }
     
     // to load a session from db with decoder
@@ -51,6 +55,7 @@ struct Session: Codable {
         self.status = try container.decode(String.self, forKey: .status)
         self.location = try container.decode(String.self, forKey: .location)
         self.sessionDate = try container.decode(Date.self, forKey: .sessionDate)
+        self.members = try container.decode([String].self, forKey: .members)
     }
     
     // to encode session instance into db with encoder
@@ -61,6 +66,7 @@ struct Session: Codable {
         try container.encode(self.status, forKey: .status)
         try container.encode(self.location, forKey: .location)
         try container.encode(self.sessionDate, forKey: .sessionDate)
+        try container.encode(self.members, forKey: .members)
     }
     
 }
@@ -105,6 +111,12 @@ final class SessionManager {
         try await sessionCollection
             .whereField("session_date", isGreaterThan: Date.now)
             .whereField("status", isEqualTo: "active")
+            .getDocuments(as: Session.self)
+    }
+    
+    func getUserSessions(userId: String) async throws -> [Session] {
+        try await sessionCollection
+            .whereField("members", arrayContains: userId)
             .getDocuments(as: Session.self)
     }
     

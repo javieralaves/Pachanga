@@ -54,7 +54,8 @@ struct SessionCell_Previews: PreviewProvider {
                                          dateCreated: Date.now,
                                          status: "active",
                                          location: "El Campello",
-                                         sessionDate: Date.now))
+                                         sessionDate: Date.now,
+                                         members: []))
             .padding()
         }
     }

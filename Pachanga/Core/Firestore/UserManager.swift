@@ -103,4 +103,39 @@ final class UserManager {
         try await userDocument(userId: userId).updateData(data)
     }
     
+    func getUserRating(userId: String) async throws -> Double {
+        var userRating = 1.0
+        
+        // array of sessions that user was a member of
+        let userSessions = try await SessionManager.shared.getUserSessions(userId: userId)
+        
+        for session in userSessions {
+            let matches = try await SessionManager.shared.getAllSessionMatches(sessionId: session.sessionId)
+            
+            for match in matches {
+                // user is in team one, and won
+                if (match.t1p1 == userId || match.t1p2 == userId) && match.scoreOne > match.scoreTwo {
+                    userRating += 0.1
+                }
+                
+                // user is in team two, and lost
+                if (match.t1p1 == userId || match.t1p2 == userId) && match.scoreOne < match.scoreTwo {
+                    userRating -= 0.1
+                }
+                
+                // user is in team two, and lost
+                if (match.t2p1 == userId || match.t2p2 == userId) && match.scoreOne > match.scoreTwo {
+                    userRating -= 0.1
+                }
+                
+                // user is in team two, and won
+                if (match.t2p1 == userId || match.t2p2 == userId) && match.scoreOne < match.scoreTwo {
+                    userRating += 0.1
+                }
+            }
+        }
+        
+        return userRating
+    }
+    
 }
