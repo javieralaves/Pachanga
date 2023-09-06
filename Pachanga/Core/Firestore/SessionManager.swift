@@ -114,6 +114,12 @@ final class SessionManager {
             .getDocuments(as: Session.self)
     }
     
+    func getUserSessions(userId: String) async throws -> [Session] {
+        try await sessionCollection
+            .whereField("members", arrayContains: userId)
+            .getDocuments(as: Session.self)
+    }
+    
     // MARK: session_members subcollection
     
     //  subcollection reference
