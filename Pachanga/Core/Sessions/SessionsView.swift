@@ -9,34 +9,18 @@ import SwiftUI
 
 @MainActor
 final class SessionsViewModel: ObservableObject {
-    
     @Published private(set) var upcomingSessions: [Session] = []
     
     func getUpcomingSessions() async throws {
         self.upcomingSessions = try await SessionManager.shared.getAllUpcomingSessions()
     }
-    
 }
 
 struct SessionsView: View {
-    
     @StateObject private var viewModel = SessionsViewModel()
     
     var body: some View {
-        
         VStack {
-//            HStack {
-//                Text("Sesiones")
-//                    .font(.system(size: 36,  weight: .semibold))
-//                    .padding()
-//                Spacer()
-//            }
-//            List {
-//                ForEach(viewModel.sessions, id: \.sessionId) { session in
-//                    SessionCell(session: session)
-//                }
-//            }
-        
             List {
                 ForEach(viewModel.upcomingSessions, id: \.sessionId) { session in
                     NavigationLink {
@@ -44,10 +28,8 @@ struct SessionsView: View {
                     } label: {
                         SessionCell(session: session)
                     }
-
                 }
             }
-            
         }
         .navigationTitle("Próximas sesiones")
         .toolbar {

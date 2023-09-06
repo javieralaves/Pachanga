@@ -10,12 +10,14 @@ import Foundation
 
 struct AuthDataResultModel {
     let uid: String
+    let name: String?
     let email: String?
     let photoURL: String?
     
     // User coming from Firebase SDK
     init(user: User) {
         self.uid = user.uid
+        self.name = user.displayName
         self.email = user.email
         // .absoluteString converts URL to string
         self.photoURL = user.photoURL?.absoluteString

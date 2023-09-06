@@ -13,18 +13,28 @@ struct SessionView: View {
     
     @State var session: Session
     
+    // empty array of members to be populated onAppear
+    @State private var sessionMembers: [(sessionMember: SessionMember, user: DBUser)] = []
+    
+    // empty array of matches to be populated onAppear
+    @State private var sessionMatches: [(sessionMatch: SessionMatch, t1p1: DBUser, t1p2: DBUser, t2p1: DBUser, t2p2: DBUser)] = []
+    
+    // equipment variables
+    @State private var ballAvailable: Bool = false
+    @State private var linesAvailable: Bool = false
+    
     // bool to display sheet that appears after tapping on join button
     @State private var joinSheet: Bool = false
     
-    // empty array of matches to be populated
-    @State private var sessionMatches: [Match] = []
+    // variable that controls whether user is a session member
+    @State private var isMember: Bool = false
     
     var body: some View {
         
         NavigationStack {
             VStack {
                 List {
-                    // details section
+                    // details
                     Section {
                         Text(session.location)
                         Text(session.sessionDate.formatted(date: .abbreviated, time: .shortened))
@@ -32,23 +42,19 @@ struct SessionView: View {
                     
                     if session.status == "active" {
                         
-                        // list of registered players
-                        if !session.players.isEmpty {
+                        // session members
+                        if !sessionMembers.isEmpty {
                             Section {
-                                ForEach(session.players, id: \.self) { player in
+                                ForEach(sessionMembers, id: \.sessionMember.id) { member in
                                     HStack {
-                                        // for testing purposes
-                                        if currentUser() == "NwIseDznbPNs5KmZlsHBTsxcsFl2" {
-                                            Text("Javier Alaves")
-                                        } else {
-                                            Text(player)
+                                        if let name = member.user.name {
+                                            Text(name)
                                         }
-                                        
                                         Spacer()
-                                        if session.bringsBall.contains(player) {
+                                        if member.sessionMember.bringsBall {
                                             Text("🏐")
                                         }
-                                        if session.bringsLines.contains(player) {
+                                        if member.sessionMember.bringsLines {
                                             Text("🪢")
                                         }
                                     }
@@ -56,40 +62,55 @@ struct SessionView: View {
                             } header: {
                                 Text("Jugadores")
                             } footer: {
-                                if session.players.count < 4 {
-                                    Text("Faltan \(4 - session.players.count) jugadores más")
+                                if sessionMembers.count < 4 {
+                                    Text("Faltan \(4 - sessionMembers.count) jugadores más")
                                 }
                             }
                         }
                         
                         // matches
                         Section ("Partidos") {
-                            ForEach(sessionMatches, id: \.self) { match in
-                                NavigationLink {
-                                    EditMatchView(match: match)
-                                } label: {
-                                    MatchCell(match: match)
+                            ForEach(sessionMatches, id: \.sessionMatch.id) { match in
+                                VStack(alignment: .leading, spacing: 4) {
+                                    HStack {
+                                        if let t1p1 = match.t1p1.name, let t1p2 = match.t1p2.name {
+                                            Text("\(t1p1) y \(t1p2)")
+                                        }
+                                        Spacer()
+                                        Text("\(match.sessionMatch.scoreOne)")
+                                            .foregroundColor(.secondary)
+                                    }
+                                    HStack {
+                                        if let t2p1 = match.t2p1.name, let t2p2 = match.t2p2.name {
+                                            Text("\(t2p1) y \(t2p2)")
+                                        }
+                                        Spacer()
+                                        Text("\(match.sessionMatch.scoreTwo)")
+                                            .foregroundColor(.secondary)
+                                    }
                                 }
                             }
+
                             NavigationLink("Añadir partido") {
-                                NewMatch(session: session)
+                                NewMatchView(session: session,
+                                             sessionMembers: sessionMembers)
                             }
                         }
                         
                         // match alerts
-                        if(session.bringsBall.isEmpty || session.bringsLines.isEmpty) {
+                        if(!ballAvailable || !linesAvailable) {
                             Section ("Atención") {
-                                if session.bringsBall.isEmpty {
+                                if !ballAvailable {
                                     Text("Falta bola")
                                 }
-                                if session.bringsLines.isEmpty {
+                                if !linesAvailable {
                                     Text("Faltan líneas")
                                 }
                             }
                         }
                         
                         // join/unjoin button
-                        if(!session.players.contains(currentUser())) {
+                        if !isMember {
                             Button("Unirme") {
                                 joinSheet.toggle()
                             }
@@ -99,20 +120,18 @@ struct SessionView: View {
                             }
                         } else {
                             Button(role: .destructive) {
-                                removePlayer()
+                                removeMember()
                             } label: {
                                 Text("Salirme")
                             }
                         }
-                                                
+                        
                     }
                     
                     if session.status == "cancelled" {
-                        Text("Esta sesión ha sido cancelada")
+                        Text("Esta sesión ha sido cancelada.")
                     }
-
                 }
-                
             }
             .navigationTitle("Sesión")
             .navigationBarTitleDisplayMode(.inline)
@@ -122,84 +141,116 @@ struct SessionView: View {
                         EditSession(session: session)
                     } label: {
                         Text("Editar")
-                    }                    
+                    }
                 }
             }
             .onAppear {
                 Task {
-                    // update session data
-                    try await updateSession()
+                    updateSession()
                 }
             }
             .onChange(of: joinSheet) { _ in
                 Task {
-                    try await updateSession()
+                    updateSession()
+                }
+            }
+            .onChange(of: isMember) { _ in
+                Task {
+                    updateSession()
                 }
             }
         }
     }
     
-    // function that returns userId for authenticated user, for join button state
-    func currentUser() -> String {
-        // bser is always going to be verified so throw will never happen
-        // but we still have to handle it anyway ¯\_(ツ)_/¯
-        do {
-            return try AuthenticationManager.shared.getAuthenticatedUser().uid
-        } catch {
-            print(error)
-        }
-        return ""
-    }
-    
-    // function to refresh session data every time the view appears
-    func updateSession() async throws {
-        do {
+    func updateSession() {
+        Task {
+            // refresh variables
             let updatedSession = try await SessionManager.shared.getSession(sessionId: session.sessionId)
-            session.status = updatedSession.status
             session.location = updatedSession.location
             session.sessionDate = updatedSession.sessionDate
-            session.players = updatedSession.players
-            session.bringsBall = updatedSession.bringsBall
-            session.bringsLines = updatedSession.bringsLines
+            session.status = updatedSession.status
+            print("Session happening in \(session.location) on \(session.sessionDate).")
             
-            sessionMatches = try await SessionManager.shared.getMatches(session: session)
-        } catch {
-            print(error)
+            // check if player is a member of the session
+            let hasJoined = try await SessionManager.shared.hasUserJoined(sessionId: session.sessionId)
+            self.isMember = hasJoined
+            print("Is user a member of this session? \(hasJoined.description).")
+            
+            // get members
+            let sessionMembers = try await SessionManager.shared.getAllSessionMembers(sessionId: session.sessionId)
+            print("There are currently \(sessionMembers.count) members in the session_members subcollection.")
+            
+            var localMembers: [(sessionMember: SessionMember, user: DBUser)] = []
+            for member in sessionMembers {
+                if let user = try? await UserManager.shared.getUser(userId: member.userId) {
+                    localMembers.append((member, user))
+                }
+            }
+            
+            self.sessionMembers = localMembers
+            print("Members have been added to local array. Count is \(sessionMembers.count).")
+            
+            // ball check
+            for member in sessionMembers {
+                if member.bringsBall {
+                    self.ballAvailable = true
+                    break
+                }
+            }
+            
+            // lines check
+            for member in sessionMembers {
+                if member.bringsLines {
+                    self.linesAvailable = true
+                    break
+                }
+            }
+            
+            // get matches
+            let sessionMatches = try await SessionManager.shared.getAllSessionMatches(sessionId: session.sessionId)
+            print("There are currently \(sessionMatches.count) matches in the session_matches subcollection.")
+            
+            var localMatches: [(sessionMatch: SessionMatch, t1p1: DBUser, t1p2: DBUser, t2p1: DBUser, t2p2: DBUser)] = []
+            
+            for match in sessionMatches {
+                let t1p1 = try await UserManager.shared.getUser(userId: match.t1p1)
+                let t1p2 = try await UserManager.shared.getUser(userId: match.t1p2)
+                let t2p1 = try await UserManager.shared.getUser(userId: match.t2p1)
+                let t2p2 = try await UserManager.shared.getUser(userId: match.t2p2)
+                
+                localMatches.append((match, t1p1, t1p2, t2p1, t2p2))
+            }
+            
+            // update sessionMatches with localMatches
+            self.sessionMatches = localMatches
+            
         }
     }
     
     // function to remove myself from session
-    func removePlayer() {
+    func removeMember() {
         Task {
+            // get my id
+            let myId = try AuthenticationManager.shared.getAuthenticatedUser().uid
             
-            // get authenticated user
-            let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
+            // get all session members
+            let sessionMembers = self.sessionMembers
             
-            // check if user was bringing ball to remove reference
-            if session.bringsBall.contains(authDataResult.uid) {
-                let data: [String : Any] = [
-                    Session.CodingKeys.bringsBall.rawValue : FieldValue.arrayRemove([authDataResult.uid])
-                ]
-                
-                let sessionCollection = Firestore.firestore().collection("sessions")
-                try await sessionCollection.document(session.sessionId).updateData(data)
+            // initialize an empty sessionMemberId to be filled below
+            var sessionMemberId = ""
+            
+            // check if session member userId matches my id & take the sessionMemberId and store it somewhere
+            for member in sessionMembers {
+                if (member.user.userId == myId) {
+                    sessionMemberId = member.sessionMember.id
+                    break
+                }
             }
             
-            // check if user was bringing lines to remove reference
-            if session.bringsLines.contains(authDataResult.uid) {
-                let data: [String : Any] = [
-                    Session.CodingKeys.bringsLines.rawValue : FieldValue.arrayRemove([authDataResult.uid])
-                ]
-                
-                let sessionCollection = Firestore.firestore().collection("sessions")
-                try await sessionCollection.document(session.sessionId).updateData(data)
-            }
+            try await SessionManager.shared.removeSessionMember(sessionId: session.sessionId,
+                                                                sessionMemberId: sessionMemberId)
             
-            // remove player from session players array
-            try await SessionManager.shared.removePlayer(session: session)
-            
-            // reload session by its id
-            self.session = try await SessionManager.shared.getSession(sessionId: session.sessionId)
+            updateSession()
         }
     }
     
@@ -209,15 +260,11 @@ struct SessionView_Previews: PreviewProvider {
     
     static var previews: some View {
         NavigationStack {
-            SessionView(session: Session(sessionId: "001",
+            SessionView(session: Session(sessionId: "",
                                          dateCreated: Date.now,
                                          status: "active",
-                                         location: "Restaurante Niza",
-                                         sessionDate: Date.now.advanced(by: 86400),
-                                         players: [],
-                                         matches: [],
-                                         bringsBall: [],
-                                         bringsLines: []))
+                                         location: "El Campello",
+                                         sessionDate: Date.now))
         }
     }
 }
