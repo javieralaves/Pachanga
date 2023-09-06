@@ -250,6 +250,13 @@ struct SessionView: View {
             try await SessionManager.shared.removeSessionMember(sessionId: session.sessionId,
                                                                 sessionMemberId: sessionMemberId)
             
+            // remove user id from members array in session
+            let data: [String:Any] = [
+                Session.CodingKeys.members.rawValue : FieldValue.arrayRemove([myId])
+            ]
+            
+            try await SessionManager.shared.sessionDocument(sessionId: session.sessionId).updateData(data)
+            
             updateSession()
         }
     }

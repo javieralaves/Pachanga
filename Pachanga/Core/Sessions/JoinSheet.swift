@@ -43,6 +43,13 @@ struct JoinSheet: View {
             // get authenticated user id
             let userId = try AuthenticationManager.shared.getAuthenticatedUser().uid
             
+            // add user id to members array in session
+            let data: [String:Any] = [
+                Session.CodingKeys.members.rawValue : FieldValue.arrayUnion([userId])
+            ]
+            
+            try await SessionManager.shared.sessionDocument(sessionId: session.sessionId).updateData(data)
+                        
             // add user to session_members subcollection
             try await SessionManager.shared.addSessionMember(sessionId: session.sessionId,
                                                              userId: userId,
