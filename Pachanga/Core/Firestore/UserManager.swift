@@ -115,7 +115,7 @@ final class UserManager {
             for match in matches {
                 // user is in team one, and won
                 if (match.t1p1 == userId || match.t1p2 == userId) && match.scoreOne > match.scoreTwo {
-                    userRating += 0.1
+                    userRating += 0.12
                 }
                 
                 // user is in team two, and lost
@@ -130,7 +130,7 @@ final class UserManager {
                 
                 // user is in team two, and won
                 if (match.t2p1 == userId || match.t2p2 == userId) && match.scoreOne < match.scoreTwo {
-                    userRating += 0.1
+                    userRating += 0.12
                 }
             }
         }

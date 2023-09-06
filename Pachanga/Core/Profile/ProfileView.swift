@@ -49,7 +49,7 @@ struct ProfileView: View {
                         Text("Email: \(email)")
                     }
                     
-                    Text("Nivel: \(userRating, specifier: "%.1f")/5.0")
+                    Text("Nivel: \(userRating, specifier: "%.2f")/5.0")
                     
                     Text("Tu plan: \(user.isPremium ?? false ? "Pro" : "Básico")")
                 }
