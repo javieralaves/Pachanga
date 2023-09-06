@@ -40,8 +40,8 @@ struct SessionCell: View {
     func getPlayerCount() {
         
         Task {
-            let sessionPlayers = try await SessionManager.shared.getAllSessionPlayers(sessionId: session.sessionId)
-            playerCount = sessionPlayers.count
+            let sessionMembers = try await SessionManager.shared.getAllSessionMembers(sessionId: session.sessionId)
+            playerCount = sessionMembers.count
         }
         
     }
@@ -50,15 +50,11 @@ struct SessionCell: View {
 struct SessionCell_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            SessionCell(session: Session(sessionId: "test",
+            SessionCell(session: Session(sessionId: "1",
                                          dateCreated: Date.now,
                                          status: "active",
-                                         location: "Club Muchavista",
-                                         sessionDate: Date.now,
-                                         players: ["javi"],
-                                         matches: [],
-                                         bringsBall: [],
-                                         bringsLines: []))
+                                         location: "El Campello",
+                                         sessionDate: Date.now))
             .padding()
         }
     }
