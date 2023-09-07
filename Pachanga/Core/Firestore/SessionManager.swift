@@ -120,6 +120,18 @@ final class SessionManager {
             .getDocuments(as: Session.self)
     }
     
+    func getSessionRating(session: Session) async throws -> Double {
+        var ratingSum = 0.0
+        
+        let sessionMembers = session.members
+        
+        for member in sessionMembers {
+            ratingSum += try await UserManager.shared.getUserRating(userId: member)
+        }
+        
+        return ratingSum / Double(sessionMembers.count)
+    }
+    
     // MARK: session_members subcollection
     
     //  subcollection reference
