@@ -121,7 +121,7 @@ final class SessionManager {
         return try await sessionCollection
             .whereField("session_date", isGreaterThan: Date.now)
             .whereField("status", isEqualTo: "active")
-            .whereField("members", arrayContains: "\(userId)")
+            .whereField("members", arrayContains: userId)
             .getDocuments(as: Session.self)
     }
     
