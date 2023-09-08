@@ -41,7 +41,9 @@ struct SessionView: View {
                     Section {
                         Text(session.location)
                         Text(session.sessionDate.formatted(date: .abbreviated, time: .shortened))
-                        Text("Nivel: \(sessionRating, specifier: "%.2f")")
+                        if !sessionMembers.isEmpty {
+                            Text("Nivel: \(sessionRating, specifier: "%.2f")")                            
+                        }
                     }
                     
                     if session.status == "active" {
