@@ -95,6 +95,17 @@ final class UserManager {
         try await userDocument(userId: userId).getDocument(as: DBUser.self)
     }
     
+    func deleteUser() async throws {
+        // get user id
+        let userId = try AuthenticationManager.shared.getAuthenticatedUser().uid
+        
+        // delete db reference
+        try await userDocument(userId: userId).delete()
+        
+        // delete authentication info
+        try await AuthenticationManager.shared.deleteUser()
+    }
+    
     func updateUserPlan(userId: String, isPremium: Bool) async throws {
         let data: [String: Any] = [
             DBUser.CodingKeys.isPremium.rawValue : isPremium
