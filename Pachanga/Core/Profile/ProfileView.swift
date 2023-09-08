@@ -33,6 +33,7 @@ struct ProfileView: View {
     @StateObject private var viewModel = ProfileViewModel()
     @Binding var showSignInView: Bool
     
+    @State var firstLoad: Bool = false
     @State var userRating: Double = 1.0
     @State var matchesPlayed: Int = 0
     @State var matchesWon: Int = 0
@@ -95,7 +96,10 @@ struct ProfileView: View {
             try? await viewModel.loadCurrentUser()
         }
         .onAppear {
-            updateProfile()
+            if !firstLoad {
+                updateProfile()
+                firstLoad = true
+            }
         }
         .navigationTitle("\(viewModel.user?.name ?? " ")")
         .toolbar {
@@ -137,13 +141,15 @@ struct ProfileView: View {
                     if (match.t1p1 == userId || match.t1p2 == userId) && match.scoreOne > match.scoreTwo {
                         matchesWon += 1
                     }
+                    if (match.t2p1 == userId || match.t2p2 == userId) && match.scoreOne < match.scoreTwo {
+                        matchesWon += 1
+                    }
                 }
             }
             
             // calculate the remaining profile stat variables
             matchesLost = matchesPlayed - matchesWon
             winLossRatio = Double(matchesWon) / Double(matchesLost)
-            
         }
     }
 }
