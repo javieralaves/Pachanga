@@ -114,6 +114,17 @@ final class SessionManager {
             .getDocuments(as: Session.self)
     }
     
+    // get all my upcoming sessions
+    func getMyUpcomingSessions() async throws -> [Session] {
+        let userId = try AuthenticationManager.shared.getAuthenticatedUser().uid
+        
+        return try await sessionCollection
+            .whereField("session_date", isGreaterThan: Date.now)
+            .whereField("status", isEqualTo: "active")
+            .whereField("members", arrayContains: userId)
+            .getDocuments(as: Session.self)
+    }
+    
     func getUserSessions(userId: String) async throws -> [Session] {
         try await sessionCollection
             .whereField("members", arrayContains: userId)
