@@ -47,15 +47,41 @@ struct NewSession: View {
                         Session.CodingKeys.dateCreated.rawValue : Timestamp(),
                         Session.CodingKeys.status.rawValue : "active",
                         Session.CodingKeys.location.rawValue : location,
-                        Session.CodingKeys.sessionDate.rawValue : sessionDate
+                        Session.CodingKeys.sessionDate.rawValue : sessionDate,
+                        Session.CodingKeys.members.rawValue : [String]()
                     ]
                     
                     // set data
                     try await document.setData(data, merge: false)
+                    
+                    // add myself to session
+                    joinSession(sessionId: documentId)
                 }
                 
                 dismiss()
             }
+        }
+    }
+    
+    private func joinSession(sessionId: String) {
+        Task {
+            // get authenticated user id
+            let userId = try AuthenticationManager.shared.getAuthenticatedUser().uid
+            
+            // add user id to members array in session
+            let data: [String:Any] = [
+                Session.CodingKeys.members.rawValue : FieldValue.arrayUnion([userId])
+            ]
+            
+            try await SessionManager.shared.sessionDocument(sessionId: sessionId).updateData(data)
+                        
+            // add user to session_members subcollection
+            try await SessionManager.shared.addSessionMember(sessionId: sessionId,
+                                                             userId: userId,
+                                                             bringsBall: false,
+                                                             bringsLines: false)
+            
+            dismiss()
         }
     }
 }

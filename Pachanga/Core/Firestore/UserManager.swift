@@ -95,12 +95,58 @@ final class UserManager {
         try await userDocument(userId: userId).getDocument(as: DBUser.self)
     }
     
+    func deleteUser() async throws {
+        // get user id
+        let userId = try AuthenticationManager.shared.getAuthenticatedUser().uid
+        
+        // delete db reference
+        try await userDocument(userId: userId).delete()
+        
+        // delete authentication info
+        try await AuthenticationManager.shared.deleteUser()
+    }
+    
     func updateUserPlan(userId: String, isPremium: Bool) async throws {
         let data: [String: Any] = [
             DBUser.CodingKeys.isPremium.rawValue : isPremium
         ]
         
         try await userDocument(userId: userId).updateData(data)
+    }
+    
+    func getUserRating(userId: String) async throws -> Double {
+        var userRating = 1.0
+        
+        // array of sessions that user was a member of
+        let userSessions = try await SessionManager.shared.getUserSessions(userId: userId)
+        
+        for session in userSessions {
+            let matches = try await SessionManager.shared.getAllSessionMatches(sessionId: session.sessionId)
+            
+            for match in matches {
+                // user is in team one, and won
+                if (match.t1p1 == userId || match.t1p2 == userId) && match.scoreOne > match.scoreTwo {
+                    userRating += 0.12
+                }
+                
+                // user is in team two, and lost
+                if (match.t1p1 == userId || match.t1p2 == userId) && match.scoreOne < match.scoreTwo {
+                    userRating -= 0.1
+                }
+                
+                // user is in team two, and lost
+                if (match.t2p1 == userId || match.t2p2 == userId) && match.scoreOne > match.scoreTwo {
+                    userRating -= 0.1
+                }
+                
+                // user is in team two, and won
+                if (match.t2p1 == userId || match.t2p2 == userId) && match.scoreOne < match.scoreTwo {
+                    userRating += 0.12
+                }
+            }
+        }
+        
+        return userRating
     }
     
 }

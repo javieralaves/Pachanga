@@ -19,6 +19,9 @@ struct SessionView: View {
     // empty array of matches to be populated onAppear
     @State private var sessionMatches: [(sessionMatch: SessionMatch, t1p1: DBUser, t1p2: DBUser, t2p1: DBUser, t2p2: DBUser)] = []
     
+    // variable to load the average session rating
+    @State private var sessionRating: Double = 0.0
+    
     // equipment variables
     @State private var ballAvailable: Bool = false
     @State private var linesAvailable: Bool = false
@@ -38,6 +41,9 @@ struct SessionView: View {
                     Section {
                         Text(session.location)
                         Text(session.sessionDate.formatted(date: .abbreviated, time: .shortened))
+                        if !sessionMembers.isEmpty {
+                            Text("Nivel: \(sessionRating, specifier: "%.2f")")                            
+                        }
                     }
                     
                     if session.status == "active" {
@@ -190,6 +196,9 @@ struct SessionView: View {
             self.sessionMembers = localMembers
             print("Members have been added to local array. Count is \(sessionMembers.count).")
             
+            // calculate the average session rating
+            sessionRating = try await SessionManager.shared.getSessionRating(session: session)
+            
             // ball check
             for member in sessionMembers {
                 if member.bringsBall {
@@ -250,6 +259,13 @@ struct SessionView: View {
             try await SessionManager.shared.removeSessionMember(sessionId: session.sessionId,
                                                                 sessionMemberId: sessionMemberId)
             
+            // remove user id from members array in session
+            let data: [String:Any] = [
+                Session.CodingKeys.members.rawValue : FieldValue.arrayRemove([myId])
+            ]
+            
+            try await SessionManager.shared.sessionDocument(sessionId: session.sessionId).updateData(data)
+            
             updateSession()
         }
     }
@@ -264,7 +280,8 @@ struct SessionView_Previews: PreviewProvider {
                                          dateCreated: Date.now,
                                          status: "active",
                                          location: "El Campello",
-                                         sessionDate: Date.now))
+                                         sessionDate: Date.now,
+                                         members: []))
         }
     }
 }

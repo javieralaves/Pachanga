@@ -26,12 +26,6 @@ struct MainView: View {
                         Label("Sesiones", systemImage: "volleyball.fill")
                     }
                     
-                    // Ranking tab
-                    Ranking()
-                        .tabItem {
-                            Label("Ránking", systemImage: "trophy.fill")
-                        }
-                    
                     // Profile tab
                     NavigationView {
                         ProfileView(showSignInView: $showSignInView)
