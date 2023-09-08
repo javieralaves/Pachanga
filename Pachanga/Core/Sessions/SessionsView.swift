@@ -27,14 +27,16 @@ struct SessionsView: View {
     var body: some View {
         VStack {
             List {
-                Section ("Mis sesiones") {
-                    ForEach(viewModel.myUpcomingSessions, id: \.sessionId) { session in
-                        NavigationLink {
-                            SessionView(session: session)
-                        } label: {
-                            SessionCell(session: session)
+                if viewModel.myUpcomingSessions.count > 0 {
+                    Section ("Mis sesiones") {
+                        ForEach(viewModel.myUpcomingSessions, id: \.sessionId) { session in
+                            NavigationLink {
+                                SessionView(session: session)
+                            } label: {
+                                SessionCell(session: session)
+                            }
                         }
-                    }
+                    }                    
                 }
                 Section ("Todas las sesiones") {
                     ForEach(viewModel.upcomingSessions, id: \.sessionId) { session in
