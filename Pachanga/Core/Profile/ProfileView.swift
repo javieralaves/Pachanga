@@ -33,25 +33,62 @@ struct ProfileView: View {
     @StateObject private var viewModel = ProfileViewModel()
     @Binding var showSignInView: Bool
     
+    @State var firstLoad: Bool = false
     @State var userRating: Double = 1.0
+    @State var matchesPlayed: Int = 0
+    @State var matchesWon: Int = 0
+    @State var matchesLost: Int = 0
+    @State var winLossRatio: Double = 1.0
     
     var body: some View {
         VStack {
             List {
                 if let user = viewModel.user {
-                    Text("ID: \(user.userId)")
                     
-                    if let name = user.name {
-                        Text("Nombre: \(name)")
+                    Section ("Info") {
+                        Text("ID: \(user.userId)")
+                        
+                        if let name = user.name {
+                            Text("Nombre: \(name)")
+                        }
+                        
+                        if let email = user.email {
+                            Text("Email: \(email)")
+                        }
                     }
                     
-                    if let email = user.email {
-                        Text("Email: \(email)")
+                    Section("Rendimiento") {
+                        HStack {
+                            Text("Nivel de jugador")
+                            Spacer()
+                            Text("\(userRating, specifier: "%.2f")/5.0")
+                                .foregroundColor(.secondary)
+                        }
+                        HStack {
+                            Text("Partidos jugados")
+                            Spacer()
+                            Text("\(matchesPlayed)")
+                                .foregroundColor(.secondary)
+                        }
+                        HStack {
+                            Text("Partidos ganados")
+                            Spacer()
+                            Text("\(matchesWon)")
+                                .foregroundColor(.secondary)
+                        }
+                        HStack {
+                            Text("Partidos perdidos")
+                            Spacer()
+                            Text("\(matchesLost)")
+                                .foregroundColor(.secondary)
+                        }
+                        HStack {
+                            Text("Ratio de victorias")
+                            Spacer()
+                            Text("\(winLossRatio, specifier: "%.2f")%")
+                                .foregroundColor(.secondary)
+                        }
                     }
-                    
-                    Text("Nivel: \(userRating, specifier: "%.2f")/5.0")
-                    
-                    Text("Tu plan: \(user.isPremium ?? false ? "Pro" : "Básico")")
                 }
             }
         }
@@ -59,9 +96,12 @@ struct ProfileView: View {
             try? await viewModel.loadCurrentUser()
         }
         .onAppear {
-            generateRating()
+            if !firstLoad {
+                updateProfile()
+                firstLoad = true
+            }
         }
-        .navigationTitle("Perfil")
+        .navigationTitle("\(viewModel.user?.name ?? " ")")
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 
@@ -75,10 +115,42 @@ struct ProfileView: View {
         }
     }
     
-    func generateRating() {
+    func updateProfile() {
         Task {
+            // get user id
             let userId = try AuthenticationManager.shared.getAuthenticatedUser().uid
+            
+            // generate user rating
             userRating = try await UserManager.shared.getUserRating(userId: userId)
+            
+            // get user sessions
+            let userSessions = try await SessionManager.shared.getUserSessions(userId: userId)
+            
+            // loop through matches within sessions
+            for session in userSessions {
+                
+                let sessionMatches = try await SessionManager.shared.getAllSessionMatches(sessionId: session.sessionId)
+                
+                for match in sessionMatches {
+                    // check for matches played
+                    if match.t1p1 == userId || match.t1p2 == userId || match.t2p1 == userId || match.t2p2 == userId {
+                        matchesPlayed += 1
+                    }
+                    
+                    // check for matches won
+                    if (match.t1p1 == userId || match.t1p2 == userId) && match.scoreOne > match.scoreTwo {
+                        matchesWon += 1
+                    }
+                    if (match.t2p1 == userId || match.t2p2 == userId) && match.scoreOne < match.scoreTwo {
+                        matchesWon += 1
+                    }
+                }
+            }
+            
+            // calculate the remaining profile stat variables
+            matchesLost = matchesPlayed - matchesWon
+            winLossRatio = (Double(matchesWon) / Double(matchesPlayed) * 100)
+            
         }
     }
 }
