@@ -85,7 +85,7 @@ struct ProfileView: View {
                         HStack {
                             Text("Ratio de victorias")
                             Spacer()
-                            Text("\(winLossRatio, specifier: "%.2f")")
+                            Text("\(winLossRatio, specifier: "%.2f")%")
                                 .foregroundColor(.secondary)
                         }
                     }
@@ -149,7 +149,8 @@ struct ProfileView: View {
             
             // calculate the remaining profile stat variables
             matchesLost = matchesPlayed - matchesWon
-            winLossRatio = Double(matchesWon) / Double(matchesLost)
+            winLossRatio = (Double(matchesWon) / Double(matchesPlayed) * 100)
+            
         }
     }
 }
