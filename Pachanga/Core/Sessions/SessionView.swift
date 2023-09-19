@@ -7,6 +7,7 @@
 
 import FirebaseFirestore
 import FirebaseFirestoreSwift
+import FirebaseMessaging
 import SwiftUI
 
 struct SessionView: View {
@@ -265,6 +266,9 @@ struct SessionView: View {
             ]
             
             try await SessionManager.shared.sessionDocument(sessionId: session.sessionId).updateData(data)
+            
+            // unsubscribe user from session notifications
+            try await Messaging.messaging().unsubscribe(fromTopic: session.sessionId)
             
             updateSession()
         }
