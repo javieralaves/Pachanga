@@ -1,53 +1,64 @@
+// importing required Firebase modules
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
+
+// initializing Firebase Admin SDK to access Firestore
 admin.initializeApp();
 
-async function getUsersInSession(sessionId) {
-  const sessionRef = admin.firestore().collection("sessions").doc(sessionId);
-  const sessionDoc = await sessionRef.get();
-
-  if (!sessionDoc.exists) {
-    console.log("No such session!");
-    return [];
-  }
-
-  return sessionDoc.data().userIds || [];
-}
-
-async function sendNotificationToUsers(userIds, sessionData) {
-  // Fetch tokens of the users
-  const tokens = [];
-  for (const userId of userIds) {
-    const userRef = admin.firestore().collection("users").doc(userId);
-    const userDoc = await userRef.get();
-
-    if (userDoc.exists && userDoc.data().token) {
-      tokens.push(userDoc.data().token);
-    }
-  }
-
-  // Prepare the message
-  const message = {
-    notification: {
-      title: "Session Update",
-      body: `Someone joined or left the session: ${sessionData.name}`,
-    },
-    tokens: tokens,
-  };
-
-  // Send the message
-  await admin.messaging().sendMulticast(message);
-}
-
-exports.notifySessionChange = functions.firestore
+// this function triggers when a 'sessions' document is updated.
+exports.getUsersInSession = functions.firestore
   .document("sessions/{sessionId}")
-  .onWrite(async (change, context) => {
-    const sessionData = change.after.data();
+  .onUpdate(async (change, context) => {
+    // extract session ID from the event context.
     const sessionId = context.params.sessionId;
 
-    // fetch users within session
-    const usersToNotify = await getUsersInSession(sessionId);
+    // fetch the session document from Firestore.
+    const sessionDoc = await admin
+      .firestore()
+      .collection("sessions")
+      .doc(sessionId)
+      .get();
 
-    // send notification to users
-    sendNotificationToUsers(usersToNotify, sessionData);
+    // list of user ids fetched from session
+    const userIds = sessionDoc.data().members || [];
+
+    // fetch FCM tokens for these users.
+    const userTokens = await getUserTokens(userIds);
+
+    // Call sendNotificationToUsers to send notification
+    if (userTokens.length > 0) {
+      await sendNotificationToUsers(
+        userTokens,
+        "Someone joined or left the session."
+      );
+    }
   });
+
+// helper function to fetch FCM tokens for a list of user IDs.
+const getUserTokens = async (userIds) => {
+  const tokens = [];
+  for (const userId of userIds) {
+    const userDoc = await admin
+      .firestore()
+      .collection("users")
+      .doc(userId)
+      .get();
+    if (userDoc.exists && userDoc.data().fcm_token) {
+      tokens.push(userDoc.data().fcm_token);
+    }
+  }
+  return tokens;
+};
+
+// helper function to send notifications to a list of user tokens.
+const sendNotificationToUsers = async (userTokens, message) => {
+  const messages = userTokens.map((token) => ({
+    token,
+    notification: {
+      title: "Session Update",
+      body: message,
+    },
+  }));
+
+  return await admin.messaging().sendEach(messages);
+};
