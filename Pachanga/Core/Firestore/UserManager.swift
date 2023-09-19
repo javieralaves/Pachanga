@@ -16,6 +16,7 @@ struct DBUser: Codable, Hashable {
     let photoUrl: String?
     let dateCreated: Date?
     let isPremium: Bool?
+    var fcmToken: String
     
     
     // initializer passing an AuthDataResultModel for authentication flow
@@ -26,6 +27,7 @@ struct DBUser: Codable, Hashable {
         self.photoUrl = auth.photoURL
         self.dateCreated = Date() // will need to update this flow eventually because it overrides the stored value with a new date every time user logs in
         self.isPremium = false
+        self.fcmToken = ""
     }
     
     // initializer to adjust properties
@@ -35,7 +37,8 @@ struct DBUser: Codable, Hashable {
         email: String? = nil,
         photoUrl: String? = nil,
         dateCreated: Date? = nil,
-        isPremium: Bool? = nil
+        isPremium: Bool? = nil,
+        fcmToken: String
     ) {
         self.userId = userId
         self.name = name ?? "Juan Doe"
@@ -43,6 +46,7 @@ struct DBUser: Codable, Hashable {
         self.photoUrl = photoUrl
         self.dateCreated = dateCreated
         self.isPremium = isPremium
+        self.fcmToken = fcmToken
     }
     
     enum CodingKeys: String, CodingKey {
@@ -52,6 +56,7 @@ struct DBUser: Codable, Hashable {
         case photoUrl = "photo_url"
         case dateCreated = "date_created"
         case isPremium = "is_premium"
+        case fcmToken = "fcm_token"
     }
     
     init(from decoder: Decoder) throws {
@@ -62,6 +67,7 @@ struct DBUser: Codable, Hashable {
         self.photoUrl = try container.decodeIfPresent(String.self, forKey: .photoUrl)
         self.dateCreated = try container.decodeIfPresent(Date.self, forKey: .dateCreated)
         self.isPremium = try container.decodeIfPresent(Bool.self, forKey: .isPremium)
+        self.fcmToken = try container.decode(String.self, forKey: .fcmToken)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -72,6 +78,7 @@ struct DBUser: Codable, Hashable {
         try container.encodeIfPresent(self.photoUrl, forKey: .photoUrl)
         try container.encodeIfPresent(self.dateCreated, forKey: .dateCreated)
         try container.encodeIfPresent(self.isPremium, forKey: .isPremium)
+        try container.encode(self.fcmToken, forKey: .fcmToken)
     }
     
 }
