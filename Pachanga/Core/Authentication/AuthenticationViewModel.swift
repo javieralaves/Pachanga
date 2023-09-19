@@ -44,7 +44,12 @@ final class AuthenticationViewModel: ObservableObject {
         let helper = SignInAppleHelper()
         let tokens = try await helper.startSignInWithAppleFlow()
         let authDataResult = try await AuthenticationManager.shared.signInWithApple(tokens: tokens)
-        let user = DBUser(auth: authDataResult)
+        var user = DBUser(auth: authDataResult)
+        
+        // fetch FCM token for notifications
+        let fcmToken = try await getMessagingToken()
+        user.fcmToken = fcmToken
+        
         try await UserManager.shared.createNewUser(user: user)
     }
 }
