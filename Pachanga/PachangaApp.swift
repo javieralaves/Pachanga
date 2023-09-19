@@ -8,12 +8,19 @@
 import Firebase
 import SwiftUI
 
+class AppDelegate: NSObject, UIApplicationDelegate {
+  func application(_ application: UIApplication,
+                   didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+    print("Pachanga application is starting up. ApplicationDelegate didFinishLaunchingWithOptions.")
+    FirebaseApp.configure()
+    return true
+  }
+}
+
 @main
 struct PachangaApp: App {
     
-    init() {
-        FirebaseApp.configure()
-    }
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
     var body: some Scene {
         WindowGroup {
