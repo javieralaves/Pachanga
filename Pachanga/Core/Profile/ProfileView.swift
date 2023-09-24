@@ -45,7 +45,8 @@ struct ProfileView: View {
                 if let user = viewModel.user {
                     
                     Section ("Info") {
-                        Text("ID: \(user.userId)")
+                        // show this only for testing purposes
+                        // Text("ID: \(user.userId)")
                         
                         if let name = user.name {
                             Text("Nombre: \(name)")
