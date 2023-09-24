@@ -11,6 +11,7 @@
 		5920BB2B2AA88DC2007E1165 /* NewMatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5920BB2A2AA88DC2007E1165 /* NewMatchView.swift */; };
 		592170082A9D46710043ED9A /* JoinSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 592170072A9D46710043ED9A /* JoinSheet.swift */; };
 		593E11722A8AAF730012B15F /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593E11712A8AAF730012B15F /* SessionManager.swift */; };
+		595A9EFA2AB979BA0044CEDD /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 595A9EF92AB979BA0044CEDD /* FirebaseMessaging */; };
 		595B0A082AA4FE700051CC16 /* EditMatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595B0A072AA4FE700051CC16 /* EditMatchView.swift */; };
 		595C61B82A8B6FF5003A0E04 /* NewSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595C61B72A8B6FF5003A0E04 /* NewSession.swift */; };
 		5971B8482A85013900145866 /* SignInAppleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5971B8472A85013900145866 /* SignInAppleHelper.swift */; };
@@ -83,6 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				595A9EFA2AB979BA0044CEDD /* FirebaseMessaging in Frameworks */,
 				59AA47932A84078100927483 /* GoogleSignInSwift in Frameworks */,
 				59C046E22A825E1500E5D071 /* FirebaseAnalyticsSwift in Frameworks */,
 				59AA47912A84078100927483 /* GoogleSignIn in Frameworks */,
@@ -277,6 +279,7 @@
 				59AA47922A84078100927483 /* GoogleSignInSwift */,
 				59C1BBD72A87984400D3558C /* FirebaseFirestore */,
 				59C1BBD92A87984400D3558C /* FirebaseFirestoreSwift */,
+				595A9EF92AB979BA0044CEDD /* FirebaseMessaging */,
 			);
 			productName = Pachanga;
 			productReference = 59E723BC2A4CC4B000236085 /* Pachanga.app */;
@@ -587,6 +590,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		595A9EF92AB979BA0044CEDD /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 59C046DE2A825E1500E5D071 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
 		59AA47902A84078100927483 /* GoogleSignIn */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 59AA478F2A84078100927483 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;

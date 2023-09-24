@@ -7,6 +7,7 @@
 
 import FirebaseFirestore
 import FirebaseFirestoreSwift
+import FirebaseMessaging
 import SwiftUI
 
 struct JoinSheet: View {
@@ -55,6 +56,9 @@ struct JoinSheet: View {
                                                              userId: userId,
                                                              bringsBall: bringingBall,
                                                              bringsLines: bringingLines)
+            
+            // subscribe user to session notifications
+            try await Messaging.messaging().subscribe(toTopic: session.sessionId)
             
             dismiss()
         }

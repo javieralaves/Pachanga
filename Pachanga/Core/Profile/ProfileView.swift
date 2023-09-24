@@ -33,7 +33,6 @@ struct ProfileView: View {
     @StateObject private var viewModel = ProfileViewModel()
     @Binding var showSignInView: Bool
     
-    @State var firstLoad: Bool = false
     @State var userRating: Double = 1.0
     @State var matchesPlayed: Int = 0
     @State var matchesWon: Int = 0
@@ -96,10 +95,7 @@ struct ProfileView: View {
             try? await viewModel.loadCurrentUser()
         }
         .onAppear {
-            if !firstLoad {
-                updateProfile()
-                firstLoad = true
-            }
+            updateProfile()
         }
         .navigationTitle("\(viewModel.user?.name ?? " ")")
         .toolbar {
@@ -117,6 +113,13 @@ struct ProfileView: View {
     
     func updateProfile() {
         Task {
+            // reset variables
+            userRating = 1.0
+            matchesPlayed = 0
+            matchesWon = 0
+            matchesLost = 0
+            winLossRatio = 1.0
+            
             // get user id
             let userId = try AuthenticationManager.shared.getAuthenticatedUser().uid
             
