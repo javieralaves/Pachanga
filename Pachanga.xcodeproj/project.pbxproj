@@ -37,6 +37,7 @@
 		59D693B12A5874DF008364A7 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D693B02A5874DF008364A7 /* ProfileView.swift */; };
 		59D693B32A58770D008364A7 /* AppLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D693B22A58770D008364A7 /* AppLogo.swift */; };
 		59D7879A2A8F696600C659AA /* SessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D787992A8F696600C659AA /* SessionView.swift */; };
+		59E6204F2ACC3BE6004D8182 /* CompleteProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E6204E2ACC3BE6004D8182 /* CompleteProfileView.swift */; };
 		59E723C02A4CC4B000236085 /* PachangaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E723BF2A4CC4B000236085 /* PachangaApp.swift */; };
 		59E723C22A4CC4B000236085 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E723C12A4CC4B000236085 /* MainView.swift */; };
 		59E723C42A4CC4B100236085 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 59E723C32A4CC4B100236085 /* Assets.xcassets */; };
@@ -68,6 +69,7 @@
 		59D693B02A5874DF008364A7 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		59D693B22A58770D008364A7 /* AppLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLogo.swift; sourceTree = "<group>"; };
 		59D787992A8F696600C659AA /* SessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionView.swift; sourceTree = "<group>"; };
+		59E6204E2ACC3BE6004D8182 /* CompleteProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteProfileView.swift; sourceTree = "<group>"; };
 		59E723BC2A4CC4B000236085 /* Pachanga.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pachanga.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		59E723BF2A4CC4B000236085 /* PachangaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PachangaApp.swift; sourceTree = "<group>"; };
 		59E723C12A4CC4B000236085 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -186,6 +188,7 @@
 		59C1BBE62A879A9300D3558C /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				59E6204E2ACC3BE6004D8182 /* CompleteProfileView.swift */,
 				59D693B02A5874DF008364A7 /* ProfileView.swift */,
 			);
 			path = Profile;
@@ -327,6 +330,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				59C1BBDF2A87996C00D3558C /* SettingsViewModel.swift in Sources */,
+				59E6204F2ACC3BE6004D8182 /* CompleteProfileView.swift in Sources */,
 				59AA47992A8413BE00927483 /* SignInGoogleHelper.swift in Sources */,
 				59C046EC2A82677900E5D071 /* AuthenticationManager.swift in Sources */,
 				5920BB2B2AA88DC2007E1165 /* NewMatchView.swift in Sources */,
