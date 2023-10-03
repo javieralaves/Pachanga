@@ -82,11 +82,13 @@ struct ProfileView: View {
                             Text("\(matchesLost)")
                                 .foregroundColor(.secondary)
                         }
-                        HStack {
-                            Text("Ratio de victorias")
-                            Spacer()
-                            Text("\(winLossRatio, specifier: "%.2f")%")
-                                .foregroundColor(.secondary)
+                        if matchesPlayed > 0 {
+                            HStack {
+                                Text("Ratio de victorias")
+                                Spacer()
+                                Text("\(winLossRatio, specifier: "%.2f")%")
+                                    .foregroundColor(.secondary)
+                            }
                         }
                     }
                 }
