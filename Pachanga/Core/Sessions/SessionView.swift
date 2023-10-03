@@ -176,16 +176,13 @@ struct SessionView: View {
             session.location = updatedSession.location
             session.sessionDate = updatedSession.sessionDate
             session.status = updatedSession.status
-            print("Session happening in \(session.location) on \(session.sessionDate).")
             
             // check if player is a member of the session
             let hasJoined = try await SessionManager.shared.hasUserJoined(sessionId: session.sessionId)
             self.isMember = hasJoined
-            print("Is user a member of this session? \(hasJoined.description).")
             
             // get members
             let sessionMembers = try await SessionManager.shared.getAllSessionMembers(sessionId: session.sessionId)
-            print("There are currently \(sessionMembers.count) members in the session_members subcollection.")
             
             var localMembers: [(sessionMember: SessionMember, user: DBUser)] = []
             for member in sessionMembers {
@@ -195,7 +192,6 @@ struct SessionView: View {
             }
             
             self.sessionMembers = localMembers
-            print("Members have been added to local array. Count is \(sessionMembers.count).")
             
             // calculate the average session rating
             sessionRating = try await SessionManager.shared.getSessionRating(session: session)
@@ -218,7 +214,6 @@ struct SessionView: View {
             
             // get matches
             let sessionMatches = try await SessionManager.shared.getAllSessionMatches(sessionId: session.sessionId)
-            print("There are currently \(sessionMatches.count) matches in the session_matches subcollection.")
             
             var localMatches: [(sessionMatch: SessionMatch, t1p1: DBUser, t1p2: DBUser, t2p1: DBUser, t2p2: DBUser)] = []
             
