@@ -49,11 +49,21 @@ struct ProfileView: View {
                         // Text("ID: \(user.userId)")
                         
                         if let name = user.name {
-                            Text("Nombre: \(name)")
+                            HStack {
+                                Text("Nombre")
+                                Spacer()
+                                Text("\(name)")
+                                    .foregroundColor(.secondary)
+                            }
                         }
                         
                         if let email = user.email {
-                            Text("Email: \(email)")
+                            HStack {
+                                Text("Email")
+                                Spacer()
+                                Text("\(email)")
+                                    .foregroundColor(.secondary)
+                            }
                         }
                     }
                     
