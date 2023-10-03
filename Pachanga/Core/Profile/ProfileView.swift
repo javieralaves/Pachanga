@@ -33,6 +33,8 @@ struct ProfileView: View {
     @StateObject private var viewModel = ProfileViewModel()
     @Binding var showSignInView: Bool
     
+    @State var fullName: String = ""
+    
     @State var userRating: Double = 1.0
     @State var matchesPlayed: Int = 0
     @State var matchesWon: Int = 0
@@ -48,13 +50,11 @@ struct ProfileView: View {
                         // show this only for testing purposes
                         // Text("ID: \(user.userId)")
                         
-                        if let name = user.name {
-                            HStack {
-                                Text("Nombre")
-                                Spacer()
-                                Text("\(name)")
-                                    .foregroundColor(.secondary)
-                            }
+                        HStack {
+                            Text("Nombre")
+                            Spacer()
+                            Text("\(fullName)")
+                                .foregroundColor(.secondary)
                         }
                         
                         if let email = user.email {
@@ -110,7 +110,7 @@ struct ProfileView: View {
         .onAppear {
             updateProfile()
         }
-        .navigationTitle("\(viewModel.user?.name ?? " ")")
+        .navigationTitle("\(fullName)")
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 
@@ -135,6 +135,9 @@ struct ProfileView: View {
             
             // get user id
             let userId = try AuthenticationManager.shared.getAuthenticatedUser().uid
+            
+            // generate full name from profile fields
+            self.fullName = "\(viewModel.user?.firstName ?? "Juan")" + " " + "\(viewModel.user?.lastName ?? "Doe")"
             
             // generate user rating
             userRating = try await UserManager.shared.getUserRating(userId: userId)
