@@ -36,7 +36,7 @@ struct SessionsView: View {
                                 SessionCell(session: session)
                             }
                         }
-                    }                    
+                    }
                 }
                 Section ("Todas las sesiones") {
                     ForEach(viewModel.upcomingSessions, id: \.sessionId) { session in

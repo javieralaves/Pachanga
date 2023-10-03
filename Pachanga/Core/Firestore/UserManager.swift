@@ -10,6 +10,7 @@ import FirebaseFirestoreSwift
 import Foundation
 
 struct DBUser: Codable, Hashable {
+    // base props
     let userId: String
     let name: String?
     let email: String?
@@ -17,7 +18,10 @@ struct DBUser: Codable, Hashable {
     let dateCreated: Date?
     let isPremium: Bool?
     var fcmToken: String
-    
+    // profile props
+    var firstLogin: Bool
+    var firstName: String
+    var lastName: String
     
     // initializer passing an AuthDataResultModel for authentication flow
     init(auth: AuthDataResultModel) {
@@ -28,6 +32,9 @@ struct DBUser: Codable, Hashable {
         self.dateCreated = Date() // will need to update this flow eventually because it overrides the stored value with a new date every time user logs in
         self.isPremium = false
         self.fcmToken = ""
+        self.firstLogin = true
+        self.firstName = ""
+        self.lastName = ""
     }
     
     // initializer to adjust properties
@@ -38,7 +45,10 @@ struct DBUser: Codable, Hashable {
         photoUrl: String? = nil,
         dateCreated: Date? = nil,
         isPremium: Bool? = nil,
-        fcmToken: String
+        fcmToken: String,
+        firstLogin: Bool,
+        firstName: String,
+        lastName: String
     ) {
         self.userId = userId
         self.name = name ?? "Juan Doe"
@@ -47,6 +57,9 @@ struct DBUser: Codable, Hashable {
         self.dateCreated = dateCreated
         self.isPremium = isPremium
         self.fcmToken = fcmToken
+        self.firstLogin = firstLogin
+        self.firstName = firstName
+        self.lastName = lastName
     }
     
     enum CodingKeys: String, CodingKey {
@@ -57,6 +70,9 @@ struct DBUser: Codable, Hashable {
         case dateCreated = "date_created"
         case isPremium = "is_premium"
         case fcmToken = "fcm_token"
+        case firstLogin = "first_login"
+        case firstName = "first_name"
+        case lastName = "last_name"
     }
     
     init(from decoder: Decoder) throws {
@@ -68,6 +84,9 @@ struct DBUser: Codable, Hashable {
         self.dateCreated = try container.decodeIfPresent(Date.self, forKey: .dateCreated)
         self.isPremium = try container.decodeIfPresent(Bool.self, forKey: .isPremium)
         self.fcmToken = try container.decode(String.self, forKey: .fcmToken)
+        self.firstLogin = try container.decode(Bool.self, forKey: .firstLogin)
+        self.firstName = try container.decode(String.self, forKey: .firstName)
+        self.lastName = try container.decode(String.self, forKey: .lastName)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -79,6 +98,9 @@ struct DBUser: Codable, Hashable {
         try container.encodeIfPresent(self.dateCreated, forKey: .dateCreated)
         try container.encodeIfPresent(self.isPremium, forKey: .isPremium)
         try container.encode(self.fcmToken, forKey: .fcmToken)
+        try container.encode(self.firstLogin, forKey: .firstLogin)
+        try container.encode(self.firstName, forKey: .firstName)
+        try container.encode(self.lastName, forKey: .lastName)
     }
     
 }

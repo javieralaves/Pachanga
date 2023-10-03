@@ -20,10 +20,14 @@ struct SettingsView: View {
     @State private var showAlert = false
     @State private var username: String = ""
     
+    @State private var firstName: String = ""
+    @State private var lastName: String = ""
+    
     var body: some View {
         Form {
             Section ("Info") {
-                TextField("Nombre", text: $username)
+                TextField("Nombre", text: $firstName)
+                TextField("Apellido", text: $lastName)
             }
             Section ("Acciones") {
                 Button("Cerrar sesión") {
@@ -50,14 +54,16 @@ struct SettingsView: View {
         }
         .task {
             try? await viewModel.loadCurrentUser()
-            username = viewModel.user?.name ?? "Juan Doe"
+            firstName = viewModel.user?.firstName ?? "Juan"
+            lastName = viewModel.user?.lastName ?? "Doe"
         }
         .navigationTitle("Ajustes")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             Button("Guardar") {
                 let data: [AnyHashable : Any] = [
-                    DBUser.CodingKeys.name.rawValue : username
+                    DBUser.CodingKeys.firstName.rawValue : firstName,
+                    DBUser.CodingKeys.lastName.rawValue : lastName
                 ]
                 Task {
                     let userCollection = Firestore.firestore().collection("users")
